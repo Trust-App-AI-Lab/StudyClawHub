@@ -1,18 +1,25 @@
 {
   "version": 1,
-  "description": "StudyClawHub Skill Registry — Social Network Mining Course",
+  "description": "StudyClawHub Skill Registry",
   "skills": [
     {
-      "name": "studyclawhub-submit",
+      "name": "sch-create",
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
-      "path": "hub-skills/submit",
+      "path": "hub-skills/sch-create",
       "author": "EnyanDai",
       "registeredAt": "2026-04-12T00:00:00Z"
     },
-{
-      "name": "studyclawhub-install",
+    {
+      "name": "sch-submit",
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
-      "path": "hub-skills/install",
+      "path": "hub-skills/sch-submit",
+      "author": "EnyanDai",
+      "registeredAt": "2026-04-12T00:00:00Z"
+    },
+    {
+      "name": "sch-install",
+      "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
+      "path": "hub-skills/sch-install",
       "author": "EnyanDai",
       "registeredAt": "2026-04-12T00:00:00Z"
     }
