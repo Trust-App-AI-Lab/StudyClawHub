@@ -409,6 +409,126 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── Quick Start ── */
+    .quickstart {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 1.5rem 2.5rem;
+    }
+    .quickstart h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      transition: border-color 0.15s;
+    }
+    .step:hover { border-color: var(--border-hover); }
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .step h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+    .step p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .step code {
+      font-size: 0.72rem;
+      background: var(--bg);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      color: var(--text-secondary);
+    }
+
+    /* ── Submit Form ── */
+    .submit-form h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .submit-form p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      margin-bottom: 1.5rem;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.35rem;
+    }
+    .form-group .hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+    .form-input {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.85rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: var(--accent); }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+    .form-preview {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: none;
+    }
+    .form-preview.active { display: block; }
+    .form-preview pre {
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .hero h1 { font-size: 1.75rem; }
@@ -449,8 +569,35 @@
   </div>
   <div class="hero-actions">
     <a class="btn btn-primary" href="#skills-section">Browse Skills</a>
-    <a class="btn btn-primary" id="submit-btn-hero" href="#" target="_blank">+ Submit Skill</a>
+    <a class="btn btn-primary" href="javascript:openSubmit()">+ Submit Skill</a>
     <a class="btn btn-outline" href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">View on GitHub</a>
+  </div>
+</section>
+
+<!-- Quick Start -->
+<section class="quickstart">
+  <h2>Quick Start</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Write a Skill</h3>
+      <p>Create a <code>SKILL.md</code> with YAML frontmatter in your own GitHub repo. Define name, description, tags, and instructions for Claude.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Push to GitHub</h3>
+      <p>Push your Skill folder to your GitHub repo. StudyClawHub only stores a link — your code stays in your repo.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Register it</h3>
+      <p>Click <strong>+ Submit Skill</strong> above, fill in the form, and submit. A bot will automatically add your Skill to the registry.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>Done!</h3>
+      <p>Your Skill appears here within minutes. Others can browse, search, and install it. Star repos you like — counts show on the cards.</p>
+    </div>
   </div>
 </section>
 
@@ -473,6 +620,48 @@
   <div class="detail">
     <button class="detail-close" onclick="closeDetail()">&times;</button>
     <div id="detail-content"></div>
+  </div>
+</div>
+
+<!-- Submit overlay -->
+<div class="overlay" id="submit-overlay" onclick="if(event.target===this)closeSubmit()">
+  <div class="detail submit-form">
+    <button class="detail-close" onclick="closeSubmit()">&times;</button>
+    <h2>Submit a Skill</h2>
+    <p class="subtitle">Register your Skill on StudyClawHub. This will create a GitHub Issue to process your submission.</p>
+
+    <div class="form-group">
+      <label for="f-name">Skill Name</label>
+      <div class="hint">Lowercase, kebab-case (e.g. my-cool-skill)</div>
+      <input class="form-input" id="f-name" type="text" placeholder="my-cool-skill" oninput="updatePreview()" />
+    </div>
+
+    <div class="form-group">
+      <label for="f-repo">GitHub Repo URL</label>
+      <div class="hint">The repo where your Skill lives</div>
+      <input class="form-input" id="f-repo" type="url" placeholder="https://github.com/your-username/your-repo" oninput="updatePreview()" />
+    </div>
+
+    <div class="form-group">
+      <label for="f-path">Path to Skill Folder</label>
+      <div class="hint">Relative path from repo root (use "." if SKILL.md is at root)</div>
+      <input class="form-input" id="f-path" type="text" placeholder="." value="." oninput="updatePreview()" />
+    </div>
+
+    <div class="form-group">
+      <label for="f-author">GitHub Username</label>
+      <input class="form-input" id="f-author" type="text" placeholder="your-github-username" oninput="updatePreview()" />
+    </div>
+
+    <div class="form-preview" id="submit-preview">
+      <strong>Preview — Issue will be created with:</strong>
+      <pre id="preview-body"></pre>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="submitSkill()">Submit to GitHub</button>
+      <button class="btn btn-outline" onclick="closeSubmit()">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -504,8 +693,6 @@ async function boot() {
     document.getElementById('stat-authors').textContent = authors.size;
 
     // Submit button
-    document.getElementById('submit-btn-hero').href =
-      `https://github.com/${REPO}/issues/new?template=register-skill.yml`;
 
     applySort();
   } catch (e) {
@@ -588,8 +775,8 @@ function renderResults(skills) {
         <div class="card-tags">
           ${(s.tags||[]).slice(0,3).map(t => `<span class="tag">${esc(t)}</span>`).join('')}
         </div>
-        ${s.stars ? `<span class="card-stat">★ ${s.stars}</span>` : ''}
-        ${s.installs ? `<span class="card-stat">↓ ${s.installs}</span>` : ''}
+        <span class="card-stat">★ ${s.stars||0}</span>
+        <span class="card-stat">↓ ${s.installs||0}</span>
       </div>
     </div>
   `).join('');
@@ -641,7 +828,82 @@ function simpleMarkdown(t) {
     .replace(/\n/g,'<br/>');
 }
 
-document.addEventListener('keydown', e => { if (e.key==='Escape') closeDetail(); });
+// ── Submit form ──
+function openSubmit() {
+  document.getElementById('submit-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  updatePreview();
+}
+
+function closeSubmit() {
+  document.getElementById('submit-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function updatePreview() {
+  const name = document.getElementById('f-name').value.trim();
+  const repo = document.getElementById('f-repo').value.trim();
+  const path = document.getElementById('f-path').value.trim() || '.';
+  const author = document.getElementById('f-author').value.trim();
+
+  const preview = document.getElementById('submit-preview');
+  const body = document.getElementById('preview-body');
+
+  if (name || repo || author) {
+    preview.classList.add('active');
+    body.textContent =
+      `Skill name: ${name || '(empty)'}\n` +
+      `Repo: ${repo || '(empty)'}\n` +
+      `Path: ${path}\n` +
+      `Author: ${author || '(empty)'}`;
+  } else {
+    preview.classList.remove('active');
+  }
+}
+
+function submitSkill() {
+  const name = document.getElementById('f-name').value.trim();
+  const repo = document.getElementById('f-repo').value.trim();
+  const path = document.getElementById('f-path').value.trim() || '.';
+  const author = document.getElementById('f-author').value.trim();
+
+  if (!name || !repo || !author) {
+    alert('Please fill in Skill Name, Repo URL, and GitHub Username.');
+    return;
+  }
+
+  // Validate name format
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) {
+    alert('Skill name must be lowercase kebab-case (e.g. my-cool-skill).');
+    return;
+  }
+
+  // Validate repo URL
+  if (!/^https:\/\/github\.com\/[^/]+\/[^/]+/.test(repo)) {
+    alert('Please enter a valid GitHub repo URL (https://github.com/owner/repo).');
+    return;
+  }
+
+  // Build GitHub Issue URL with pre-filled body
+  const issueTitle = `Register: ${name}`;
+  const issueBody =
+    `### Skill Name\n\n${name}\n\n` +
+    `### GitHub Repo URL\n\n${repo}\n\n` +
+    `### Path to Skill Folder\n\n${path}\n\n` +
+    `### GitHub Username\n\n${author}`;
+
+  const issueUrl = `https://github.com/${REPO}/issues/new?` +
+    `title=${encodeURIComponent(issueTitle)}` +
+    `&body=${encodeURIComponent(issueBody)}` +
+    `&labels=register`;
+
+  window.open(issueUrl, '_blank');
+  closeSubmit();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeDetail(); closeSubmit(); }
+});
 
 boot();
 </script>
