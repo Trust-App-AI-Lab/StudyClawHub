@@ -1,7 +1,7 @@
 ---
 name: studyclawhub-submit
 description: "Submit your Skill to StudyClawHub. Use when a student says 'submit my skill', 'publish to StudyClawHub', 'register my skill', '提交skill', or '发布skill'. Guides the student through validating their Skill folder, pushing to their own GitHub repo, and registering it via a GitHub Issue."
-author: studyclawhub
+author: EnyanDai
 version: 2.0.0
 tags:
   - hub

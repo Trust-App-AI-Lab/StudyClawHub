@@ -1,7 +1,7 @@
 ---
 name: studyclawhub-install
 description: "Install a Skill from StudyClawHub. Use when a student says 'install skill X', 'download skill', 'get that skill', '安装skill', or '下载skill'. Fetches the Skill from the author's GitHub repo and installs it locally."
-author: studyclawhub
+author: EnyanDai
 version: 2.0.0
 tags:
   - hub
