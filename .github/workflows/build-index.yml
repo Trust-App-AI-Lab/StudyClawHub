@@ -167,6 +167,9 @@ jobs:
       - name: Pull latest index
         run: git pull origin main
 
+      - name: Copy index to site
+        run: cp skills-index.json site/skills-index.json
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
