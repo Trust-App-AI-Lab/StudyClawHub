@@ -14,12 +14,40 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  issues: read
 
 jobs:
   build-index:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Fetch install counts
+        run: |
+          gh issue list --repo "$GITHUB_REPOSITORY" --label install \
+            --state all --limit 9999 --json title \
+            --jq '.[].title' > /tmp/install-titles.txt 2>/dev/null || true
+
+          python3 << 'COUNTS'
+          import json
+          from collections import Counter
+
+          counts = Counter()
+          try:
+              with open('/tmp/install-titles.txt') as f:
+                  for line in f:
+                      line = line.strip()
+                      if line.startswith('install: '):
+                          counts[line[len('install: '):]] += 1
+          except FileNotFoundError:
+              pass
+
+          with open('/tmp/install-counts.json', 'w') as f:
+              json.dump(dict(counts), f)
+          print(f"Install counts: {len(counts)} skills tracked")
+          COUNTS
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build skills-index.json
         run: |
@@ -29,6 +57,12 @@ jobs:
 
           with open('registry.json') as f:
               registry = json.load(f)
+
+          try:
+              with open('/tmp/install-counts.json') as f:
+                  install_counts = json.load(f)
+          except:
+              install_counts = {}
 
           skills = []
           for entry in registry.get('skills', []):
@@ -69,18 +103,23 @@ jobs:
 
               body = fm_match.group(2).strip()
 
-              # Check for ranker.js
-              ranker_url = f"https://raw.githubusercontent.com/{repo_path}/main/{path}/ranker.js"
-              has_ranker = False
+              # Fetch star count from GitHub API
+              stars = 0
               try:
-                  req = urllib.request.Request(ranker_url, headers={'User-Agent': 'StudyClawHub-Bot'})
-                  with urllib.request.urlopen(req, timeout=5) as resp:
-                      has_ranker = resp.status == 200
+                  api_url = f"https://api.github.com/repos/{repo_path}"
+                  req = urllib.request.Request(api_url, headers={
+                      'User-Agent': 'StudyClawHub-Bot',
+                      'Accept': 'application/vnd.github.v3+json'
+                  })
+                  with urllib.request.urlopen(req, timeout=10) as resp:
+                      repo_data = json.loads(resp.read().decode('utf-8'))
+                      stars = repo_data.get('stargazers_count', 0)
               except:
                   pass
 
+              skill_name = meta.get("name", name)
               skills.append({
-                  "name": meta.get("name", name),
+                  "name": skill_name,
                   "description": meta.get("description", ""),
                   "author": meta.get("author", author),
                   "version": meta.get("version", "1.0.0"),
@@ -88,8 +127,9 @@ jobs:
                   "repo": repo,
                   "repo_name": repo_path.split('/')[-1],
                   "path": path,
-                  "ranker": has_ranker or meta.get("ranker", False),
                   "registeredAt": entry.get("registeredAt", ""),
+                  "stars": stars,
+                  "installs": install_counts.get(skill_name, 0),
                   "skillmd_body": body[:2000],  # Truncate for index size
               })
 

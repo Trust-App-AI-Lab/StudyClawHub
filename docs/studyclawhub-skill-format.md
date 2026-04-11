@@ -10,7 +10,7 @@ and register them with StudyClawHub.
 ```
 my-skill/
 ├── SKILL.md          ← Required. Frontmatter metadata + instructions.
-└── (any other files)  ← Optional. References, scripts, examples, ranker.js, etc.
+└── (any other files)  ← Optional. References, scripts, examples, etc.
 ```
 
 ## SKILL.md
@@ -41,48 +41,29 @@ tags:
 | `version`     | `string`   | Yes      | Semver version string                          |
 | `tags`        | `string[]` | Yes      | Category tags for filtering/search             |
 | `repo`        | `string`   | No       | GitHub repo URL (auto-filled by submit Skill)  |
-| `ranker`      | `boolean`  | No       | If true, this Skill provides a `ranker.js`     |
 
 ### Body
 
 After the frontmatter, write the Skill instructions in Markdown. This is what
 Claude/OpenClaw will read when the Skill is activated.
 
-## Optional: ranker.js
-
-If your Skill provides a custom search ranking algorithm, include a `ranker.js`
-in the root of your Skill folder. It must export a single function:
-
-```js
-// ranker.js
-export default function rank(skills, query) {
-  // skills: Array<{ name, description, author, tags, ... }>
-  // query: string (search query)
-  // return: sorted Array of skills
-}
-```
-
-The StudyClawHub website and search Skill will load this function to re-rank
-search results.
-
 ## Example
 
 ```yaml
 ---
-name: pagerank-search
-description: "Ranks Skills by PageRank score based on cross-references."
+name: network-analyzer
+description: "Analyze social network structure and detect communities."
 author: zhangsan
 version: 1.0.0
 tags:
-  - search
-  - pagerank
-  - ranking
-ranker: true
+  - community-detection
+  - graph-analysis
+  - social-network
 ---
 
-# PageRank Search
+# Network Analyzer
 
-This Skill ranks StudyClawHub skills using the PageRank algorithm...
+This Skill helps you analyze social network graphs...
 ```
 
 ## Slugs

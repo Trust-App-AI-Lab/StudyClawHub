@@ -1,0 +1,38 @@
+name: Register a Skill
+description: Register your Skill with StudyClawHub
+title: "register: "
+labels: ["register"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Skill name
+      description: Kebab-case, e.g. "pagerank-search"
+      placeholder: my-awesome-skill
+    validations:
+      required: true
+
+  - type: input
+    id: repo
+    attributes:
+      label: GitHub repo URL
+      description: The repo where your Skill lives
+      placeholder: https://github.com/you/your-repo
+    validations:
+      required: true
+
+  - type: input
+    id: path
+    attributes:
+      label: Path to Skill folder
+      description: "If SKILL.md is in the repo root, leave as '.'"
+      placeholder: "."
+      value: "."
+
+  - type: input
+    id: author
+    attributes:
+      label: Your GitHub username
+      placeholder: your-username
+    validations:
+      required: true

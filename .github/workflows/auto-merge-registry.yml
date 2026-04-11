@@ -1,0 +1,132 @@
+name: Process Skill Registration
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  register:
+    if: contains(github.event.issue.labels.*.name, 'register')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse issue and update registry
+        run: |
+          python3 << 'SCRIPT'
+          import json, re, os, sys
+          from datetime import datetime, timezone
+
+          body = os.environ.get('ISSUE_BODY', '')
+          author_login = os.environ.get('ISSUE_AUTHOR', '')
+
+          # Parse form fields from issue body
+          def parse_field(text, field_id):
+              pattern = rf'### {field_id}\s*\n\s*(.+)'
+              m = re.search(pattern, text, re.IGNORECASE)
+              if m:
+                  return m.group(1).strip()
+              # Fallback: look for "field_id\n\nvalue" pattern
+              pattern = rf'{field_id}\s*\n\n(.+)'
+              m = re.search(pattern, text, re.IGNORECASE)
+              return m.group(1).strip() if m else ''
+
+          name = parse_field(body, 'Skill name')
+          repo = parse_field(body, 'GitHub repo URL')
+          path = parse_field(body, 'Path to Skill folder') or '.'
+          author = parse_field(body, 'Your GitHub username') or author_login
+
+          # Validate
+          errors = []
+          if not name:
+              errors.append('Missing skill name')
+          elif not re.match(r'^[a-z0-9][a-z0-9-]*$', name):
+              errors.append(f'Invalid name "{name}" — must be kebab-case')
+          if not repo:
+              errors.append('Missing repo URL')
+          elif not repo.startswith('https://github.com/'):
+              errors.append(f'Invalid repo URL "{repo}" — must be a GitHub URL')
+          if not author:
+              errors.append('Missing author')
+
+          if errors:
+              msg = 'Registration failed:\\n' + '\\n'.join(f'- {e}' for e in errors)
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write(f'comment={msg}\n')
+                  f.write('success=false\n')
+              print(msg, file=sys.stderr)
+              sys.exit(1)
+
+          # Load registry
+          with open('registry.json') as f:
+              registry = json.load(f)
+
+          # Check for duplicates
+          existing = [s for s in registry['skills'] if s['name'] == name]
+          if existing:
+              existing[0].update({
+                  'repo': repo,
+                  'path': path,
+                  'author': author,
+                  'updatedAt': datetime.now(timezone.utc).isoformat()
+              })
+              action = 'updated'
+          else:
+              registry['skills'].append({
+                  'name': name,
+                  'repo': repo,
+                  'path': path,
+                  'author': author,
+                  'registeredAt': datetime.now(timezone.utc).isoformat()
+              })
+              action = 'registered'
+
+          with open('registry.json', 'w') as f:
+              json.dump(registry, f, indent=2, ensure_ascii=False)
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'comment=Successfully {action} **{name}** by @{author}\\n')
+              f.write('success=true\n')
+
+          print(f'{action}: {name} by @{author}')
+          SCRIPT
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+        id: register
+
+      - name: Commit registry update
+        if: steps.register.outputs.success == 'true'
+        run: |
+          git config user.name "StudyClawHub Bot"
+          git config user.email "bot@studyclawhub"
+          git add registry.json
+          git commit -m "register: add skill from #${{ github.event.issue.number }}"
+          git push
+
+      - name: Comment and close issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const success = '${{ steps.register.outputs.success }}' === 'true';
+            const body = success
+              ? '✅ ${{ steps.register.outputs.comment }}\n\nThe skills index will be rebuilt shortly. Your Skill will appear on the website within a few minutes.'
+              : '❌ ${{ steps.register.outputs.comment }}\n\nPlease fix the errors and open a new issue.';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });
+            if (success) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                state: 'closed'
+              });
+            }

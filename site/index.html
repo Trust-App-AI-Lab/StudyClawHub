@@ -4,148 +4,306 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StudyClawHub — Skill Registry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --border: #30363d;
-      --text: #e6edf3;
-      --text-muted: #8b949e;
-      --accent: #58a6ff;
-      --accent-hover: #79c0ff;
-      --tag-bg: #1f6feb22;
-      --tag-border: #1f6feb55;
-      --green: #3fb950;
+      --bg: #09090b;
+      --surface: #18181b;
+      --surface-hover: #1e1e22;
+      --border: #27272a;
+      --border-hover: #3f3f46;
+      --text: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --green: #22c55e;
+      --green-dim: rgba(34,197,94,0.12);
+      --orange: #f59e0b;
+      --purple: #a78bfa;
+      --tag-bg: rgba(59,130,246,0.1);
+      --tag-border: rgba(59,130,246,0.25);
+      --radius: 8px;
+      --radius-lg: 12px;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
     a { color: var(--accent); text-decoration: none; }
-    a:hover { color: var(--accent-hover); text-decoration: underline; }
+    a:hover { color: var(--accent-hover); }
 
-    /* Header */
-    .header {
+    /* ── Nav ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(9,9,11,0.85);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      padding: 1rem 2rem;
+      padding: 0 2rem;
+      height: 56px;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.5rem;
     }
-    .header h1 { font-size: 1.25rem; font-weight: 600; }
-    .header .subtitle { color: var(--text-muted); font-size: 0.85rem; }
+    .nav-logo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 0.25rem; margin-left: 1rem; }
+    .nav-links a {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--text);
+      background: var(--surface);
+    }
+    .nav-spacer { flex: 1; }
 
-    /* Main */
-    .main { max-width: 960px; margin: 0 auto; padding: 2rem 1rem; }
-
-    /* Search bar */
-    .search-row {
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 4rem 1rem 2.5rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      padding: 0.2rem 0.75rem;
+      border-radius: 20px;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero-stats {
       display: flex;
-      gap: 0.75rem;
+      justify-content: center;
+      gap: 2rem;
       margin-bottom: 1.5rem;
+    }
+    .hero-stat {
+      text-align: center;
+    }
+    .hero-stat-num {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .hero-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.55rem 1.25rem;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); color: #fff; text-decoration: none; }
+    .btn-outline { background: transparent; color: var(--text-secondary); border-color: var(--border); }
+    .btn-outline:hover { color: var(--text); border-color: var(--border-hover); background: var(--surface); text-decoration: none; }
+
+    /* ── Custom rank banner ── */
+    .custom-rank-banner {
+      background: rgba(59,130,246,0.08);
+      border: 1px solid var(--tag-border);
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── Toolbar ── */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
       flex-wrap: wrap;
     }
-    .search-input {
-      flex: 1;
-      min-width: 200px;
-      padding: 0.6rem 1rem;
+    .toolbar-select {
+      padding: 0.55rem 0.75rem;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: var(--radius);
       background: var(--surface);
-      color: var(--text);
-      font-size: 0.95rem;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-family: inherit;
+      cursor: pointer;
       outline: none;
     }
-    .search-input:focus { border-color: var(--accent); }
-    .ranker-select {
-      padding: 0.6rem 1rem;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--surface);
-      color: var(--text);
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-
-    /* Stats */
-    .stats {
+    .toolbar-select:hover { border-color: var(--border-hover); }
+    .result-count {
+      font-size: 0.8rem;
       color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
 
-    /* Skill card */
-    .skill-card {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 0.75rem;
-      background: var(--surface);
-      transition: border-color 0.15s;
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
     }
-    .skill-card:hover { border-color: var(--accent); }
-    .skill-header {
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .card:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-hover);
+      transform: translateY(-1px);
+    }
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .card-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+    }
+    .card-version {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+    .card-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-footer {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      margin-bottom: 0.5rem;
+      margin-top: auto;
+      padding-top: 0.4rem;
     }
-    .skill-name { font-size: 1.1rem; font-weight: 600; color: var(--accent); }
-    .skill-version { color: var(--text-muted); font-size: 0.8rem; }
-    .skill-desc { color: var(--text-muted); margin-bottom: 0.6rem; }
-    .skill-meta {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      flex-wrap: wrap;
-    }
-    .skill-author {
+    .card-author {
       display: flex;
       align-items: center;
       gap: 0.35rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
     }
-    .skill-author img {
-      width: 20px;
-      height: 20px;
+    .card-author img {
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
     }
-    .tags { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .card-author:hover { color: var(--text-secondary); }
+    .card-tags {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+      flex: 1;
+    }
     .tag {
-      padding: 0.15rem 0.5rem;
-      border: 1px solid var(--tag-border);
-      border-radius: 12px;
+      font-size: 0.68rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 4px;
       background: var(--tag-bg);
-      font-size: 0.75rem;
       color: var(--accent);
+      border: 1px solid var(--tag-border);
     }
-    .skill-rank {
-      color: var(--green);
+    .card-stat {
       font-size: 0.75rem;
-      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
     }
+    .card-stat .num { color: var(--text-secondary); font-weight: 500; }
 
-    /* Detail overlay */
+    /* ── Detail overlay ── */
     .overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
       z-index: 100;
       justify-content: center;
       align-items: flex-start;
-      padding: 2rem;
+      padding: 3rem 1rem;
       overflow-y: auto;
     }
     .overlay.active { display: flex; }
-    .detail-panel {
+    .detail {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: var(--radius-lg);
       max-width: 720px;
       width: 100%;
       padding: 2rem;
@@ -155,312 +313,336 @@
       position: absolute;
       top: 1rem;
       right: 1rem;
-      background: none;
-      border: none;
+      background: var(--bg);
+      border: 1px solid var(--border);
       color: var(--text-muted);
-      font-size: 1.5rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
+      font-size: 1.1rem;
+    }
+    .detail-close:hover { color: var(--text); border-color: var(--border-hover); }
+    .detail-header { margin-bottom: 1rem; }
+    .detail-name { font-size: 1.3rem; font-weight: 700; }
+    .detail-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
     }
     .detail-body {
+      border-top: 1px solid var(--border);
+      padding-top: 1.25rem;
       margin-top: 1rem;
       line-height: 1.8;
-      color: var(--text);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
     }
     .detail-body h1, .detail-body h2, .detail-body h3 {
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
+      color: var(--text);
+      margin: 1.25rem 0 0.5rem;
     }
     .detail-body code {
       background: var(--bg);
       padding: 0.15rem 0.4rem;
       border-radius: 4px;
-      font-size: 0.9em;
+      font-size: 0.85em;
     }
     .detail-body pre {
       background: var(--bg);
       padding: 1rem;
-      border-radius: 6px;
+      border-radius: var(--radius);
       overflow-x: auto;
       margin: 0.5rem 0;
+      border: 1px solid var(--border);
+    }
+    .detail-install {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+      font-size: 0.82rem;
+      color: var(--green);
     }
 
-    /* Empty state */
+    /* ── Empty ── */
     .empty {
       text-align: center;
-      padding: 3rem 1rem;
+      padding: 4rem 1rem;
       color: var(--text-muted);
     }
-    .empty h2 { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--text); }
+    .empty h2 { color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 0.5rem; }
 
-    /* Submit guide */
-    .submit-banner {
-      border: 1px dashed var(--border);
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-    .submit-banner a { font-weight: 600; }
-
-    /* Loading */
-    .loading { text-align: center; padding: 3rem; color: var(--text-muted); }
-
-    /* Footer */
+    /* ── Footer ── */
     .footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      color: var(--text-muted);
-      font-size: 0.8rem;
       border-top: 1px solid var(--border);
-      margin-top: 2rem;
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+    .footer a { color: var(--text-secondary); }
+
+    /* ── Loading ── */
+    .loading {
+      text-align: center;
+      padding: 4rem;
+      color: var(--text-muted);
+    }
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.75rem; }
+      .grid { grid-template-columns: 1fr; }
+      .nav { padding: 0 1rem; }
+      .nav-links { display: none; }
+      .hero-stats { gap: 1.25rem; }
     }
   </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>StudyClawHub</h1>
-  <span class="subtitle">Social Network Mining — Skill Registry</span>
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-logo">Study<span>Claw</span>Hub</div>
+  <div class="nav-links">
+    <a href="#" class="active">Skills</a>
+    <a href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">GitHub</a>
+    <a href="https://github.com/Trust-App-AI-Lab/StudyClawHub/blob/main/docs/studyclawhub-skill-format.md" target="_blank">Docs</a>
+  </div>
+  <div class="nav-spacer"></div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">HKUST-GZ · AI Thrust · TAI Lab</div>
+  <h1>The skill registry for <em>sharp students</em></h1>
+  <p>Browse, install, and publish Claude Code / OpenClaw skills.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="stat-skills">0</div>
+      <div class="hero-stat-label">Skills</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num" id="stat-authors">0</div>
+      <div class="hero-stat-label">Authors</div>
+    </div>
+  </div>
+  <div class="hero-actions">
+    <a class="btn btn-primary" href="#skills-section">Browse Skills</a>
+    <a class="btn btn-primary" id="submit-btn-hero" href="#" target="_blank">+ Submit Skill</a>
+    <a class="btn btn-outline" href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">View on GitHub</a>
+  </div>
+</section>
+
+<!-- Main -->
+<div class="container" id="skills-section">
+  <div class="toolbar">
+    <select class="toolbar-select" id="sort-select" onchange="applySort()">
+      <option value="stars">Most starred</option>
+      <option value="installs">Most installed</option>
+      <option value="newest">Newest first</option>
+      <option value="name">A → Z</option>
+    </select>
+  </div>
+  <div class="result-count" id="result-count"></div>
+  <div class="grid" id="results"></div>
 </div>
 
-<div class="main" id="app">
-  <div class="loading">Loading skills index...</div>
-</div>
-
+<!-- Detail overlay -->
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeDetail()">
-  <div class="detail-panel">
+  <div class="detail">
     <button class="detail-close" onclick="closeDetail()">&times;</button>
     <div id="detail-content"></div>
   </div>
 </div>
 
+<!-- Footer -->
 <div class="footer">
-  StudyClawHub — A lightweight Skill registry for Social Network Mining course.
-  <br>Powered by GitHub Pages. No servers, no databases.
+  <div style="margin-bottom:0.4rem;">
+    <strong style="color:var(--text-secondary);">HKUST-GZ</strong> &nbsp;·&nbsp; AI Thrust &nbsp;·&nbsp; Trust-App AI Lab &nbsp;·&nbsp; PI: Enyan Dai
+  </div>
+  StudyClawHub — A lightweight skill registry for Social Network Mining.
+  Inspired by <a href="https://clawhub.ai" target="_blank">ClawHub</a>.
+  Powered by GitHub. Zero servers.
 </div>
 
 <script>
-// ============================================================
-// StudyClawHub — Static Skill Browser
-// ============================================================
-
 const INDEX_URL = 'skills-index.json';
-const JSDELIVR = 'https://cdn.jsdelivr.net/gh';
+const REPO = 'Trust-App-AI-Lab/StudyClawHub';
 
 let allSkills = [];
-let rankers = [];
-let activeRanker = null;
 
-// -- URL params --
-const params = new URLSearchParams(location.search);
-const initQuery = params.get('q') || '';
-const initRanker = params.get('ranker') || '';
-
-// -- Boot --
 async function boot() {
   try {
     const res = await fetch(INDEX_URL);
     const data = await res.json();
     allSkills = data.skills || [];
-    rankers = allSkills.filter(s => s.ranker);
-    render();
-    if (initRanker) {
-      await loadRanker(initRanker);
-    }
-    if (initQuery) {
-      document.getElementById('search').value = initQuery;
-      applySearch();
-    }
+
+    // Stats
+    const authors = new Set(allSkills.map(s => s.author));
+    document.getElementById('stat-skills').textContent = allSkills.length;
+    document.getElementById('stat-authors').textContent = authors.size;
+
+    // Submit button
+    document.getElementById('submit-btn-hero').href =
+      `https://github.com/${REPO}/issues/new?template=register-skill.yml`;
+
+    applySort();
   } catch (e) {
-    document.getElementById('app').innerHTML =
-      '<div class="empty"><h2>Could not load skills index</h2><p>' + e.message + '</p></div>';
+    document.getElementById('results').innerHTML =
+      `<div class="empty"><h2>Could not load skills index</h2><p>${esc(e.message)}</p></div>`;
   }
 }
 
-// -- Render --
-function render() {
-  const app = document.getElementById('app');
-  app.innerHTML = `
-    <div class="submit-banner">
-      Want to submit your Skill? Use the <strong>studyclawhub-submit</strong> Skill in Claude Code / OpenClaw,
-      or push directly to the repo.
-      <a href="https://github.com/${getRepoPath()}" target="_blank">View on GitHub</a>
-    </div>
-    <div class="search-row">
-      <input class="search-input" id="search" type="text"
-        placeholder="Search skills by name, tag, author, or description..."
-        oninput="applySearch()" />
-      <select class="ranker-select" id="ranker-select" onchange="onRankerChange()">
-        <option value="">Default ranking</option>
-        ${rankers.map(r =>
-          `<option value="${r.author}/${r.repo_name}" ${initRanker === r.author+'/'+r.repo_name ? 'selected' : ''}>
-            ${r.name} by @${r.author}
-          </option>`
-        ).join('')}
-      </select>
-    </div>
-    <div class="stats" id="stats"></div>
-    <div id="results"></div>
-  `;
-  applySearch();
+function applySort() {
+  const sort = document.getElementById('sort-select').value;
+  let sorted = [...allSkills];
+  if (sort === 'stars') sorted.sort((a,b) => (b.stars||0) - (a.stars||0));
+  else if (sort === 'installs') sorted.sort((a,b) => (b.installs||0) - (a.installs||0));
+  else if (sort === 'newest') sorted.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
+  else if (sort === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name));
+  renderResults(sorted);
 }
 
-// -- Search --
-function applySearch() {
-  const query = (document.getElementById('search')?.value || '').toLowerCase().trim();
-  let filtered = allSkills;
+/**
+ * Public API: called by search Skill via browser JS injection.
+ * @param {string[]} orderedNames - skill names in ranked order
+ * @param {string} [query] - optional search query for display
+ */
+window.applyCustomOrder = function(orderedNames, query) {
+  const orderMap = new Map(orderedNames.map((name, i) => [name, i]));
+  const sorted = [...allSkills].sort((a, b) => {
+    const ia = orderMap.has(a.name) ? orderMap.get(a.name) : 99999;
+    const ib = orderMap.has(b.name) ? orderMap.get(b.name) : 99999;
+    return ia - ib;
+  });
 
-  if (query) {
-    filtered = allSkills.filter(s =>
-      s.name.toLowerCase().includes(query) ||
-      s.description.toLowerCase().includes(query) ||
-      s.author.toLowerCase().includes(query) ||
-      (s.tags || []).some(t => t.toLowerCase().includes(query))
-    );
+  // Show banner
+  let banner = document.getElementById('custom-rank-banner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'custom-rank-banner';
+    banner.className = 'custom-rank-banner';
+    document.getElementById('skills-section').prepend(banner);
   }
+  banner.innerHTML = 'Custom ranking applied' +
+    (query ? ' for "<strong>' + esc(query) + '</strong>"' : '') +
+    ' · <a href="javascript:resetOrder()" style="color:var(--accent)">Reset</a>';
 
-  // Apply active ranker if loaded
-  if (activeRanker) {
-    try {
-      filtered = activeRanker(filtered, query);
-    } catch (e) {
-      console.warn('Ranker error:', e);
-    }
-  }
+  document.getElementById('sort-select').style.display = 'none';
+  renderResults(sorted);
+};
 
-  renderResults(filtered, query);
+function resetOrder() {
+  const banner = document.getElementById('custom-rank-banner');
+  if (banner) banner.remove();
+  document.getElementById('sort-select').style.display = '';
+  applySort();
 }
 
-// -- Render results --
-function renderResults(skills, query) {
-  const stats = document.getElementById('stats');
-  const results = document.getElementById('results');
+function renderResults(skills) {
+  document.getElementById('result-count').textContent =
+    `${skills.length} skill${skills.length!==1?'s':''} registered`;
 
-  stats.textContent = `${skills.length} skill${skills.length !== 1 ? 's' : ''} found` +
-    (activeRanker ? ` (ranked by custom algorithm)` : '');
-
-  if (skills.length === 0) {
-    results.innerHTML = `
-      <div class="empty">
-        <h2>No skills found</h2>
-        <p>Try a different search term, or be the first to create a Skill for "${query}"!</p>
+  if (!skills.length) {
+    document.getElementById('results').innerHTML = `
+      <div class="empty" style="grid-column:1/-1">
+        <h2>No skills yet</h2>
+        <p>Be the first to submit a Skill!</p>
       </div>`;
     return;
   }
 
-  results.innerHTML = skills.map((s, i) => `
-    <div class="skill-card" onclick="showDetail('${s.name}')" style="cursor:pointer">
-      <div class="skill-header">
-        <span class="skill-name">${esc(s.name)}</span>
-        <span class="skill-version">v${esc(s.version || '1.0.0')}</span>
-        ${s._rankScore != null ? `<span class="skill-rank">score: ${s._rankScore.toFixed(2)}</span>` : ''}
+  document.getElementById('results').innerHTML = skills.map(s => `
+    <div class="card" onclick="showDetail('${esc(s.name)}')">
+      <div class="card-top">
+        <span class="card-name">${esc(s.name)}</span>
+        <span class="card-version">v${esc(s.version||'1.0.0')}</span>
       </div>
-      <div class="skill-desc">${esc(s.description)}</div>
-      <div class="skill-meta">
-        <a class="skill-author" href="https://github.com/${esc(s.author)}" target="_blank" onclick="event.stopPropagation()">
-          <img src="https://github.com/${esc(s.author)}.png?size=40" alt="${esc(s.author)}" />
+      <div class="card-desc">${esc(s.description)}</div>
+      <div class="card-footer">
+        <a class="card-author" href="https://github.com/${esc(s.author)}" target="_blank" onclick="event.stopPropagation()">
+          <img src="https://github.com/${esc(s.author)}.png?size=36" alt="" loading="lazy" />
           @${esc(s.author)}
         </a>
-        <div class="tags">
-          ${(s.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('')}
+        <div class="card-tags">
+          ${(s.tags||[]).slice(0,3).map(t => `<span class="tag">${esc(t)}</span>`).join('')}
         </div>
-        <a href="${esc(s.repo)}" target="_blank" onclick="event.stopPropagation()">repo</a>
+        ${s.stars ? `<span class="card-stat">★ ${s.stars}</span>` : ''}
+        ${s.installs ? `<span class="card-stat">↓ ${s.installs}</span>` : ''}
       </div>
     </div>
   `).join('');
 }
 
-// -- Ranker loading --
-async function onRankerChange() {
-  const val = document.getElementById('ranker-select').value;
-  if (!val) {
-    activeRanker = null;
-    applySearch();
-    return;
-  }
-  await loadRanker(val);
-  applySearch();
-}
-
-async function loadRanker(rankerRef) {
-  try {
-    // rankerRef format: "author/repo" or "author/repo/path"
-    const url = `${JSDELIVR}/${rankerRef}@main/ranker.js`;
-    const res = await fetch(url);
-    const code = await res.text();
-    // Create a function from the module code
-    const fn = new Function('skills', 'query', code + '\nreturn typeof rank === "function" ? rank(skills, query) : skills;');
-    activeRanker = fn;
-  } catch (e) {
-    console.warn('Failed to load ranker:', rankerRef, e);
-    activeRanker = null;
-  }
-}
-
-// -- Detail view --
 function showDetail(name) {
-  const skill = allSkills.find(s => s.name === name);
-  if (!skill) return;
-  const content = document.getElementById('detail-content');
-  content.innerHTML = `
-    <div class="skill-header">
-      <span class="skill-name" style="font-size:1.4rem">${esc(skill.name)}</span>
-      <span class="skill-version">v${esc(skill.version || '1.0.0')}</span>
-    </div>
-    <div class="skill-desc" style="margin:0.5rem 0">${esc(skill.description)}</div>
-    <div class="skill-meta" style="margin-bottom:1rem">
-      <a class="skill-author" href="https://github.com/${esc(skill.author)}" target="_blank">
-        <img src="https://github.com/${esc(skill.author)}.png?size=40" />
-        @${esc(skill.author)}
-      </a>
-      <div class="tags">
-        ${(skill.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('')}
+  const s = allSkills.find(x => x.name === name);
+  if (!s) return;
+  document.getElementById('detail-content').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-name">${esc(s.name)}</div>
+      <div class="detail-meta">
+        <a class="card-author" href="https://github.com/${esc(s.author)}" target="_blank">
+          <img src="https://github.com/${esc(s.author)}.png?size=36" alt="" />
+          @${esc(s.author)}
+        </a>
+        <span>v${esc(s.version||'1.0.0')}</span>
+        <span>★ ${s.stars||0} stars</span>
+        <span>↓ ${s.installs||0} installs</span>
+        <div class="card-tags">${(s.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
+        <a href="${esc(s.repo)}" target="_blank">GitHub repo →</a>
       </div>
-      <a href="${esc(skill.repo)}" target="_blank">View on GitHub</a>
     </div>
-    <hr style="border-color:var(--border);margin:1rem 0" />
-    <div class="detail-body">
-      <h3>Install</h3>
-      <pre><code>Use the studyclawhub-install Skill in Claude Code / OpenClaw:\n"install ${esc(skill.name)}"</code></pre>
-      ${skill.skillmd_body ? `<hr style="border-color:var(--border);margin:1rem 0"/><div>${simpleMarkdown(skill.skillmd_body)}</div>` : ''}
-    </div>
+    <div class="detail-install">$ studyclawhub-install ${esc(s.name)}</div>
+    ${s.skillmd_body ? `<div class="detail-body">${simpleMarkdown(s.skillmd_body)}</div>` : ''}
   `;
   document.getElementById('overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
 }
 
 function closeDetail() {
   document.getElementById('overlay').classList.remove('active');
+  document.body.style.overflow = '';
 }
 
-// -- Utils --
 function esc(s) {
   if (!s) return '';
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function simpleMarkdown(text) {
-  // Very basic markdown → HTML for detail view
-  return esc(text)
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
-    .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/\n/g, '<br/>');
+function simpleMarkdown(t) {
+  return esc(t)
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/\n\n/g,'<br/><br/>')
+    .replace(/\n/g,'<br/>');
 }
 
-function getRepoPath() {
-  // Can be overridden via meta tag or env
-  return document.querySelector('meta[name="studyclawhub-repo"]')?.content || 'instructor/StudyClawHub';
-}
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeDetail(); });
 
-// -- Keyboard --
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeDetail();
-});
-
-// -- Go --
 boot();
 </script>
 </body>

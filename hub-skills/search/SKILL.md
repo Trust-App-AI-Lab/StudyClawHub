@@ -1,8 +1,8 @@
 ---
 name: studyclawhub-search
-description: "Search for Skills on StudyClawHub. Use when a student says 'search skills', 'find a skill about X', 'search StudyClawHub', '搜索skill', or '找skill'. Fetches the skills index, applies optional custom ranking, and displays results. Can open the StudyClawHub website with ranking parameters for visual browsing."
+description: "Search for Skills on StudyClawHub. Use when a student says 'search skills', 'find a skill about X', 'search StudyClawHub', '搜索skill', or '找skill'. LLM-driven semantic search — fetches all skills, understands user intent, ranks by relevance, and visualizes results on the website."
 author: studyclawhub
-version: 1.0.0
+version: 3.0.0
 tags:
   - hub
   - search
@@ -12,6 +12,8 @@ tags:
 # StudyClawHub Search
 
 You are helping a student search and discover Skills on StudyClawHub.
+You (the LLM) are the search engine — read all skills, understand what
+the student wants, and decide the best ranking yourself.
 
 ## Workflow
 
@@ -21,65 +23,65 @@ Ask the student what they're looking for. They might say:
 - A topic: "community detection", "graph visualization"
 - A tag: "pagerank", "centrality"
 - An author: "zhangsan"
+- A vague need: "something to help me analyze networks"
 - Or just "show me everything"
 
 ### Step 2: Fetch the index
 
-Fetch `skills-index.json` from the StudyClawHub repo or website:
+Fetch `skills-index.json` from the StudyClawHub repo:
 
 ```
-https://raw.githubusercontent.com/{STUDYCLAWHUB_REPO}/main/skills-index.json
+https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/skills-index.json
 ```
 
-Or if the `STUDYCLAWHUB_REPO` env var is set, use that.
+Parse it as JSON. The `skills` array contains all registered skills with
+fields: `name`, `description`, `tags`, `author`, `version`, `stars`,
+`installs`, `registeredAt`, `repo`, `skillmd_body`.
 
-### Step 3: Search and rank
+### Step 3: Read and rank
 
-Filter and rank the skills based on the query:
+Read every skill's full information — name, description, tags, and the
+`skillmd_body` (the content of the SKILL.md). Use your understanding of
+the student's query to rank them by relevance. Consider:
 
-1. **Text match**: Match query against `name`, `description`, `tags`, and `author`
-2. **Tag match**: Exact tag matches get boosted
-3. **Default ranking**: Sort by relevance score, then by `registeredAt` (newest first)
+- Semantic relevance to the query (not just keyword matching)
+- Quality of the description and documentation
+- Stars and install counts as popularity signals
+- Tag relevance
+- How well the skill solves the student's actual need
 
-If the student has a preferred ranker Skill installed locally, ask if they
-want to use it for custom ranking.
+You decide the final order. There is no external ranking algorithm —
+you are the ranker.
 
-### Step 4: Display results
+### Step 4: Display results in CLI
 
-Show results in a clear format:
+Show the top results in a clear format:
 
 ```
-1. [skill-name] by @author
+1. [skill-name] by @author  ★3 ↓12
    description text here
    Tags: tag1, tag2 | v1.0.0
-   Repo: https://github.com/author/repo
 
-2. [another-skill] by @author2
+2. [another-skill] by @author2  ★1 ↓5
    ...
 ```
 
-### Step 5: Offer visual browsing
+Briefly explain why you ranked them this way if it's not obvious.
 
-After showing text results, offer to open the StudyClawHub website with
-the search query pre-filled:
+### Step 5: Visualize on website
 
+After ranking, open the StudyClawHub website and inject the ranking:
+
+1. Open `https://trust-app-ai-lab.github.io/StudyClawHub/` in the browser
+2. Wait for the page to finish loading
+3. Execute JavaScript on the page to call the public API:
+
+```javascript
+window.applyCustomOrder(["skill-name-1", "skill-name-2", ...], "the search query")
 ```
-https://{STUDYCLAWHUB_PAGES_URL}/?q={query}
-```
 
-If the student has a custom ranker, include it:
+The first argument is an array of skill names in ranked order.
+The second argument is the search query string (optional, for display).
 
-```
-https://{STUDYCLAWHUB_PAGES_URL}/?q={query}&ranker={author}/{repo}
-```
-
-This opens in CC's preview panel or the browser, showing the same results
-with the custom ranking applied visually.
-
-## Notes
-
-- The search is intentionally simple (text matching). Students are encouraged
-  to write their own search/ranking Skills with more sophisticated algorithms
-  (PageRank, collaborative filtering, community detection, etc.) as part of
-  the Social Network Mining course.
-- Each student's ranking Skill is itself a course deliverable.
+The website will instantly re-render with the custom ranking and show
+a banner indicating that a custom ranking is active.
