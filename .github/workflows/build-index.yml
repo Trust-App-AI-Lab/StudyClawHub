@@ -166,25 +166,6 @@ jobs:
           print(f"\nDone: {len(skills)} skills indexed.")
           SCRIPT
 
-      - name: Commit updated index
-        run: |
-          git config user.name "StudyClawHub Bot"
-          git config user.email "bot@studyclawhub"
-          git add skills-index.json
-          git diff --cached --quiet || git commit -m "chore: rebuild skills index [skip ci]"
-          git push
-
-  deploy-pages:
-    needs: build-index
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Pull latest index
-        run: git pull origin main
-
       - name: Copy index to site
         run: cp skills-index.json site/skills-index.json
 
