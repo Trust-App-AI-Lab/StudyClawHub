@@ -52,8 +52,26 @@ jobs:
       - name: Build skills-index.json
         run: |
           python3 << 'SCRIPT'
-          import json, urllib.request, yaml, re, sys
+          import json, urllib.request, re, sys
           from datetime import datetime, timezone
+
+          def parse_frontmatter(text):
+              """Parse simple YAML frontmatter without PyYAML dependency."""
+              meta = {}
+              for line in text.strip().splitlines():
+                  m = re.match(r'^(\w+)\s*:\s*(.*)', line)
+                  if not m:
+                      continue
+                  key, val = m.group(1), m.group(2).strip()
+                  # Handle list values like: tags: hub, submit, publish
+                  if ',' in val:
+                      meta[key] = [v.strip() for v in val.split(',')]
+                  # Handle list values like: [hub, submit]
+                  elif val.startswith('[') and val.endswith(']'):
+                      meta[key] = [v.strip().strip("'\"") for v in val[1:-1].split(',')]
+                  else:
+                      meta[key] = val.strip("'\"")
+              return meta
 
           with open('registry.json') as f:
               registry = json.load(f)
@@ -96,9 +114,9 @@ jobs:
                   continue
 
               try:
-                  meta = yaml.safe_load(fm_match.group(1))
+                  meta = parse_frontmatter(fm_match.group(1))
               except Exception as e:
-                  print(f"Skipping {name}: YAML parse error: {e}", file=sys.stderr)
+                  print(f"Skipping {name}: frontmatter parse error: {e}", file=sys.stderr)
                   continue
 
               body = fm_match.group(2).strip()
