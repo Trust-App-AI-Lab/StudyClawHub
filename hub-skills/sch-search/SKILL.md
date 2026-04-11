@@ -1,12 +1,17 @@
 ---
-name: studyclawhub-search
-description: "Search for Skills on StudyClawHub. Use when a student says 'search skills', 'find a skill about X', 'search StudyClawHub', '搜索skill', or '找skill'. LLM-driven semantic search — fetches all skills, understands user intent, ranks by relevance, and visualizes results on the website."
+name: sch-search
+description: "Search for Skills on StudyClawHub. Use when a student says 'sch search', 'search StudyClawHub', 'find a skill on sch', 'browse StudyClawHub', or 'sch find'. LLM-driven semantic search — fetches all skills, understands user intent, ranks by relevance, and visualizes results on the website."
 author: EnyanDai
 version: 3.0.0
 tags:
   - hub
   - search
   - discover
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - curl
 ---
 
 # StudyClawHub Search

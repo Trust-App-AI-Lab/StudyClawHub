@@ -2,9 +2,16 @@
 
 ## What is this
 
-StudyClawHub is a lightweight Skill registry for a Social Network Mining
-university course. Students write Claude Code / OpenClaw Skills and register
-them here. It is inspired by ClawHub but uses zero servers — just GitHub.
+StudyClawHub is a lightweight Skill registry for a university course at
+HKUST-GZ (AI Thrust, TAI Lab). Students write Claude Code / OpenClaw Skills
+and register them here. Inspired by ClawHub, uses zero servers — just GitHub.
+
+## Skill format
+
+**ClawHub-compatible.** Skills use `SKILL.md` with YAML frontmatter, same
+format as ClawHub. Students can publish to both StudyClawHub and ClawHub
+without modification. See `docs/studyclawhub-skill-format.md` for the full
+spec including `metadata.openclaw` fields.
 
 ## Architecture
 
@@ -13,8 +20,8 @@ them here. It is inspired by ClawHub but uses zero servers — just GitHub.
 - **Static website**: `site/index.html` hosted on GitHub Pages. Browse-only
   with sorting by stars/installs/time. Exposes `window.applyCustomOrder()`
   JS API for the search Skill to inject LLM-driven rankings.
-- **Hub Skills**: `hub-skills/submit`, `hub-skills/search`, `hub-skills/install`
-  are the CLI/agent interaction layer.
+- **Hub Skills**: `hub-skills/sch-create`, `hub-skills/sch-submit`, `hub-skills/sch-search`,
+  `hub-skills/sch-install` are the CLI/agent interaction layer.
 - **No Convex, no OpenAI, no server, no database.**
 
 ## Key files
@@ -22,15 +29,19 @@ them here. It is inspired by ClawHub but uses zero servers — just GitHub.
 - `registry.json` — skill registry (repo URLs + author info)
 - `skills-index.json` — auto-generated metadata index
 - `site/index.html` — static website
-- `hub-skills/` — submit, search, install Skills
-- `docs/studyclawhub-skill-format.md` — Skill format spec
+- `hub-skills/sch-create` — scaffold a new ClawHub-compatible Skill
+- `hub-skills/sch-submit` — register a Skill via GitHub Issue
+- `hub-skills/sch-search` — LLM-driven semantic search
+- `hub-skills/sch-install` — install a Skill + log install count
+- `docs/studyclawhub-skill-format.md` — Skill format spec (ClawHub-compatible)
 
 ## Student workflow
 
-1. Student writes a Skill in their own GitHub repo
-2. Registers it via `submit` Skill or website Issue form
-3. GitHub Actions fetches metadata, star counts, install counts, and rebuilds `skills-index.json`
-4. Website displays all skills; search Skill provides LLM-driven semantic ranking
+1. Student creates a Skill (use `create` Skill for guided scaffolding)
+2. Pushes to their own public GitHub repo
+3. Registers via `submit` Skill or website Submit form
+4. GitHub Actions fetches metadata, star counts, install counts, rebuilds `skills-index.json`
+5. Website displays all skills; `search` Skill provides LLM-driven semantic ranking
 
 ## Search & ranking
 

@@ -1,12 +1,19 @@
 ---
-name: studyclawhub-submit
-description: "Submit your Skill to StudyClawHub. Use when a student says 'submit my skill', 'publish to StudyClawHub', 'register my skill', '提交skill', or '发布skill'. Guides the student through validating their Skill folder, pushing to their own GitHub repo, and registering it via a GitHub Issue."
+name: sch-submit
+description: "Submit your Skill to StudyClawHub. Use when a student says 'sch submit', 'submit to StudyClawHub', 'register on StudyClawHub', 'publish to sch', or 'sch publish'. Guides the student through validating their Skill folder and registering it via a GitHub Issue."
 author: EnyanDai
 version: 2.0.0
 tags:
   - hub
   - submit
   - publish
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - git
+      anyBins:
+        - gh
 ---
 
 # StudyClawHub Submit
@@ -28,7 +35,10 @@ Ask the student which folder contains their Skill. Read the `SKILL.md`
 file in that folder and validate:
 
 - [ ] `SKILL.md` exists
-- [ ] YAML frontmatter has required fields: `name`, `description`, `author`, `version`, `tags`
+- [ ] YAML frontmatter has required fields: `name`, `description`
+- [ ] Recommended fields present: `author`, `version`, `tags`
+- [ ] If `metadata.openclaw` is present, validate that declared env vars / bins
+      are actually referenced in the body
 - [ ] `name` is kebab-case and URL-safe: `^[a-z0-9][a-z0-9-]*$`
 - [ ] `author` matches their GitHub username
 - [ ] `tags` has at least one tag
@@ -44,22 +54,40 @@ Check if the student's folder is in a Git repo with a remote:
 git remote -v
 ```
 
-**If already in a repo with a remote:** ensure changes are committed and pushed.
+**Case A — Already in a repo with a remote:**
 
-**If not in a repo:** run the following for the student:
+Ensure changes are committed and pushed:
+
+```bash
+git add .
+git commit -m "Update {skill-name}"
+git push
+```
+
+**Case B — Not in a repo yet:**
 
 ```bash
 git init
 git add .
-git commit -m "Initial commit"
+git commit -m "Initial commit: {skill-name}"
 ```
 
-Then tell the student to create a repo on GitHub:
-- Open this link in their browser: `https://github.com/new`
-- Repo name can be anything, must be **Public**
-- Do NOT initialize with README
+Then check if `gh` is available:
 
-After the student creates the repo and gives you the URL, run:
+```bash
+gh --version
+```
+
+**If `gh` is available**, create the repo and push in one command:
+
+```bash
+gh repo create {skill-name} --public --source=. --push
+```
+
+**If `gh` is NOT available**, tell the student to create a repo manually:
+- Open `https://github.com/new` in their browser
+- Must be **Public**, do NOT initialize with README
+- After creation, run:
 
 ```bash
 git remote add origin https://github.com/{username}/{repo}.git

@@ -1,12 +1,19 @@
 ---
-name: studyclawhub-install
-description: "Install a Skill from StudyClawHub. Use when a student says 'install skill X', 'download skill', 'get that skill', '安装skill', or '下载skill'. Fetches the Skill from the author's GitHub repo and installs it locally."
+name: sch-install
+description: "Install a Skill from StudyClawHub. Use when a student says 'sch install X', 'install from StudyClawHub', 'get skill from sch', or 'download from StudyClawHub'. Fetches the Skill from the author's GitHub repo and installs it locally."
 author: EnyanDai
 version: 2.0.0
 tags:
   - hub
   - install
   - download
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - git
+      anyBins:
+        - gh
 ---
 
 # StudyClawHub Install
@@ -29,6 +36,16 @@ Fetch the index:
 ```
 https://raw.githubusercontent.com/{STUDYCLAWHUB_REPO}/main/skills-index.json
 ```
+
+If the skill is **not found** in the StudyClawHub index, tell the student:
+
+> This skill isn't registered on StudyClawHub. If it's a community skill,
+> you can try installing it from ClawHub instead:
+> ```
+> /install {skill-name}
+> ```
+
+Then stop — do not continue with the StudyClawHub install flow.
 
 ### Step 2: Fetch Skill details
 
@@ -58,14 +75,10 @@ git clone --depth 1 {repo_url} /tmp/skill-download
 
 Copy the Skill folder to the student's local skills directory:
 
-For Claude Code:
+Copy the Skill into the local skills directory:
+
 ```bash
 cp -r /tmp/skill-download/{path} ~/.claude/skills/{skill-name}/
-```
-
-For OpenClaw:
-```bash
-cp -r /tmp/skill-download/{path} ~/.openclaw/skills/{skill-name}/
 ```
 
 ### Step 5: Log the install and suggest starring
