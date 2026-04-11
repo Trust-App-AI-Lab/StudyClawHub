@@ -1,0 +1,139 @@
+name: Build Skills Index
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'registry.json'
+  workflow_dispatch:
+  schedule:
+    # Rebuild index every 6 hours to pick up changes in student repos
+    - cron: '0 */6 * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build skills-index.json
+        run: |
+          python3 << 'SCRIPT'
+          import json, urllib.request, yaml, re, sys
+          from datetime import datetime, timezone
+
+          with open('registry.json') as f:
+              registry = json.load(f)
+
+          skills = []
+          for entry in registry.get('skills', []):
+              repo = entry.get('repo', '')
+              path = entry.get('path', '.')
+              author = entry.get('author', '')
+              name = entry.get('name', '')
+
+              # Fetch SKILL.md from student's repo via GitHub raw
+              # Extract owner/repo from URL
+              match = re.match(r'https://github\.com/([^/]+/[^/]+)', repo)
+              if not match:
+                  print(f"Skipping {name}: invalid repo URL", file=sys.stderr)
+                  continue
+
+              repo_path = match.group(1)
+              skill_md_url = f"https://raw.githubusercontent.com/{repo_path}/main/{path}/SKILL.md"
+
+              try:
+                  req = urllib.request.Request(skill_md_url, headers={'User-Agent': 'StudyClawHub-Bot'})
+                  with urllib.request.urlopen(req, timeout=10) as resp:
+                      content = resp.read().decode('utf-8')
+              except Exception as e:
+                  print(f"Skipping {name}: could not fetch SKILL.md: {e}", file=sys.stderr)
+                  continue
+
+              # Parse YAML frontmatter
+              fm_match = re.match(r'^---\s*\n(.*?)\n---\s*\n(.*)', content, re.DOTALL)
+              if not fm_match:
+                  print(f"Skipping {name}: no frontmatter found", file=sys.stderr)
+                  continue
+
+              try:
+                  meta = yaml.safe_load(fm_match.group(1))
+              except Exception as e:
+                  print(f"Skipping {name}: YAML parse error: {e}", file=sys.stderr)
+                  continue
+
+              body = fm_match.group(2).strip()
+
+              # Check for ranker.js
+              ranker_url = f"https://raw.githubusercontent.com/{repo_path}/main/{path}/ranker.js"
+              has_ranker = False
+              try:
+                  req = urllib.request.Request(ranker_url, headers={'User-Agent': 'StudyClawHub-Bot'})
+                  with urllib.request.urlopen(req, timeout=5) as resp:
+                      has_ranker = resp.status == 200
+              except:
+                  pass
+
+              skills.append({
+                  "name": meta.get("name", name),
+                  "description": meta.get("description", ""),
+                  "author": meta.get("author", author),
+                  "version": meta.get("version", "1.0.0"),
+                  "tags": meta.get("tags", []),
+                  "repo": repo,
+                  "repo_name": repo_path.split('/')[-1],
+                  "path": path,
+                  "ranker": has_ranker or meta.get("ranker", False),
+                  "registeredAt": entry.get("registeredAt", ""),
+                  "skillmd_body": body[:2000],  # Truncate for index size
+              })
+
+              print(f"Indexed: {meta.get('name', name)} by @{meta.get('author', author)}")
+
+          index = {
+              "version": 1,
+              "generatedAt": datetime.now(timezone.utc).isoformat(),
+              "count": len(skills),
+              "skills": skills
+          }
+
+          with open('skills-index.json', 'w') as f:
+              json.dump(index, f, indent=2, ensure_ascii=False)
+
+          print(f"\nDone: {len(skills)} skills indexed.")
+          SCRIPT
+
+      - name: Commit updated index
+        run: |
+          git config user.name "StudyClawHub Bot"
+          git config user.email "bot@studyclawhub"
+          git add skills-index.json
+          git diff --cached --quiet || git commit -m "chore: rebuild skills index [skip ci]"
+          git push
+
+  deploy-pages:
+    needs: build-index
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Pull latest index
+        run: git pull origin main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
