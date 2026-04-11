@@ -63,14 +63,18 @@ jobs:
                   if not m:
                       continue
                   key, val = m.group(1), m.group(2).strip()
-                  # Handle list values like: tags: hub, submit, publish
-                  if ',' in val:
-                      meta[key] = [v.strip() for v in val.split(',')]
-                  # Handle list values like: [hub, submit]
+                  # Quoted string — return as-is (don't split on commas)
+                  if (val.startswith('"') and val.endswith('"')) or \
+                     (val.startswith("'") and val.endswith("'")):
+                      meta[key] = val[1:-1]
+                  # List values like: [hub, submit]
                   elif val.startswith('[') and val.endswith(']'):
                       meta[key] = [v.strip().strip("'\"") for v in val[1:-1].split(',')]
+                  # Unquoted comma-separated → list (e.g. tags: hub, submit)
+                  elif ',' in val:
+                      meta[key] = [v.strip() for v in val.split(',')]
                   else:
-                      meta[key] = val.strip("'\"")
+                      meta[key] = val
               return meta
 
           with open('registry.json') as f:
