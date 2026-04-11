@@ -38,27 +38,50 @@ If validation fails, help the student fix the issues.
 
 ### Step 2: Push Skill to student's own GitHub repo
 
-Check if the student's folder is in a Git repo with a remote. If not:
+Check if the student's folder is in a Git repo with a remote:
 
-1. `git init`
-2. Guide to github.com/new to create a repo
-3. Add remote, commit, push
+```bash
+git remote -v
+```
 
-If already in a repo, ensure changes are committed and pushed.
-Record the full repo URL (e.g. `https://github.com/student/repo`).
+**If already in a repo with a remote:** ensure changes are committed and pushed.
+
+**If not in a repo:** run the following for the student:
+
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+```
+
+Then tell the student to create a repo on GitHub:
+- Open this link in their browser: `https://github.com/new`
+- Repo name can be anything, must be **Public**
+- Do NOT initialize with README
+
+After the student creates the repo and gives you the URL, run:
+
+```bash
+git remote add origin https://github.com/{username}/{repo}.git
+git branch -M main
+git push -u origin main
+```
+
+Record the full repo URL.
 
 ### Step 3: Register via GitHub Issue
 
-Create a GitHub Issue on the StudyClawHub repo. The student only needs
-a GitHub account — no write access, no fork.
+Build a pre-filled Issue URL and give it to the student to open in their browser:
 
-**Option A — Using `gh` CLI:**
-```bash
-gh issue create \
-  --repo {STUDYCLAWHUB_REPO} \
-  --title "register: {skill-name}" \
-  --label "register" \
-  --body "### Skill name
+```
+https://github.com/{STUDYCLAWHUB_REPO}/issues/new?title={encoded_title}&body={encoded_body}&labels=register
+```
+
+Where:
+- `title` = `register: {skill-name}`
+- `body` = the following (URL-encoded):
+```
+### Skill name
 
 {skill-name}
 
@@ -72,25 +95,18 @@ gh issue create \
 
 ### Your GitHub username
 
-{author}"
+{author}
 ```
 
-**Option B — If `gh` is not available:**
-Provide the student a direct link to open a pre-filled issue:
-```
-https://github.com/{STUDYCLAWHUB_REPO}/issues/new?template=register-skill.yml&title=register:+{skill-name}
-```
-And tell them to fill in the 4 fields.
+Tell the student: "Open this link and click **Submit new issue**. That's it."
 
 ### Step 4: Confirm
 
 Tell the student:
-- Their registration Issue has been created.
-- A GitHub Action will automatically validate the info, add it to
-  `registry.json`, and close the Issue.
-- Another Action will then fetch their SKILL.md metadata and rebuild
-  the skills index.
+- A GitHub Action will automatically add their Skill to the registry
+  and close the Issue.
 - Their Skill will appear on the StudyClawHub website within minutes.
+- No extra tools or permissions needed — just a GitHub account.
 
 ## Error Handling
 
