@@ -419,51 +419,50 @@
       font-size: 1.3rem;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
     }
     .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
     .step {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem;
+      border-radius: var(--radius);
+      padding: 0.6rem 1rem;
       transition: border-color 0.15s;
     }
     .step:hover { border-color: var(--border-hover); }
     .step-num {
+      flex-shrink: 0;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       background: var(--tag-bg);
       border: 1px solid var(--tag-border);
       color: var(--accent);
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      margin-bottom: 0.75rem;
     }
-    .step h3 {
-      font-size: 0.9rem;
-      font-weight: 600;
-      margin-bottom: 0.35rem;
+    .step-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
     }
-    .step p {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      line-height: 1.5;
+    .step-text strong {
+      color: var(--text);
     }
-    .step code {
-      font-size: 0.72rem;
+    .step-text code {
+      font-size: 0.75rem;
       background: var(--bg);
       padding: 0.1rem 0.35rem;
       border-radius: 4px;
-      color: var(--text-secondary);
     }
 
     /* ── Submit Form ── */
@@ -578,26 +577,10 @@
 <section class="quickstart">
   <h2>Quick Start</h2>
   <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <h3>Write a Skill</h3>
-      <p>Create a <code>SKILL.md</code> with YAML frontmatter in your own GitHub repo. Define name, description, tags, and instructions for Claude.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <h3>Push to GitHub</h3>
-      <p>Push your Skill folder to your GitHub repo. StudyClawHub only stores a link — your code stays in your repo.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <h3>Register it</h3>
-      <p>Click <strong>+ Submit Skill</strong> above, fill in the form, and submit. A bot will automatically add your Skill to the registry.</p>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <h3>Done!</h3>
-      <p>Your Skill appears here within minutes. Others can browse, search, and install it. Star repos you like — counts show on the cards.</p>
-    </div>
+    <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Write</strong> — Create a <code>SKILL.md</code> with YAML frontmatter in your GitHub repo</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Push</strong> — Push your Skill folder to GitHub</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Register</strong> — Click <strong>+ Submit Skill</strong> and fill in the form</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Done</strong> — Your Skill appears here within minutes</div></div>
   </div>
 </section>
 
@@ -887,10 +870,10 @@ function submitSkill() {
   // Build GitHub Issue URL with pre-filled body
   const issueTitle = `Register: ${name}`;
   const issueBody =
-    `### Skill Name\n\n${name}\n\n` +
-    `### GitHub Repo URL\n\n${repo}\n\n` +
-    `### Path to Skill Folder\n\n${path}\n\n` +
-    `### GitHub Username\n\n${author}`;
+    `### Skill name\n\n${name}\n\n` +
+    `### GitHub repo URL\n\n${repo}\n\n` +
+    `### Path to Skill folder\n\n${path}\n\n` +
+    `### Your GitHub username\n\n${author}`;
 
   const issueUrl = `https://github.com/${REPO}/issues/new?` +
     `title=${encodeURIComponent(issueTitle)}` +
