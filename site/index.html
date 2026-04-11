@@ -917,7 +917,7 @@ function showDetail(name) {
       </div>
     </div>
     <div class="detail-install">$ studyclawhub-install ${esc(s.name)}</div>
-    ${s.skillmd_body ? `<div class="detail-body">${simpleMarkdown(s.skillmd_body)}</div>` : ''}
+    ${s.description ? `<div class="detail-body">${simpleMarkdown(s.description)}</div>` : ''}
   `;
   document.getElementById('overlay').classList.add('active');
   document.body.style.overflow = 'hidden';

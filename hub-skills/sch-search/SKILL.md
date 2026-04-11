@@ -41,13 +41,13 @@ https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/skills-inde
 
 Parse it as JSON. The `skills` array contains all registered skills with
 fields: `name`, `description`, `tags`, `author`, `version`, `stars`,
-`installs`, `registeredAt`, `repo`, `skillmd_body`.
+`installs`, `registeredAt`, `repo`.
 
 ### Step 3: Read and rank
 
-Read every skill's full information — name, description, tags, and the
-`skillmd_body` (the content of the SKILL.md). Use your understanding of
-the student's query to rank them by relevance. Consider:
+Read every skill's full information — name, description, and tags.
+Use your understanding of the student's query to rank them by relevance.
+Consider:
 
 - Semantic relevance to the query (not just keyword matching)
 - Quality of the description and documentation

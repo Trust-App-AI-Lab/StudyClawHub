@@ -119,8 +119,6 @@ jobs:
                   print(f"Skipping {name}: frontmatter parse error: {e}", file=sys.stderr)
                   continue
 
-              body = fm_match.group(2).strip()
-
               # Fetch star count from GitHub API
               stars = 0
               try:
@@ -148,7 +146,6 @@ jobs:
                   "registeredAt": entry.get("registeredAt", ""),
                   "stars": stars,
                   "installs": install_counts.get(skill_name, 0),
-                  "skillmd_body": body[:2000],  # Truncate for index size
               })
 
               print(f"Indexed: {meta.get('name', name)} by @{meta.get('author', author)}")
