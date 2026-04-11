@@ -3,8 +3,6 @@ name: Build Skills Index
 on:
   push:
     branches: [main]
-    paths:
-      - 'registry.json'
   workflow_dispatch:
   schedule:
     # Rebuild index every 6 hours to pick up changes in student repos
