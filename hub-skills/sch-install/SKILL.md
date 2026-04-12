@@ -73,13 +73,21 @@ git clone --depth 1 {repo_url} /tmp/skill-download
 
 ### Step 4: Install locally
 
-Copy the Skill folder to the student's local skills directory:
-
-Copy the Skill into the local skills directory:
+Detect the project root and platform, then copy the Skill folder:
 
 ```bash
-cp -r /tmp/skill-download/{path} ~/.claude/skills/{skill-name}/
+PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
+
+# Claude Code
+mkdir -p "$PROJECT_ROOT/.claude/skills/{skill-name}"
+cp -r /tmp/skill-download/{path}/* "$PROJECT_ROOT/.claude/skills/{skill-name}/"
+
+# OpenClaw
+mkdir -p "$PROJECT_ROOT/skills/{skill-name}"
+cp -r /tmp/skill-download/{path}/* "$PROJECT_ROOT/skills/{skill-name}/"
 ```
+
+Ask the student which platform they use if unclear.
 
 ### Step 5: Log the install and suggest starring
 
