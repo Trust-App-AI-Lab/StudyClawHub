@@ -63,6 +63,23 @@
         "texas-holdem"
       ],
       "registeredAt": "2026-04-12T18:37:39.567669+00:00"
+    },
+    {
+      "name": "coachbot",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
+      "path": ".claude/skills/coachbot",
+      "author": "EnyanDai",
+      "description": "PokerBot entry SKILL -- real-time GTO poker coach. Trigger: \"play poker\", \"开一局\", \"teach me poker\", \"review hands\", \"该不该call\", \"EV多少\".",
+      "version": "1.0.0",
+      "tags": [
+        "poker",
+        "coach",
+        "gto",
+        "entry-point"
+      ],
+      "agent": "PokerBot",
+      "registeredAt": "2026-04-12T18:38:14.611152+00:00"
     }
   ]
 }
