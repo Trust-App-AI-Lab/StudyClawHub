@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "mcp__cowork__allow_cowork_file_delete"
-    ]
-  }
-}
