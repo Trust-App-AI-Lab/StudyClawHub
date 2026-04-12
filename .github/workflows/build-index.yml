@@ -56,14 +56,28 @@ jobs:
           def parse_frontmatter(text):
               """Parse simple YAML frontmatter without PyYAML dependency."""
               meta = {}
+              current_key = None
               for line in text.strip().splitlines():
+                  # YAML list item: "  - value"
+                  list_m = re.match(r'^\s+-\s+(.*)', line)
+                  if list_m and current_key is not None:
+                      if not isinstance(meta[current_key], list):
+                          meta[current_key] = []
+                      meta[current_key].append(list_m.group(1).strip().strip("'\""))
+                      continue
+                  # Key-value pair
                   m = re.match(r'^(\w+)\s*:\s*(.*)', line)
                   if not m:
+                      current_key = None
                       continue
                   key, val = m.group(1), m.group(2).strip()
+                  current_key = key
+                  # Empty value — might be followed by list items
+                  if not val:
+                      meta[key] = ''
                   # Quoted string — return as-is (don't split on commas)
-                  if (val.startswith('"') and val.endswith('"')) or \
-                     (val.startswith("'") and val.endswith("'")):
+                  elif (val.startswith('"') and val.endswith('"')) or \
+                       (val.startswith("'") and val.endswith("'")):
                       meta[key] = val[1:-1]
                   # List values like: [hub, submit]
                   elif val.startswith('[') and val.endswith(']'):
