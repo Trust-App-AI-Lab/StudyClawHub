@@ -101,7 +101,7 @@ jobs:
               json.dump(registry, f, indent=2, ensure_ascii=False)
 
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write(f'comment=Successfully {action} **{name}** by @{author}\\n')
+              f.write(f'comment=Successfully {action} **{name}** by @{author}\n')
               f.write('success=true\n')
 
           print(f'{action}: {name} by @{author}')
