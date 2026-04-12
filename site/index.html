@@ -482,6 +482,35 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── Pagination ── */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.5rem 0;
+    }
+    .page-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-secondary);
+      padding: 0.4rem 0.75rem;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .page-btn:hover { border-color: var(--border-hover); }
+    .page-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
     /* ── Quick Start ── */
     .quickstart {
       max-width: 800px;
@@ -729,6 +758,7 @@
   </div>
   <div class="result-count" id="result-count"></div>
   <div class="grid" id="results"></div>
+  <div id="pagination"></div>
 </div>
 
 <!-- Detail overlay -->
@@ -796,6 +826,9 @@ const INDEX_URL = 'skills-index.json';
 const REPO = 'Trust-App-AI-Lab/StudyClawHub';
 
 let allSkills = [];
+let currentPage = 1;
+const PAGE_SIZE = 12;
+let currentDisplaySkills = [];
 
 async function boot() {
   try {
@@ -864,6 +897,16 @@ function resetOrder() {
 }
 
 function renderResults(skills) {
+  currentDisplaySkills = skills;
+  currentPage = 1;
+  renderPage();
+}
+
+function renderPage() {
+  const skills = currentDisplaySkills;
+  const totalPages = Math.max(1, Math.ceil(skills.length / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+
   document.getElementById('result-count').textContent =
     `${skills.length} skill${skills.length!==1?'s':''} registered`;
 
@@ -873,10 +916,14 @@ function renderResults(skills) {
         <h2>No skills yet</h2>
         <p>Be the first to submit a Skill!</p>
       </div>`;
+    document.getElementById('pagination').innerHTML = '';
     return;
   }
 
-  document.getElementById('results').innerHTML = skills.map(s => `
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageSkills = skills.slice(start, start + PAGE_SIZE);
+
+  document.getElementById('results').innerHTML = pageSkills.map(s => `
     <div class="card" onclick="showDetail('${esc(s.name)}')">
       <div class="card-top">
         <span class="card-name">${esc(s.name)}</span>
@@ -896,6 +943,26 @@ function renderResults(skills) {
       </div>
     </div>
   `).join('');
+
+  // Pagination
+  if (totalPages <= 1) {
+    document.getElementById('pagination').innerHTML = '';
+    return;
+  }
+  let phtml = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>← Prev</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    phtml += `<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  phtml += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>Next →</button>`;
+  document.getElementById('pagination').innerHTML = phtml;
+}
+
+function goPage(p) {
+  const totalPages = Math.ceil(currentDisplaySkills.length / PAGE_SIZE);
+  if (p < 1 || p > totalPages) return;
+  currentPage = p;
+  renderPage();
+  document.getElementById('skills-section').scrollIntoView({behavior:'smooth'});
 }
 
 function showDetail(name) {
