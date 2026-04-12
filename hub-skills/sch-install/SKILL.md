@@ -73,21 +73,30 @@ git clone --depth 1 {repo_url} /tmp/skill-download
 
 ### Step 4: Install locally
 
-Detect the project root and platform, then copy the Skill folder:
+Read the platform from `.studyclawhub.json` in the project root:
 
 ```bash
 PROJECT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
-
-# Claude Code
-mkdir -p "$PROJECT_ROOT/.claude/skills/{skill-name}"
-cp -r /tmp/skill-download/{path}/* "$PROJECT_ROOT/.claude/skills/{skill-name}/"
-
-# OpenClaw
-mkdir -p "$PROJECT_ROOT/skills/{skill-name}"
-cp -r /tmp/skill-download/{path}/* "$PROJECT_ROOT/skills/{skill-name}/"
+cat "$PROJECT_ROOT/.studyclawhub.json"
 ```
 
-Ask the student which platform they use if unclear.
+The `platform` field is one of: `claude-code`, `openclaw`, or `both`.
+
+Copy the Skill based on platform:
+
+| Platform       | Install path                                  |
+|----------------|-----------------------------------------------|
+| `claude-code`  | `$PROJECT_ROOT/.claude/skills/{skill-name}/`  |
+| `openclaw`     | `$PROJECT_ROOT/skills/{skill-name}/`          |
+| `both`         | Both paths above                              |
+
+```bash
+mkdir -p "$INSTALL_PATH"
+cp -r /tmp/skill-download/{path}/* "$INSTALL_PATH/"
+```
+
+If `.studyclawhub.json` doesn't exist, ask the student which platform
+they use, then save it for next time.
 
 ### Step 5: Log the install and suggest starring
 

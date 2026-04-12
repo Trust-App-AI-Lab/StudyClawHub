@@ -58,6 +58,15 @@ for SKILLS_DIR in "${TARGETS[@]}"; do
   done
 done
 
+# Save platform config
+PLATFORM=""
+case $choice in
+  1) PLATFORM="claude-code" ;;
+  2) PLATFORM="openclaw" ;;
+  3) PLATFORM="both" ;;
+esac
+echo "{\"platform\":\"$PLATFORM\"}" > "$PROJECT_ROOT/.studyclawhub.json"
+
 # Clean up
 rm -rf "$TMP_DIR"
 
