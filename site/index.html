@@ -521,7 +521,13 @@
       font-size: 1.3rem;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.4rem;
+    }
+    .quickstart-hint {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      margin-bottom: 1.2rem;
     }
     .steps {
       display: flex;
@@ -576,22 +582,31 @@
       border-radius: 4px;
       color: var(--text-secondary);
     }
-    .step-cmd {
+    .step-prompt {
       display: block;
       margin-top: 0.5rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: #f0f4ff;
+      border: 1px solid #c7d7fe;
       border-radius: var(--radius);
       padding: 0.5rem 0.75rem;
-      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
-      font-size: 0.72rem;
-      color: var(--accent);
-      overflow-x: auto;
-      white-space: nowrap;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-style: italic;
+      color: var(--text-secondary);
     }
-    .step-cmd::before {
-      content: '$ ';
+    .step-prompt::before {
+      content: 'Chat \203A  ';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 0.7rem;
+      color: var(--accent);
+    }
+    .step-or {
+      display: block;
+      text-align: center;
+      font-size: 0.7rem;
       color: var(--text-muted);
+      margin-top: 0.3rem;
     }
 
     /* ── Submit Form ── */
@@ -709,38 +724,42 @@
 <!-- Quick Start -->
 <section class="quickstart">
   <h2>Quick Start</h2>
+  <p class="quickstart-hint">Stuck on any step? Just ask your Claude / Claw — it can help with everything.</p>
   <div class="steps">
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <div class="step-title">Setup</div>
-        <div class="step-desc">Run in your project directory. Choose your platform when prompted (Claude Code / OpenClaw / WorkBuddy).</div>
-        <code class="step-cmd">curl -fsSL https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/setup.sh | bash</code>
+        <div class="step-title">Install StudyClawHub</div>
+        <div class="step-desc">Tell your Claude / Claw:</div>
+        <code class="step-prompt">Run: curl -fsSL https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/setup.sh | bash</code>
       </div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <div class="step-title">Create</div>
-        <div class="step-desc">Scaffold a Skill, create a GitHub repo, and push — all guided by the agent.</div>
-        <code class="step-cmd">/sch-create</code>
+        <div class="step-title">Create or adapt a Skill</div>
+        <div class="step-desc">Tell your Claude / Claw:</div>
+        <code class="step-prompt">Help me turn my project into a StudyClawHub skill</code>
+        <code class="step-prompt">/sch-create</code>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <div class="step-title">Submit</div>
-        <div class="step-desc">Register your Skill on StudyClawHub via a GitHub Issue.</div>
-        <code class="step-cmd">/sch-submit</code>
+        <div class="step-title">Submit to registry</div>
+        <div class="step-desc">Tell your Claude / Claw:</div>
+        <code class="step-prompt">Submit my skill to StudyClawHub</code>
+        <code class="step-prompt">/sch-submit</code>
       </div>
     </div>
     <div class="step">
       <div class="step-num">4</div>
       <div class="step-body">
-        <div class="step-title">Discover</div>
-        <div class="step-desc">Find and install Skills created by others.</div>
-        <code class="step-cmd">/sch-search</code>
-        <code class="step-cmd">/sch-install</code>
+        <div class="step-title">Discover & install</div>
+        <div class="step-desc">Tell your Claude / Claw:</div>
+        <code class="step-prompt">Search StudyClawHub for a skill about community detection</code>
+        <code class="step-prompt">/sch-search community detection</code>
+        <code class="step-prompt">/sch-install network-analyzer</code>
       </div>
     </div>
   </div>
