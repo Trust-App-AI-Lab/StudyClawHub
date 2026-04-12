@@ -1,5 +1,50 @@
 {
   "version": 2,
   "description": "StudyClawHub Skill & Agent Registry",
-  "skills": []
+  "skills": [
+    {
+      "name": "StudyClawHub",
+      "type": "agent",
+      "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
+      "path": ".",
+      "author": "EnyanDai",
+      "registeredAt": "2026-04-12T00:00:00Z"
+    },
+    {
+      "name": "sch-create",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
+      "path": "hub-skills/sch-create",
+      "author": "EnyanDai",
+      "agent": "StudyClawHub",
+      "registeredAt": "2026-04-12T00:00:00Z"
+    },
+    {
+      "name": "sch-submit",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
+      "path": "hub-skills/sch-submit",
+      "author": "EnyanDai",
+      "agent": "StudyClawHub",
+      "registeredAt": "2026-04-12T00:00:00Z"
+    },
+    {
+      "name": "sch-install",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
+      "path": "hub-skills/sch-install",
+      "author": "EnyanDai",
+      "agent": "StudyClawHub",
+      "registeredAt": "2026-04-12T00:00:00Z"
+    },
+    {
+      "name": "sch-search",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
+      "path": "hub-skills/sch-search",
+      "author": "EnyanDai",
+      "agent": "StudyClawHub",
+      "registeredAt": "2026-04-12T00:00:00Z"
+    }
+  ]
 }
