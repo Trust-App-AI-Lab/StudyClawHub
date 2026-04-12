@@ -183,10 +183,21 @@ For agent registration, first create the agent issue (type = agent),
 then create issues for each child skill (type = skill, with agent
 name filled in).
 
+**IMPORTANT: Submit issues one at a time.** Wait for each issue to be
+closed by the GitHub Action before creating the next one. This avoids
+concurrent push conflicts in the registry. Use this loop:
+
+1. Create the issue
+2. Wait ~15 seconds, then check if it was closed:
+   ```bash
+   gh issue view {number} --repo Trust-App-AI-Lab/StudyClawHub --json state --jq .state
+   ```
+3. If CLOSED, proceed to the next. If still OPEN after 60 seconds,
+   check the Action run for errors.
+
 If there's only one skill, give the student the link to open.
 
-If there are multiple skills and `gh` is available, create the issues
-directly:
+If `gh` is available, create each issue sequentially:
 
 ```bash
 gh issue create \
@@ -196,7 +207,8 @@ gh issue create \
 ```
 
 If `gh` is not available and there are multiple skills, give the
-student all the links at once so they can open them one by one.
+student all the links and tell them to open them **one at a time**,
+waiting for each to be closed before opening the next.
 
 ### Step 5: Confirm
 
@@ -208,8 +220,10 @@ Tell the student:
 
 ## Error Handling
 
-- If the student's repo is private, warn them it must be public for
-  the index builder to fetch SKILL.md.
+- If the student's repo is private, registration still works — metadata
+  from the Issue body is stored in registry.json as a fallback. The
+  skill will appear on the website but with limited info until the
+  repo is made public.
 - If a skill with the same name exists, the Action will update the
   existing entry instead of creating a duplicate.
 
