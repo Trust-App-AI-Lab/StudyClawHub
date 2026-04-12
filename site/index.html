@@ -815,6 +815,10 @@
       <div class="hero-stat-label">Skills</div>
     </div>
     <div class="hero-stat">
+      <div class="hero-stat-num" id="stat-agents">0</div>
+      <div class="hero-stat-label">Agents</div>
+    </div>
+    <div class="hero-stat">
       <div class="hero-stat-num" id="stat-authors">0</div>
       <div class="hero-stat-label">Authors</div>
     </div>
@@ -993,7 +997,8 @@ async function boot() {
 
     // Stats
     const authors = new Set(all.map(s => s.author));
-    document.getElementById('stat-skills').textContent = all.length;
+    document.getElementById('stat-skills').textContent = allSkills.length;
+    document.getElementById('stat-agents').textContent = allAgents.length;
     document.getElementById('stat-authors').textContent = authors.size;
 
     applySort();
