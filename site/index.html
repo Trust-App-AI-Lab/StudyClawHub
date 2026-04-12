@@ -931,8 +931,24 @@
     </div>
 
     <div class="form-group">
+      <label for="f-desc">Description</label>
+      <input class="form-input" id="f-desc" type="text" placeholder="A short description of your skill" oninput="updatePreview()" />
+    </div>
+
+    <div class="form-group">
+      <label for="f-version">Version</label>
+      <input class="form-input" id="f-version" type="text" placeholder="0.1.0" value="0.1.0" oninput="updatePreview()" />
+    </div>
+
+    <div class="form-group">
+      <label for="f-tags">Tags</label>
+      <div class="hint">Comma-separated (e.g. tool, search, graph)</div>
+      <input class="form-input" id="f-tags" type="text" placeholder="tool, search" oninput="updatePreview()" />
+    </div>
+
+    <div class="form-group">
       <label for="f-repo">GitHub Repo URL</label>
-      <div class="hint">The repo where your Skill lives</div>
+      <div class="hint">The repo where your Skill lives (can be private)</div>
       <input class="form-input" id="f-repo" type="url" placeholder="https://github.com/your-username/your-repo" oninput="updatePreview()" />
     </div>
 
@@ -1292,6 +1308,9 @@ function updatePreview() {
 function submitSkill() {
   const type = document.getElementById('f-type').value;
   const name = document.getElementById('f-name').value.trim();
+  const desc = document.getElementById('f-desc').value.trim();
+  const version = document.getElementById('f-version').value.trim() || '0.1.0';
+  const tags = document.getElementById('f-tags').value.trim();
   const repo = document.getElementById('f-repo').value.trim();
   const path = document.getElementById('f-path').value.trim() || '.';
   const author = document.getElementById('f-author').value.trim();
@@ -1321,6 +1340,9 @@ function submitSkill() {
   const issueTitle = `register: ${name}`;
   const issueBody =
     `### Skill name\n\n${name}\n\n` +
+    `### Description\n\n${desc || '(none)'}\n\n` +
+    `### Version\n\n${version}\n\n` +
+    `### Tags\n\n${tags || '(none)'}\n\n` +
     `### GitHub repo URL\n\n${repo}\n\n` +
     `### Path to Skill folder\n\n${path}\n\n` +
     `### Type\n\n${type}\n\n` +

@@ -146,6 +146,18 @@ Where:
 
 {skill-name}
 
+### Description
+
+{description from SKILL.md/AGENTS.md frontmatter}
+
+### Version
+
+{version from frontmatter}
+
+### Tags
+
+{comma-separated tags from frontmatter}
+
 ### GitHub repo URL
 
 {repo-url}

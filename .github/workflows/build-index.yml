@@ -129,8 +129,12 @@ jobs:
                   if fm_match:
                       meta = parse_frontmatter(fm_match.group(1))
               except Exception as e:
-                  print(f"Skipping {name}: could not fetch {md_file}: {e}", file=sys.stderr)
-                  continue
+                  # Use metadata from registry.json as fallback (e.g. private repos)
+                  if entry.get('description'):
+                      print(f"{name}: using registry metadata (could not fetch {md_file})")
+                  else:
+                      print(f"Skipping {name}: could not fetch {md_file} and no registry metadata", file=sys.stderr)
+                      continue
 
               # Fetch star count from GitHub API
               stars = 0
@@ -151,10 +155,10 @@ jobs:
               skill_entry = {
                   "name": skill_name,
                   "type": entry_type,
-                  "description": meta.get("description", ""),
+                  "description": meta.get("description", entry.get("description", "")),
                   "author": meta.get("author", author),
-                  "version": meta.get("version", "1.0.0"),
-                  "tags": meta.get("tags", []),
+                  "version": meta.get("version", entry.get("version", "1.0.0")),
+                  "tags": meta.get("tags", entry.get("tags", [])),
                   "repo": repo,
                   "repo_name": repo_path.split('/')[-1],
                   "path": path,

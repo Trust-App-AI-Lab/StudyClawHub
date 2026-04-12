@@ -41,6 +41,10 @@ jobs:
           entry_type = parse_field(body, 'Type') or 'skill'
           agent_name = parse_field(body, 'Agent name') or ''
           author = parse_field(body, 'Your GitHub username') or author_login
+          description = parse_field(body, 'Description') or ''
+          version = parse_field(body, 'Version') or ''
+          tags_str = parse_field(body, 'Tags') or ''
+          tags = [t.strip() for t in tags_str.split(',') if t.strip()] if tags_str else []
 
           # Normalize type
           entry_type = entry_type.strip().lower()
@@ -82,6 +86,12 @@ jobs:
               'path': path,
               'author': author,
           }
+          if description:
+              entry['description'] = description
+          if version:
+              entry['version'] = version
+          if tags:
+              entry['tags'] = tags
           if agent_name and entry_type == 'skill':
               entry['agent'] = agent_name
 
