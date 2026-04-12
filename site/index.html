@@ -821,7 +821,7 @@
   </div>
   <div class="hero-actions">
     <a class="btn btn-primary" href="#skills-section">Browse Skills</a>
-    <a class="btn btn-primary" href="javascript:openSubmit()">+ Submit Skill</a>
+    <a class="btn btn-primary" href="javascript:openSubmit()">+ Submit Skill / Agent</a>
     <a class="btn btn-outline" href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">View on GitHub</a>
   </div>
 </section>
@@ -901,12 +901,20 @@
 <div class="overlay" id="submit-overlay" onclick="if(event.target===this)closeSubmit()">
   <div class="detail submit-form">
     <button class="detail-close" onclick="closeSubmit()">&times;</button>
-    <h2>Submit a Skill</h2>
-    <p class="subtitle">Register your Skill on StudyClawHub. This will create a GitHub Issue to process your submission.</p>
+    <h2>Submit a Skill / Agent</h2>
+    <p class="subtitle">Register your Skill or Agent on StudyClawHub. This will create a GitHub Issue to process your submission.</p>
 
     <div class="form-group">
-      <label for="f-name">Skill Name</label>
-      <div class="hint">Lowercase, kebab-case (e.g. my-cool-skill)</div>
+      <label for="f-type">Type</label>
+      <select class="form-input" id="f-type" onchange="updatePreview()">
+        <option value="skill">Skill</option>
+        <option value="agent">Agent</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="f-name">Name</label>
+      <div class="hint" id="name-hint">Lowercase, kebab-case (e.g. my-cool-skill)</div>
       <input class="form-input" id="f-name" type="text" placeholder="my-cool-skill" oninput="updatePreview()" />
     </div>
 
@@ -1013,7 +1021,10 @@ function renderAgents() {
         </div>
         <div class="agent-desc">${esc(a.description)}</div>
         <div class="agent-meta">
-          <a href="https://github.com/${esc(a.author)}" target="_blank">@${esc(a.author)}</a>
+          <a class="card-author" href="https://github.com/${esc(a.author)}" target="_blank">
+            <img src="https://github.com/${esc(a.author)}.png?size=36" alt="" loading="lazy" />
+            @${esc(a.author)}
+          </a>
           <span>★ ${a.stars||0}</span>
           <span>↓ ${a.installs||0}</span>
           <a href="${esc(a.repo)}" target="_blank">repo →</a>
@@ -1226,10 +1237,17 @@ function closeSubmit() {
 }
 
 function updatePreview() {
+  const type = document.getElementById('f-type').value;
   const name = document.getElementById('f-name').value.trim();
   const repo = document.getElementById('f-repo').value.trim();
   const path = document.getElementById('f-path').value.trim() || '.';
   const author = document.getElementById('f-author').value.trim();
+
+  // Update hint based on type
+  document.getElementById('name-hint').textContent = type === 'agent'
+    ? 'Alphanumeric with hyphens (e.g. MyAgent)'
+    : 'Lowercase, kebab-case (e.g. my-cool-skill)';
+  document.getElementById('f-name').placeholder = type === 'agent' ? 'MyAgent' : 'my-cool-skill';
 
   const preview = document.getElementById('submit-preview');
   const body = document.getElementById('preview-body');
@@ -1237,7 +1255,8 @@ function updatePreview() {
   if (name || repo || author) {
     preview.classList.add('active');
     body.textContent =
-      `Skill name: ${name || '(empty)'}\n` +
+      `Type: ${type}\n` +
+      `Name: ${name || '(empty)'}\n` +
       `Repo: ${repo || '(empty)'}\n` +
       `Path: ${path}\n` +
       `Author: ${author || '(empty)'}`;
@@ -1247,19 +1266,24 @@ function updatePreview() {
 }
 
 function submitSkill() {
+  const type = document.getElementById('f-type').value;
   const name = document.getElementById('f-name').value.trim();
   const repo = document.getElementById('f-repo').value.trim();
   const path = document.getElementById('f-path').value.trim() || '.';
   const author = document.getElementById('f-author').value.trim();
 
   if (!name || !repo || !author) {
-    alert('Please fill in Skill Name, Repo URL, and GitHub Username.');
+    alert('Please fill in Name, Repo URL, and GitHub Username.');
     return;
   }
 
   // Validate name format
-  if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) {
+  if (type === 'skill' && !/^[a-z0-9][a-z0-9-]*$/.test(name)) {
     alert('Skill name must be lowercase kebab-case (e.g. my-cool-skill).');
+    return;
+  }
+  if (type === 'agent' && !/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/.test(name)) {
+    alert('Agent name must be alphanumeric with hyphens/underscores (e.g. MyAgent).');
     return;
   }
 
@@ -1270,17 +1294,18 @@ function submitSkill() {
   }
 
   // Build GitHub Issue URL with pre-filled body
-  const issueTitle = `Register: ${name}`;
+  const issueTitle = `register: ${name}`;
   const issueBody =
     `### Skill name\n\n${name}\n\n` +
     `### GitHub repo URL\n\n${repo}\n\n` +
     `### Path to Skill folder\n\n${path}\n\n` +
+    `### Type\n\n${type}\n\n` +
+    `### Agent name\n\n\n\n` +
     `### Your GitHub username\n\n${author}`;
 
   const issueUrl = `https://github.com/${REPO}/issues/new?` +
     `title=${encodeURIComponent(issueTitle)}` +
-    `&body=${encodeURIComponent(issueBody)}` +
-    `&labels=register`;
+    `&body=${encodeURIComponent(issueBody)}`;
 
   window.open(issueUrl, '_blank');
   closeSubmit();
