@@ -13,23 +13,7 @@ Skill format is **ClawHub-compatible** — publish to both without modification.
 
 Tell Claude Code or OpenClaw:
 
-> 从 https://github.com/Trust-App-AI-Lab/StudyClawHub 安装 skills 到我的项目
-
-The agent will download four hub skills into your project.
-
-### For agents: how to install
-
-Download each SKILL.md from this repo's `hub-skills/` directory:
-
-```bash
-BASE="https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/hub-skills"
-INSTALL_PATH=".claude/skills"  # or "skills" for OpenClaw
-
-for skill in sch-create sch-submit sch-install sch-search; do
-  mkdir -p "$INSTALL_PATH/$skill"
-  curl -fsSL "$BASE/$skill/SKILL.md" -o "$INSTALL_PATH/$skill/SKILL.md"
-done
-```
+> 按照 https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/SETUP.md 安装
 
 After setup you get four commands:
 
