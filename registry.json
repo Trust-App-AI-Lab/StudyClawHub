@@ -80,6 +80,24 @@
       ],
       "agent": "PokerBot",
       "registeredAt": "2026-04-12T18:38:14.611152+00:00"
+    },
+    {
+      "name": "poker-strategy",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
+      "path": ".claude/skills/poker-strategy",
+      "author": "EnyanDai",
+      "description": "PokerBot internal dependency -- GTO poker calculation tools and strategy docs. Pure internal component, never triggered directly.",
+      "version": "1.0.0",
+      "tags": [
+        "poker",
+        "gto",
+        "strategy",
+        "tools",
+        "internal"
+      ],
+      "agent": "PokerBot",
+      "registeredAt": "2026-04-12T18:38:22.263146+00:00"
     }
   ]
 }
