@@ -114,22 +114,23 @@ jobs:
 
               repo_path = match.group(1)
 
-              # Try to fetch SKILL.md
-              skill_md_url = f"https://raw.githubusercontent.com/{repo_path}/main/{path}/SKILL.md"
+              # Fetch metadata file: AGENTS.md for agents, SKILL.md for skills
+              if entry_type == 'agent':
+                  md_file = 'AGENTS.md'
+              else:
+                  md_file = 'SKILL.md'
+              md_url = f"https://raw.githubusercontent.com/{repo_path}/main/{path}/{md_file}"
               meta = {}
               try:
-                  req = urllib.request.Request(skill_md_url, headers={'User-Agent': 'StudyClawHub-Bot'})
+                  req = urllib.request.Request(md_url, headers={'User-Agent': 'StudyClawHub-Bot'})
                   with urllib.request.urlopen(req, timeout=10) as resp:
                       content = resp.read().decode('utf-8')
                   fm_match = re.match(r'^---\s*\n(.*?)\n---\s*\n(.*)', content, re.DOTALL)
                   if fm_match:
                       meta = parse_frontmatter(fm_match.group(1))
               except Exception as e:
-                  # Agents may not have SKILL.md — use registry info
-                  if entry_type != 'agent':
-                      print(f"Skipping {name}: could not fetch SKILL.md: {e}", file=sys.stderr)
-                      continue
-                  print(f"Agent {name}: no SKILL.md, using registry info")
+                  print(f"Skipping {name}: could not fetch {md_file}: {e}", file=sys.stderr)
+                  continue
 
               # Fetch star count from GitHub API
               stars = 0

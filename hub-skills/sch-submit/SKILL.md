@@ -52,14 +52,19 @@ If no SKILL.md is found, tell the student to run `/sch-create` first.
 - **Agent** — register an agent entry for the whole repo, plus each
   selected child skill with `agent` field pointing to the agent name.
   Ask the student for an overall agent name and description.
+  Then check if `AGENTS.md` exists at the repo root. If not, auto-create
+  one with YAML frontmatter (same format as SKILL.md: name, description,
+  author, version, tags), commit and push it. The build-index workflow
+  reads `AGENTS.md` for agent metadata.
 - **Independent** — register each selected skill separately, no
   agent association.
 
 **If only one SKILL.md is found**, register it as a standalone skill.
 
-### Step 2: Validate each Skill
+### Step 2: Validate each Skill / Agent
 
-For each selected SKILL.md, validate:
+For agents, validate `AGENTS.md` at the repo root. For skills, validate
+each `SKILL.md`. The frontmatter format is the same for both:
 
 - [ ] YAML frontmatter has required fields: `name`, `description`
 - [ ] Recommended fields present: `author`, `version`, `tags`
