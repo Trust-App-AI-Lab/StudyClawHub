@@ -1,12 +1,13 @@
 ---
 name: sch-create
-description: "Scaffold a new Skill for StudyClawHub. Use when a student says 'sch create', 'sch new', 'create a StudyClawHub skill', 'new skill for StudyClawHub', or 'scaffold a skill for sch'. Generates a complete Skill folder with SKILL.md, creates a GitHub repo, and pushes it."
+description: "Create or adapt a Skill for StudyClawHub / ClawHub. Use when a student says 'sch create', 'create a skill', 'adapt my skill', 'convert to skill format', '适配skill', '创建skill', 'make my project a skill', 'wrap as skill', or wants to turn an existing project into a ClawHub-compatible Skill."
 author: EnyanDai
-version: 1.0.0
+version: 0.1.0
 tags:
   - hub
   - create
   - scaffold
+  - adapt
 metadata:
   openclaw:
     requires:
@@ -16,48 +17,74 @@ metadata:
         - gh
 ---
 
-# StudyClawHub Create
+# StudyClawHub Create / Adapt
 
-You are helping a student create a new Skill from scratch. The generated Skill
-will be registered on StudyClawHub. The format is also compatible with
-ClawHub, so students can publish there too if they want.
+You are helping a student either **adapt an existing project** into a
+ClawHub-compatible Skill, or **create a new Skill from scratch**. The primary
+use case is adaptation — most students already have working code and just need
+it packaged correctly.
 
-## Workflow
+## Step 0: Determine Mode
 
-### Step 1: Understand what the student wants to build
+Ask the student one question:
 
-Ask the student:
+> Do you already have code / a project you want to turn into a Skill, or do
+> you want to start from scratch?
 
-1. **What does your Skill do?** — Get a clear description of the functionality.
-2. **What should it be called?** — Suggest a kebab-case name based on their
-   description if they're unsure (e.g. `network-analyzer`, `sentiment-checker`).
-3. **Does it need any external tools or APIs?** — Find out if the Skill
-   requires environment variables (API keys), CLI tools (python3, curl, etc.),
-   or package dependencies (pip, npm).
+- **"I have existing code"** → go to **Path A: Adapt Existing Project**
+- **"Start from scratch"** → go to **Path B: Create New Skill**
 
-### Step 2: Choose a location
+If the student's working directory already contains code files, default to
+Path A and confirm.
 
-Ask the student where to create the Skill folder:
+---
 
-- If they already have a project repo, create the folder inside it.
-- If not, create a new folder that they can later push to GitHub.
+## Path A: Adapt Existing Project (Primary)
 
-The folder structure will be:
+### A1: Understand the project
+
+Scan the student's project directory. Read key files (README, main scripts,
+config files, etc.) to understand:
+
+1. **What it does** — Summarize the functionality in one sentence.
+2. **How it's triggered** — What user intents or commands activate it?
+3. **Dependencies** — Does it need env vars (API keys), CLI tools, or
+   packages?
+4. **Existing structure** — Where the main logic lives, what files are
+   essential vs auxiliary.
+
+Share your understanding with the student and confirm it's accurate before
+proceeding.
+
+### A2: Determine Skill folder layout
+
+The Skill must live in a single folder:
 
 ```
 {skill-name}/
-├── SKILL.md
-└── (any supporting files the student needs)
+├── SKILL.md          ← Required
+└── (supporting files) ← Scripts, examples, references, etc.
 ```
 
-### Step 3: Generate SKILL.md
+Discuss with the student:
 
-Create the `SKILL.md` file with the following structure:
+- If the whole repo IS the skill → SKILL.md goes at repo root.
+- If the skill is a subfolder of a larger repo → identify which folder.
+- Files must be text-based (.md, .js, .ts, .py, .json, .yaml, .txt, .csv,
+  .svg). No binaries in the Skill folder.
+
+### A3: Generate SKILL.md
+
+Based on what you learned in A1, generate a complete `SKILL.md`. Don't ask
+the student to fill in each field one by one — **draft it yourself** based on
+your analysis, then let them review and refine.
+
+#### Frontmatter format
 
 ```yaml
 ---
 name: {skill-name}
-description: "{one-line description}"
+description: "{one-line description — include trigger phrases}"
 author: {github-username}
 version: 1.0.0
 tags:
@@ -74,64 +101,107 @@ metadata:
 ---
 ```
 
-**Rules for frontmatter:**
+**Frontmatter rules:**
 
-- `name`: Must be kebab-case, URL-safe: `^[a-z0-9][a-z0-9-]*$`
-- `description`: One line, quoted, explain what it does and when to trigger it.
-  Include common trigger phrases in both English and Chinese if the student
-  is from a Chinese-language course.
-- `author`: Student's GitHub username
-- `version`: Start at `1.0.0`
-- `tags`: At least one tag, lowercase, related to the skill's domain
+- `name`: Kebab-case, URL-safe: `^[a-z0-9][a-z0-9-]*$`
+- `description`: One line, quoted. Explain what it does AND when to trigger
+  it. Include common trigger phrases in both English and Chinese if the
+  student is from a Chinese-language course.
+- `author`: Student's GitHub username.
+- `version`: `1.0.0` for new skills, or match existing version if the
+  project already has one.
+- `tags`: At least one tag, lowercase, related to the skill's domain.
 - `metadata.openclaw`: Only include if the skill actually needs env vars,
   binaries, or dependencies. Omit entirely for pure-prompt skills.
 
-**Rules for the body (instructions):**
+#### Body content
 
-After the frontmatter, write a clear Markdown document that tells Claude /
-the agent exactly how to execute the Skill. The body should include:
+After the frontmatter, write clear Markdown instructions that tell Claude /
+the agent how to execute the Skill. Include:
 
 1. **One-line role statement** — "You are helping the user do X."
-2. **When to trigger** — Describe the user intents that activate this Skill.
+2. **When to trigger** — User intents that activate this Skill.
 3. **Step-by-step workflow** — Numbered steps with clear actions.
 4. **Input/output format** — What the Skill expects and produces.
-5. **Error handling** — Common failure modes and how to recover.
-6. **Examples** (optional) — Sample interactions showing expected behavior.
+5. **Error handling** — Common failure modes and recovery.
+6. **Examples** (optional) — Sample interactions.
 
-Write the body collaboratively with the student — don't just generate a
-generic template. Ask about their specific use case and tailor the
-instructions accordingly.
+**Important:** Don't generate a generic template. Tailor the body to the
+student's actual project — reference their real files, real functions, real
+use cases.
 
-### Step 4: Create supporting files (if needed)
+### A4: Create supporting files (if needed)
 
-If the Skill needs helper scripts, example data, or reference files,
-create them in the same folder. Common patterns:
+If the Skill needs helper scripts, example data, or reference files, create
+or reorganize them in the Skill folder. Common patterns:
 
-- `examples/` — Sample input/output files
-- `templates/` — Template files the Skill uses
-- `lib/` — Helper scripts (`.py`, `.js`, `.sh`)
+- `examples/` — Sample input/output
+- `templates/` — Template files
+- `lib/` — Helper scripts
 
-### Step 5: Validate
+### A5: Validate
 
-Before finishing, validate the generated Skill:
+Check the generated Skill:
 
 - [ ] `SKILL.md` exists with valid YAML frontmatter
 - [ ] `name` is kebab-case and URL-safe
-- [ ] `description` is present and meaningful
+- [ ] `description` is present and meaningful, includes trigger phrases
 - [ ] `author` matches student's GitHub username
 - [ ] `version` is valid semver
 - [ ] `tags` has at least one tag
-- [ ] If `metadata.openclaw.requires.env` is declared, those env vars are
-      actually referenced in the instructions
-- [ ] If `metadata.openclaw.requires.bins` is declared, those binaries are
-      actually used in the instructions
-- [ ] Body has clear step-by-step instructions
+- [ ] `metadata.openclaw.requires.env` — declared vars are actually used
+- [ ] `metadata.openclaw.requires.bins` — declared binaries are actually used
+- [ ] Body has clear step-by-step instructions tailored to the project
 - [ ] No binary files in the Skill folder
 
-### Step 6: Create GitHub repo and push
+→ Proceed to **Step 1: Git & GitHub (Optional)**.
 
-Help the student create a GitHub repo and push their Skill. First check
-the current state:
+---
+
+## Path B: Create New Skill (From Scratch)
+
+### B1: Understand what the student wants to build
+
+Ask the student:
+
+1. **What does your Skill do?** — Get a clear description of the
+   functionality.
+2. **What should it be called?** — Suggest a kebab-case name based on their
+   description if they're unsure.
+3. **Does it need any external tools or APIs?** — Env vars, CLI tools,
+   package dependencies?
+
+### B2: Choose a location
+
+Ask where to create the Skill folder:
+
+- Inside an existing project repo, or
+- A new folder they can later push to GitHub.
+
+### B3: Generate SKILL.md and supporting files
+
+Follow the same frontmatter rules and body content guidelines as Path A
+(sections A3 and A4). Write the body collaboratively with the student —
+ask about their specific use case and tailor the instructions accordingly.
+
+### B4: Validate
+
+Run the same validation checklist as Path A (section A5).
+
+→ Proceed to **Step 1: Git & GitHub (Optional)**.
+
+---
+
+## Step 1: Git & GitHub (Optional)
+
+Ask the student: **"Would you like to push this to GitHub now, or keep it
+local for now?"**
+
+If the student wants to **keep it local** → skip to Step 2.
+
+If the student wants to **push to GitHub**:
+
+First check the current state:
 
 ```bash
 cd {skill-folder-parent}
@@ -146,11 +216,7 @@ git commit -m "Add {skill-name} skill"
 git push
 ```
 
-Skip to Step 7.
-
 **Case B — Not in a git repo yet:**
-
-First initialize git and commit:
 
 ```bash
 cd {skill-folder-parent}
@@ -165,26 +231,20 @@ Then check if GitHub CLI is available:
 gh --version
 ```
 
-**If `gh` is available**, create the repo directly:
+**If `gh` is available:**
 
 ```bash
 gh repo create {skill-name} --public --source=. --push
 ```
 
-This creates the GitHub repo, sets the remote, and pushes — all in one
-command. The repo will be at `https://github.com/{username}/{skill-name}`.
+If `gh auth status` shows not logged in, run `gh auth login` first.
 
-If `gh auth status` shows not logged in, run `gh auth login` first and
-follow the browser-based OAuth flow.
+**If `gh` is NOT available:**
 
-**If `gh` is NOT available**, fall back to manual creation:
-
-1. Tell the student to open `https://github.com/new` in their browser
-2. Repo name: suggest using the skill name (e.g. `{skill-name}`)
-3. Must be **Public**
-4. Do NOT initialize with README
-
-After the student creates the repo and gives the URL:
+1. Tell the student to open `https://github.com/new` in their browser.
+2. Repo name: suggest using the skill name.
+3. Must be **Public**. Do NOT initialize with README.
+4. After the student creates the repo and gives the URL:
 
 ```bash
 git remote add origin https://github.com/{username}/{repo}.git
@@ -198,26 +258,17 @@ git push -u origin main
 git log --oneline -1 origin/main
 ```
 
-### Step 7: Register on StudyClawHub
+## Step 2: Register on StudyClawHub (Optional)
 
-Once pushed, ask the student: **"Would you like to register this on StudyClawHub now?"**
+If the student has pushed to GitHub, ask:
+**"Would you like to register this on StudyClawHub now?"**
 
-If yes, seamlessly hand off to the `submit` Skill workflow — build the
-pre-filled GitHub Issue URL:
+If yes → hand off to the **sch-submit** Skill. Tell the student to run
+`/sch-submit` (or the equivalent command for their platform) and follow
+its workflow.
 
-```
-https://github.com/{STUDYCLAWHUB_REPO}/issues/new?title=register: {skill-name}&body={encoded_body}&labels=register
-```
-
-Where body includes: skill name, repo URL, path to skill folder, GitHub
-username. Give the student the link and tell them to click Submit.
-
-### Step 8: Optional next steps
-
-Tell the student:
-
-1. **Test it locally**: Install the Skill locally to try it out before
-   others discover it on StudyClawHub.
+If the student hasn't pushed to GitHub yet, let them know they can register
+later once they do.
 
 ## Tips for Writing Good Skills
 
@@ -225,13 +276,13 @@ Share these with the student:
 
 - **Be specific in the description** — Include trigger phrases so the Skill
   activates reliably. E.g. "Use when user says 'analyze my network',
-  'detect communities', 'analyze network'."
+  'detect communities'."
 - **Don't over-engineer** — A Skill is just a prompt with metadata. Start
   simple, iterate later.
 - **Think about edge cases** — What if the user gives incomplete input?
   What if an API call fails?
-- **Use the student's course context** — Skills might involve graph analysis,
-  sentiment analysis, influence detection, etc.
+- **Test locally first** — Install the Skill locally and try it before
+  publishing.
 
 ## Error Handling
 

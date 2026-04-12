@@ -22,7 +22,7 @@ You are helping a student install a Skill from StudyClawHub.
 
 ## Config
 
-`STUDYCLAWHUB_REPO` — the StudyClawHub repo (e.g. `instructor/StudyClawHub`).
+The StudyClawHub repo is `Trust-App-AI-Lab/StudyClawHub`.
 
 ## Workflow
 
@@ -34,7 +34,7 @@ search workflow first to help them find it.
 
 Fetch the index:
 ```
-https://raw.githubusercontent.com/{STUDYCLAWHUB_REPO}/main/skills-index.json
+https://trust-app-ai-lab.github.io/StudyClawHub/skills-index.json
 ```
 
 If the skill is **not found** in the StudyClawHub index, tell the student:

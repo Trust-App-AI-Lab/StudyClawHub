@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # StudyClawHub — One-line setup for students
-# Usage: curl -fsSL https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/setup.sh | bash
+# Usage: Run this in your project root:
+#   curl -fsSL https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/setup.sh | bash
 #
-# Installs hub skills for your chosen platform.
+# Installs hub skills into the current project (local, not global).
 # Commands: /sch-create, /sch-submit, /sch-install, /sch-search
 
 set -euo pipefail
@@ -10,7 +11,12 @@ set -euo pipefail
 REPO="https://github.com/Trust-App-AI-Lab/StudyClawHub.git"
 TMP_DIR="$(mktemp -d)"
 
+# Determine project root: nearest git root, or current directory
+PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
 echo "==> StudyClawHub setup"
+echo ""
+echo "    Project root: $PROJECT_ROOT"
 echo ""
 echo "    Which platform are you using?"
 echo "    1) Claude Code"
@@ -21,9 +27,9 @@ read -rp "    Enter 1, 2, or 3: " choice
 
 TARGETS=()
 case $choice in
-  1) TARGETS=(".claude/skills") ;;
-  2) TARGETS=("skills") ;;
-  3) TARGETS=(".claude/skills" "skills") ;;
+  1) TARGETS=("$PROJECT_ROOT/.claude/skills") ;;
+  2) TARGETS=("$PROJECT_ROOT/skills") ;;
+  3) TARGETS=("$PROJECT_ROOT/.claude/skills" "$PROJECT_ROOT/skills") ;;
   *)
     echo "    Invalid choice. Exiting."
     exit 1
@@ -56,7 +62,12 @@ done
 rm -rf "$TMP_DIR"
 
 echo ""
-echo "    ✓ /sch-create   — Create a new Skill"
+echo "    Installed to:"
+for SKILLS_DIR in "${TARGETS[@]}"; do
+  echo "      $SKILLS_DIR/"
+done
+echo ""
+echo "    ✓ /sch-create   — Create or adapt a Skill"
 echo "    ✓ /sch-submit   — Submit a Skill to StudyClawHub"
 echo "    ✓ /sch-install  — Install a Skill from StudyClawHub"
 echo "    ✓ /sch-search   — Search for Skills on StudyClawHub"

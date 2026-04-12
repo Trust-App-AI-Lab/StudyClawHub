@@ -36,7 +36,7 @@ Ask the student what they're looking for. They might say:
 Fetch `skills-index.json` from the StudyClawHub repo:
 
 ```
-https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/skills-index.json
+https://trust-app-ai-lab.github.io/StudyClawHub/skills-index.json
 ```
 
 Parse it as JSON. The `skills` array contains all registered skills with

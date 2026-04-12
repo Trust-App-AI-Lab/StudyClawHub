@@ -23,9 +23,7 @@ No write access or fork is needed — registration is done via a GitHub Issue.
 
 ## Config
 
-The StudyClawHub repo location. Check for the environment variable
-`STUDYCLAWHUB_REPO`, or fall back to reading it from the student.
-Format: `owner/repo` (e.g. `instructor/StudyClawHub`)
+The StudyClawHub repo is `Trust-App-AI-Lab/StudyClawHub`.
 
 ## Workflow
 
@@ -102,7 +100,7 @@ Record the full repo URL.
 Build a pre-filled Issue URL and give it to the student to open in their browser:
 
 ```
-https://github.com/{STUDYCLAWHUB_REPO}/issues/new?title={encoded_title}&body={encoded_body}&labels=register
+https://github.com/Trust-App-AI-Lab/StudyClawHub/issues/new?title={encoded_title}&body={encoded_body}&labels=register
 ```
 
 Where:
