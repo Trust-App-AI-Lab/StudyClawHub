@@ -888,7 +888,15 @@
   <div class="grid" id="results"></div>
   <div id="pagination"></div>
   <div class="agents-section" id="agents-section" style="display:none">
-    <h3>Agents</h3>
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem">
+      <h3 style="margin:0">Agents</h3>
+      <select class="toolbar-select" id="agent-sort-select" onchange="applyAgentSort()">
+        <option value="stars">Most starred</option>
+        <option value="installs">Most installed</option>
+        <option value="newest">Newest first</option>
+        <option value="name">A → Z</option>
+      </select>
+    </div>
     <div id="agents-results"></div>
   </div>
 </div>
@@ -1009,12 +1017,23 @@ async function boot() {
   }
 }
 
-function renderAgents() {
+function applyAgentSort() {
+  const sort = document.getElementById('agent-sort-select').value;
+  let sorted = [...allAgents];
+  if (sort === 'stars') sorted.sort((a,b) => (b.stars||0) - (a.stars||0));
+  else if (sort === 'installs') sorted.sort((a,b) => (b.installs||0) - (a.installs||0));
+  else if (sort === 'newest') sorted.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
+  else if (sort === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name));
+  renderAgents(sorted);
+}
+
+function renderAgents(agents) {
+  agents = agents || allAgents;
   const section = document.getElementById('agents-section');
   if (!allAgents.length) { section.style.display = 'none'; return; }
   section.style.display = '';
 
-  document.getElementById('agents-results').innerHTML = allAgents.map(a => {
+  document.getElementById('agents-results').innerHTML = agents.map(a => {
     const preview = a.children.slice(0, AGENT_PREVIEW_COUNT);
     const rest = a.children.length - AGENT_PREVIEW_COUNT;
     return `
