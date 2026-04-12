@@ -46,6 +46,23 @@
       "author": "EnyanDai",
       "agent": "StudyClawHub",
       "registeredAt": "2026-04-12T00:00:00Z"
+    },
+    {
+      "name": "PokerBot",
+      "type": "agent",
+      "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
+      "path": ".",
+      "author": "EnyanDai",
+      "description": "Multi-agent poker system -- AI bots with distinct personalities play Texas Hold'em with real-time GTO coaching.",
+      "version": "1.0.0",
+      "tags": [
+        "poker",
+        "gto",
+        "multi-agent",
+        "coaching",
+        "texas-holdem"
+      ],
+      "registeredAt": "2026-04-12T18:37:39.567669+00:00"
     }
   ]
 }
