@@ -38,7 +38,14 @@ jobs:
           name = parse_field(body, 'Skill name')
           repo = parse_field(body, 'GitHub repo URL')
           path = parse_field(body, 'Path to Skill folder') or '.'
+          entry_type = parse_field(body, 'Type') or 'skill'
+          agent_name = parse_field(body, 'Agent name') or ''
           author = parse_field(body, 'Your GitHub username') or author_login
+
+          # Normalize type
+          entry_type = entry_type.strip().lower()
+          if entry_type not in ('skill', 'agent'):
+              entry_type = 'skill'
 
           # Validate
           errors = []
@@ -65,24 +72,27 @@ jobs:
           with open('registry.json') as f:
               registry = json.load(f)
 
+          # Build entry
+          entry = {
+              'name': name,
+              'type': entry_type,
+              'repo': repo,
+              'path': path,
+              'author': author,
+          }
+          if agent_name and entry_type == 'skill':
+              entry['agent'] = agent_name
+
           # Check for duplicates
           existing = [s for s in registry['skills'] if s['name'] == name]
           if existing:
-              existing[0].update({
-                  'repo': repo,
-                  'path': path,
-                  'author': author,
-                  'updatedAt': datetime.now(timezone.utc).isoformat()
-              })
+              entry['updatedAt'] = datetime.now(timezone.utc).isoformat()
+              entry['registeredAt'] = existing[0].get('registeredAt', entry['updatedAt'])
+              existing[0].update(entry)
               action = 'updated'
           else:
-              registry['skills'].append({
-                  'name': name,
-                  'repo': repo,
-                  'path': path,
-                  'author': author,
-                  'registeredAt': datetime.now(timezone.utc).isoformat()
-              })
+              entry['registeredAt'] = datetime.now(timezone.utc).isoformat()
+              registry['skills'].append(entry)
               action = 'registered'
 
           with open('registry.json', 'w') as f:

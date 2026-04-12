@@ -447,6 +447,111 @@
       color: var(--green);
     }
 
+    /* ── Agent Cards ── */
+    .agents-section {
+      margin-top: 2rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+    .agents-section h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .agent-card {
+      display: flex;
+      gap: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      transition: all 0.15s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .agent-card:hover { border-color: var(--border-hover); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .agent-left {
+      flex: 1;
+      min-width: 0;
+    }
+    .agent-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .agent-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      background: var(--purple);
+      color: #fff;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      margin-left: 0.5rem;
+      vertical-align: middle;
+    }
+    .agent-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.35rem;
+      line-height: 1.5;
+    }
+    .agent-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .agent-meta a { color: var(--text-secondary); text-decoration: none; }
+    .agent-meta a:hover { color: var(--accent); }
+    .agent-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      min-width: 0;
+    }
+    .agent-skill {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      padding: 0.35rem 0.6rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .agent-skill:hover { border-color: var(--border-hover); }
+    .agent-skill-name {
+      font-weight: 600;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+    .agent-skill-desc {
+      color: var(--text-muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .agent-expand {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 0.78rem;
+      cursor: pointer;
+      padding: 0.2rem 0;
+      text-align: left;
+    }
+    .agent-expand:hover { text-decoration: underline; }
+    @media (max-width: 700px) {
+      .agent-card { flex-direction: column; }
+    }
+
     /* ── Empty ── */
     .empty {
       text-align: center;
@@ -778,6 +883,10 @@
   <div class="result-count" id="result-count"></div>
   <div class="grid" id="results"></div>
   <div id="pagination"></div>
+  <div class="agents-section" id="agents-section" style="display:none">
+    <h3>Agents</h3>
+    <div id="agents-results"></div>
+  </div>
 </div>
 
 <!-- Detail overlay -->
@@ -845,28 +954,94 @@ const INDEX_URL = 'skills-index.json';
 const REPO = 'Trust-App-AI-Lab/StudyClawHub';
 
 let allSkills = [];
+let allAgents = [];
 let currentPage = 1;
 const PAGE_SIZE = 12;
 let currentDisplaySkills = [];
+const AGENT_PREVIEW_COUNT = 3;
 
 async function boot() {
   try {
     const res = await fetch(INDEX_URL);
     const data = await res.json();
-    allSkills = data.skills || [];
+    const all = data.skills || [];
+
+    // Split into skills and agents
+    allAgents = all.filter(s => s.type === 'agent');
+    const agentNames = new Set(allAgents.map(a => a.name));
+
+    // Skills that belong to an agent (child skills)
+    const childSkillMap = {};
+    all.filter(s => s.agent && agentNames.has(s.agent)).forEach(s => {
+      if (!childSkillMap[s.agent]) childSkillMap[s.agent] = [];
+      childSkillMap[s.agent].push(s);
+    });
+
+    // Attach child skills to agents
+    allAgents.forEach(a => { a.children = childSkillMap[a.name] || []; });
+
+    // All skills (including registered child skills, but not agents themselves)
+    allSkills = all.filter(s => s.type !== 'agent');
 
     // Stats
-    const authors = new Set(allSkills.map(s => s.author));
-    document.getElementById('stat-skills').textContent = allSkills.length;
+    const authors = new Set(all.map(s => s.author));
+    document.getElementById('stat-skills').textContent = all.length;
     document.getElementById('stat-authors').textContent = authors.size;
 
-    // Submit button
-
     applySort();
+    renderAgents();
   } catch (e) {
     document.getElementById('results').innerHTML =
       `<div class="empty"><h2>Could not load skills index</h2><p>${esc(e.message)}</p></div>`;
   }
+}
+
+function renderAgents() {
+  const section = document.getElementById('agents-section');
+  if (!allAgents.length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+
+  document.getElementById('agents-results').innerHTML = allAgents.map(a => {
+    const preview = a.children.slice(0, AGENT_PREVIEW_COUNT);
+    const rest = a.children.length - AGENT_PREVIEW_COUNT;
+    return `
+    <div class="agent-card">
+      <div class="agent-left">
+        <div>
+          <span class="agent-name">${esc(a.name)}</span>
+          <span class="agent-badge">Agent · ${a.children.length} skill${a.children.length!==1?'s':''}</span>
+        </div>
+        <div class="agent-desc">${esc(a.description)}</div>
+        <div class="agent-meta">
+          <a href="https://github.com/${esc(a.author)}" target="_blank">@${esc(a.author)}</a>
+          <span>★ ${a.stars||0}</span>
+          <span>↓ ${a.installs||0}</span>
+          <a href="${esc(a.repo)}" target="_blank">repo →</a>
+        </div>
+      </div>
+      <div class="agent-right" id="agent-skills-${esc(a.name)}">
+        ${preview.map(s => `
+          <div class="agent-skill" onclick="showDetail('${esc(s.name)}')">
+            <span class="agent-skill-name">${esc(s.name)}</span>
+            <span class="agent-skill-desc">${esc(s.description)}</span>
+          </div>
+        `).join('')}
+        ${rest > 0 ? `<button class="agent-expand" onclick="expandAgent('${esc(a.name)}')">Show all ${a.children.length} skills ↓</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function expandAgent(name) {
+  const a = allAgents.find(x => x.name === name);
+  if (!a) return;
+  const el = document.getElementById('agent-skills-' + name);
+  el.innerHTML = a.children.map(s => `
+    <div class="agent-skill" onclick="showDetail('${esc(s.name)}')">
+      <span class="agent-skill-name">${esc(s.name)}</span>
+      <span class="agent-skill-desc">${esc(s.description)}</span>
+    </div>
+  `).join('');
 }
 
 function applySort() {
@@ -948,6 +1123,7 @@ function renderPage() {
         <span class="card-name">${esc(s.name)}</span>
         <span class="card-version">v${esc(s.version||'1.0.0')}</span>
       </div>
+      ${s.agent ? `<div style="font-size:0.7rem;color:var(--purple);margin-bottom:0.25rem">Part of <strong>${esc(s.agent)}</strong></div>` : ''}
       <div class="card-desc">${esc(s.description)}</div>
       <div class="card-footer">
         <a class="card-author" href="https://github.com/${esc(s.author)}" target="_blank" onclick="event.stopPropagation()">
@@ -985,11 +1161,18 @@ function goPage(p) {
 }
 
 function showDetail(name) {
-  const s = allSkills.find(x => x.name === name);
+  const allChildren = allAgents.flatMap(a => a.children || []);
+  const s = allSkills.find(x => x.name === name) || allChildren.find(x => x.name === name);
   if (!s) return;
+
+  // If this skill belongs to an agent, show a link to the agent
+  const agentLabel = s.agent
+    ? `<span style="font-size:0.82rem;color:var(--text-muted)">Part of <strong style="color:var(--purple)">${esc(s.agent)}</strong></span>`
+    : '';
+
   document.getElementById('detail-content').innerHTML = `
     <div class="detail-header">
-      <div class="detail-name">${esc(s.name)}</div>
+      <div class="detail-name">${esc(s.name)} ${agentLabel}</div>
       <div class="detail-meta">
         <a class="card-author" href="https://github.com/${esc(s.author)}" target="_blank">
           <img src="https://github.com/${esc(s.author)}.png?size=36" alt="" />
@@ -1002,7 +1185,7 @@ function showDetail(name) {
         <a href="${esc(s.repo)}" target="_blank">GitHub repo →</a>
       </div>
     </div>
-    <div class="detail-install">$ studyclawhub-install ${esc(s.name)}</div>
+    <div class="detail-install">$ /sch-install ${esc(s.name)}</div>
     ${s.description ? `<div class="detail-body">${simpleMarkdown(s.description)}</div>` : ''}
   `;
   document.getElementById('overlay').classList.add('active');

@@ -104,8 +104,8 @@ jobs:
               path = entry.get('path', '.')
               author = entry.get('author', '')
               name = entry.get('name', '')
+              entry_type = entry.get('type', 'skill')
 
-              # Fetch SKILL.md from student's repo via GitHub raw
               # Extract owner/repo from URL
               match = re.match(r'https://github\.com/([^/]+/[^/]+)', repo)
               if not match:
@@ -113,27 +113,23 @@ jobs:
                   continue
 
               repo_path = match.group(1)
-              skill_md_url = f"https://raw.githubusercontent.com/{repo_path}/main/{path}/SKILL.md"
 
+              # Try to fetch SKILL.md
+              skill_md_url = f"https://raw.githubusercontent.com/{repo_path}/main/{path}/SKILL.md"
+              meta = {}
               try:
                   req = urllib.request.Request(skill_md_url, headers={'User-Agent': 'StudyClawHub-Bot'})
                   with urllib.request.urlopen(req, timeout=10) as resp:
                       content = resp.read().decode('utf-8')
+                  fm_match = re.match(r'^---\s*\n(.*?)\n---\s*\n(.*)', content, re.DOTALL)
+                  if fm_match:
+                      meta = parse_frontmatter(fm_match.group(1))
               except Exception as e:
-                  print(f"Skipping {name}: could not fetch SKILL.md: {e}", file=sys.stderr)
-                  continue
-
-              # Parse YAML frontmatter
-              fm_match = re.match(r'^---\s*\n(.*?)\n---\s*\n(.*)', content, re.DOTALL)
-              if not fm_match:
-                  print(f"Skipping {name}: no frontmatter found", file=sys.stderr)
-                  continue
-
-              try:
-                  meta = parse_frontmatter(fm_match.group(1))
-              except Exception as e:
-                  print(f"Skipping {name}: frontmatter parse error: {e}", file=sys.stderr)
-                  continue
+                  # Agents may not have SKILL.md — use registry info
+                  if entry_type != 'agent':
+                      print(f"Skipping {name}: could not fetch SKILL.md: {e}", file=sys.stderr)
+                      continue
+                  print(f"Agent {name}: no SKILL.md, using registry info")
 
               # Fetch star count from GitHub API
               stars = 0
@@ -150,8 +146,10 @@ jobs:
                   pass
 
               skill_name = meta.get("name", name)
-              skills.append({
+              entry_type = entry.get("type", "skill")
+              skill_entry = {
                   "name": skill_name,
+                  "type": entry_type,
                   "description": meta.get("description", ""),
                   "author": meta.get("author", author),
                   "version": meta.get("version", "1.0.0"),
@@ -162,7 +160,10 @@ jobs:
                   "registeredAt": entry.get("registeredAt", ""),
                   "stars": stars,
                   "installs": install_counts.get(skill_name, 0),
-              })
+              }
+              if entry.get("agent"):
+                  skill_entry["agent"] = entry["agent"]
+              skills.append(skill_entry)
 
               print(f"Indexed: {meta.get('name', name)} by @{meta.get('author', author)}")
 

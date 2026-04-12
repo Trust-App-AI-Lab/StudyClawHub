@@ -1,5 +1,5 @@
-name: Register a Skill
-description: Register your Skill with StudyClawHub
+name: Register a Skill or Agent
+description: Register your Skill or Agent with StudyClawHub
 title: "register: "
 labels: ["register"]
 body:
@@ -28,6 +28,23 @@ body:
       description: "If SKILL.md is in the repo root, leave as '.'"
       placeholder: "."
       value: "."
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      description: Is this a single Skill or an Agent (project with multiple skills)?
+      options:
+        - skill
+        - agent
+      default: 0
+
+  - type: input
+    id: agent
+    attributes:
+      label: Agent name
+      description: "If this skill belongs to an Agent, enter the Agent's name. Leave empty for standalone skills or agents."
+      placeholder: ""
 
   - type: input
     id: author

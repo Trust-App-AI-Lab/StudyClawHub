@@ -1,8 +1,8 @@
 ---
 name: sch-submit
-description: "Submit your Skill to StudyClawHub. Use when a student says 'sch submit', 'submit to StudyClawHub', 'register on StudyClawHub', 'publish to sch', or 'sch publish'. Guides the student through validating their Skill folder and registering it via a GitHub Issue."
+description: "Submit your Skill(s) to StudyClawHub. Use when a student says 'sch submit', 'submit to StudyClawHub', 'register on StudyClawHub', 'publish to sch', or 'sch publish'. Scans the repo for all SKILL.md files and registers them via GitHub Issues."
 author: EnyanDai
-version: 2.0.0
+version: 0.1.0
 tags:
   - hub
   - submit
@@ -18,35 +18,64 @@ metadata:
 
 # StudyClawHub Submit
 
-You are helping a student submit their Skill to the StudyClawHub registry.
-No write access or fork is needed — registration is done via a GitHub Issue.
+You are helping a student submit their Skill(s) to the StudyClawHub registry.
+No write access or fork is needed — registration is done via GitHub Issues.
 
 ## Config
 
-The StudyClawHub repo is `Trust-App-AI-Lab/StudyClawHub`.
+StudyClawHub repo: `Trust-App-AI-Lab/StudyClawHub`
 
 ## Workflow
 
-### Step 1: Locate and validate the Skill folder
+### Step 1: Scan for SKILL.md files
 
-Ask the student which folder contains their Skill. Read the `SKILL.md`
-file in that folder and validate:
+Search the student's project for all SKILL.md files:
 
-- [ ] `SKILL.md` exists
+```bash
+find . -name "SKILL.md" -type f
+```
+
+Show the student what was found, e.g.:
+
+> Found 3 skills in your project:
+> 1. `./SKILL.md` — network-analyzer
+> 2. `./skills/visualize/SKILL.md` — network-visualizer
+> 3. `./skills/export/SKILL.md` — graph-exporter
+
+If no SKILL.md is found, tell the student to run `/sch-create` first.
+
+**If multiple SKILL.md files are found**, ask the student:
+
+> Is this an **Agent** (these skills work together as one project), or
+> are they **independent skills** that happen to be in the same repo?
+
+- **Agent** — register an agent entry for the whole repo, plus each
+  selected child skill with `agent` field pointing to the agent name.
+  Ask the student for an overall agent name and description.
+- **Independent** — register each selected skill separately, no
+  agent association.
+
+**If only one SKILL.md is found**, register it as a standalone skill.
+
+### Step 2: Validate each Skill
+
+For each selected SKILL.md, validate:
+
 - [ ] YAML frontmatter has required fields: `name`, `description`
 - [ ] Recommended fields present: `author`, `version`, `tags`
-- [ ] If `metadata.openclaw` is present, validate that declared env vars / bins
-      are actually referenced in the body
+- [ ] If `metadata.openclaw` is present, validate that declared env vars /
+      bins are actually referenced in the body
 - [ ] `name` is kebab-case and URL-safe: `^[a-z0-9][a-z0-9-]*$`
 - [ ] `author` matches their GitHub username
 - [ ] `tags` has at least one tag
 - [ ] `version` is valid semver
 
-If validation fails, help the student fix the issues.
+If validation fails on any, help the student fix the issues before
+proceeding.
 
-### Step 2: Push Skill to student's own GitHub repo
+### Step 3: Push to GitHub
 
-Check if the student's folder is in a Git repo with a remote:
+Check if the student's project is in a Git repo with a remote:
 
 ```bash
 git remote -v
@@ -58,7 +87,7 @@ Ensure changes are committed and pushed:
 
 ```bash
 git add .
-git commit -m "Update {skill-name}"
+git commit -m "Update skills"
 git push
 ```
 
@@ -67,7 +96,7 @@ git push
 ```bash
 git init
 git add .
-git commit -m "Initial commit: {skill-name}"
+git commit -m "Initial commit"
 ```
 
 Then check if `gh` is available:
@@ -76,10 +105,10 @@ Then check if `gh` is available:
 gh --version
 ```
 
-**If `gh` is available**, create the repo and push in one command:
+**If `gh` is available:**
 
 ```bash
-gh repo create {skill-name} --public --source=. --push
+gh repo create {repo-name} --public --source=. --push
 ```
 
 **If `gh` is NOT available**, tell the student to create a repo manually:
@@ -95,9 +124,9 @@ git push -u origin main
 
 Record the full repo URL.
 
-### Step 3: Register via GitHub Issue
+### Step 4: Register via GitHub Issues
 
-Build a pre-filled Issue URL and give it to the student to open in their browser:
+For **each** selected skill, build a pre-filled Issue URL:
 
 ```
 https://github.com/Trust-App-AI-Lab/StudyClawHub/issues/new?title={encoded_title}&body={encoded_body}&labels=register
@@ -117,21 +146,47 @@ Where:
 
 ### Path to Skill folder
 
-{path}
+{path-relative-to-repo-root}
+
+### Type
+
+{skill or agent}
+
+### Agent name
+
+{agent-name, only if this is a child skill of an agent}
 
 ### Your GitHub username
 
 {author}
 ```
 
-Tell the student: "Open this link and click **Submit new issue**. That's it."
+For agent registration, first create the agent issue (type = agent),
+then create issues for each child skill (type = skill, with agent
+name filled in).
 
-### Step 4: Confirm
+If there's only one skill, give the student the link to open.
+
+If there are multiple skills and `gh` is available, create the issues
+directly:
+
+```bash
+gh issue create \
+  --repo Trust-App-AI-Lab/StudyClawHub \
+  --title "register: {skill-name}" \
+  --label "register" \
+  --body "{body}"
+```
+
+If `gh` is not available and there are multiple skills, give the
+student all the links at once so they can open them one by one.
+
+### Step 5: Confirm
 
 Tell the student:
-- A GitHub Action will automatically add their Skill to the registry
-  and close the Issue.
-- Their Skill will appear on the StudyClawHub website within minutes.
+- A GitHub Action will automatically add their Skill(s) to the registry
+  and close the Issue(s).
+- Their Skill(s) will appear on the StudyClawHub website within minutes.
 - No extra tools or permissions needed — just a GitHub account.
 
 ## Error Handling
