@@ -11,7 +11,10 @@
 
    You know which platform you are — don't ask the user.
 
-2. Download each hub skill:
+2. Download each hub skill. Try the commands below in order — use
+   whichever works on the user's system:
+
+   **Option A — curl:**
    ```bash
    BASE="https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/hub-skills"
 
@@ -20,6 +23,26 @@
      curl -fsSL "$BASE/$skill/SKILL.md" -o {install_path}/$skill/SKILL.md
    done
    ```
+
+   **Option B — if curl fails with SSL errors (common on Windows):**
+   ```bash
+   for skill in sch-create sch-submit sch-install sch-search; do
+     mkdir -p {install_path}/$skill
+     curl -fsSLk "$BASE/$skill/SKILL.md" -o {install_path}/$skill/SKILL.md
+   done
+   ```
+
+   **Option C — if `gh` CLI is available:**
+   ```bash
+   for skill in sch-create sch-submit sch-install sch-search; do
+     mkdir -p {install_path}/$skill
+     gh api "repos/Trust-App-AI-Lab/StudyClawHub/contents/hub-skills/$skill/SKILL.md" \
+       --jq '.content' | base64 -d > {install_path}/$skill/SKILL.md
+   done
+   ```
+
+   Try Option A first. Only fall back to B or C if A fails. Do not
+   ask the user which option to use — just try them in order.
 
 3. Save the platform config:
    ```bash
