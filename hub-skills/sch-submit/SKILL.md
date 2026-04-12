@@ -70,7 +70,8 @@ each `SKILL.md`. The frontmatter format is the same for both:
 - [ ] Recommended fields present: `author`, `version`, `tags`
 - [ ] If `metadata.openclaw` is present, validate that declared env vars /
       bins are actually referenced in the body
-- [ ] `name` is kebab-case and URL-safe: `^[a-z0-9][a-z0-9-]*$`
+- [ ] Skill `name` is kebab-case: `^[a-z0-9][a-z0-9-]*$`
+- [ ] Agent `name` allows mixed case: `^[a-zA-Z0-9][a-zA-Z0-9_-]*$`
 - [ ] `author` matches their GitHub username
 - [ ] `tags` has at least one tag
 - [ ] `version` is valid semver
