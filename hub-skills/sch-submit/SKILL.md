@@ -134,7 +134,7 @@ Record the full repo URL.
 For **each** selected skill, build a pre-filled Issue URL:
 
 ```
-https://github.com/Trust-App-AI-Lab/StudyClawHub/issues/new?title={encoded_title}&body={encoded_body}&labels=register
+https://github.com/Trust-App-AI-Lab/StudyClawHub/issues/new?title={encoded_title}&body={encoded_body}
 ```
 
 Where:
@@ -179,7 +179,6 @@ directly:
 gh issue create \
   --repo Trust-App-AI-Lab/StudyClawHub \
   --title "register: {skill-name}" \
-  --label "register" \
   --body "{body}"
 ```
 
