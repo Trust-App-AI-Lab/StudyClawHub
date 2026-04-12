@@ -132,6 +132,23 @@
       ],
       "agent": "PokerBot",
       "registeredAt": "2026-04-12T18:49:45.239994+00:00"
+    },
+    {
+      "name": "bot-management",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
+      "path": ".claude/skills/bot-management",
+      "author": "EnyanDai",
+      "description": "PokerBot internal SKILL -- AI poker bot lifecycle management. Trigger: \"加几个bot\", \"add bots\", \"create bot\", \"bot stuck\".",
+      "version": "1.0.0",
+      "tags": [
+        "poker",
+        "bot",
+        "management",
+        "internal"
+      ],
+      "agent": "PokerBot",
+      "registeredAt": "2026-04-12T18:50:44.084314+00:00"
     }
   ]
 }
