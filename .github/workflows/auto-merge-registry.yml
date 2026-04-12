@@ -4,6 +4,10 @@ on:
   issues:
     types: [opened]
 
+concurrency:
+  group: registry-update
+  cancel-in-progress: false
+
 permissions:
   contents: write
   issues: write
@@ -126,6 +130,7 @@ jobs:
         run: |
           git config user.name "StudyClawHub Bot"
           git config user.email "bot@studyclawhub"
+          git pull --rebase origin main
           git add registry.json
           git commit -m "register: add skill from #${{ github.event.issue.number }}"
           git push
