@@ -179,6 +179,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check repo permission
+        id: perms
+        run: |
+          PERM=$(gh api repos/${{ github.repository }}/collaborators/${{ github.event.issue.user.login }}/permission --jq .permission 2>/dev/null || echo "none")
+          echo "permission=$PERM" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Parse and delete from registry
         run: |
           python3 << 'SCRIPT'
@@ -186,7 +194,7 @@ jobs:
 
           title = os.environ.get('ISSUE_TITLE', '')
           issue_author = os.environ.get('ISSUE_AUTHOR', '')
-          author_assoc = os.environ.get('AUTHOR_ASSOCIATION', '')
+          repo_permission = os.environ.get('REPO_PERMISSION', 'none')
 
           # Extract skill name from title "delete: skill-name"
           m = re.match(r'^delete:\s*(.+)$', title.strip(), re.IGNORECASE)
@@ -214,8 +222,8 @@ jobs:
               print(msg, file=sys.stderr)
               sys.exit(1)
 
-          # Auth check: must be the author OR a repo admin/member
-          is_admin = author_assoc in ('OWNER', 'MEMBER', 'COLLABORATOR')
+          # Auth check: must be the author OR have write/admin permission on the repo
+          is_admin = repo_permission in ('admin', 'write')
           is_author = issue_author.lower() == entry.get('author', '').lower()
           if not is_admin and not is_author:
               msg = f'Permission denied. Only the author (@{entry.get("author")}) or repo admins can delete **{name}**.'
@@ -250,7 +258,7 @@ jobs:
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
-          AUTHOR_ASSOCIATION: ${{ github.event.issue.author_association }}
+          REPO_PERMISSION: ${{ steps.perms.outputs.permission }}
         id: delete
 
       - name: Commit registry update
