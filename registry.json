@@ -156,7 +156,7 @@
       "repo": "https://github.com/Trust-App-AI-Lab/LatexReport",
       "path": ".",
       "author": "EnyanDai",
-      "description": "A LaTeX skill for NeurIPS-style academic reports. Handles project setup (scaffolding) and content formatting (tables, figures, math, algorithms). Triggers on: LaTeX report, NeurIPS template, report setup, create report, add table, add figure, format report.",
+      "description": "NeurIPS-style LaTeX report scaffolding and formatting.",
       "version": "0.1.0",
       "tags": [
         "latex",
@@ -165,7 +165,8 @@
         "academic-writing"
       ],
       "registeredAt": "2026-04-13T09:22:59.746271+00:00",
-      "updatedAt": "2026-04-13T09:42:28.976400+00:00"
+      "updatedAt": "2026-04-13T11:43:20.276927+00:00",
+      "agent": "### Your GitHub username"
     }
   ]
 }
