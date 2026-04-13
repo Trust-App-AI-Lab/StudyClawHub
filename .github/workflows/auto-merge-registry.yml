@@ -34,11 +34,19 @@ jobs:
               pattern = rf'### {field_id}\s*\n\s*(?!###)(.+)'
               m = re.search(pattern, text, re.IGNORECASE)
               if m:
-                  return m.group(1).strip()
+                  val = m.group(1).strip()
+                  if val.lower() in ('_no response_', 'n/a', 'none', ''):
+                      return ''
+                  return val
               # Fallback: look for "field_id\n\nvalue" pattern
               pattern = rf'{field_id}\s*\n\n(.+)'
               m = re.search(pattern, text, re.IGNORECASE)
-              return m.group(1).strip() if m else ''
+              if m:
+                  val = m.group(1).strip()
+                  if val.lower() in ('_no response_', 'n/a', 'none', ''):
+                      return ''
+                  return val
+              return ''
 
           name = parse_field(body, 'Skill name')
           repo = parse_field(body, 'GitHub repo URL')
