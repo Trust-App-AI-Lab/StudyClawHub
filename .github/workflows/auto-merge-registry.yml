@@ -11,6 +11,7 @@ concurrency:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 jobs:
   register:
@@ -137,6 +138,7 @@ jobs:
 
       - name: Trigger index rebuild
         if: steps.register.outputs.success == 'true'
+        continue-on-error: true
         run: gh workflow run build-index.yml
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
