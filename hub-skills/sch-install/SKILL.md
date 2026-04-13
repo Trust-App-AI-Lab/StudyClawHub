@@ -71,10 +71,11 @@ git clone --depth 1 {repo_url} {skill-name}
 **Skill = subdirectory** (`path` is e.g. `skills/my-skill`):
 
 ```bash
-git clone --depth 1 --filter=blob:none --sparse {repo_url} /tmp/sch-dl
-cd /tmp/sch-dl && git sparse-checkout set {path}
+tmpdir=$(mktemp -d)
+git clone --depth 1 --filter=blob:none --sparse {repo_url} "$tmpdir"
+cd "$tmpdir" && git sparse-checkout set {path}
 cp -r {path} {target_dir}/{skill-name}
-rm -rf /tmp/sch-dl
+rm -rf "$tmpdir"
 ```
 
 ### Step 4: Confirm

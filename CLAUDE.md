@@ -21,7 +21,7 @@ spec including `metadata.openclaw` fields.
   with sorting by stars/installs/time. Exposes `window.applyCustomOrder()`
   JS API for the search Skill to inject LLM-driven rankings.
 - **Hub Skills**: `hub-skills/sch-create`, `hub-skills/sch-submit`, `hub-skills/sch-search`,
-  `hub-skills/sch-install` are the CLI/agent interaction layer.
+  `hub-skills/sch-install`, `hub-skills/sch-deps` are the CLI/agent interaction layer.
 - **No Convex, no OpenAI, no server, no database.**
 
 ## Key files
@@ -33,6 +33,7 @@ spec including `metadata.openclaw` fields.
 - `hub-skills/sch-submit` — register a Skill via GitHub Issue
 - `hub-skills/sch-search` — LLM-driven semantic search
 - `hub-skills/sch-install` — install a Skill + log install count
+- `hub-skills/sch-deps` — check, add, or fix dependencies for a Skill
 - `docs/studyclawhub-skill-format.md` — Skill format spec (ClawHub-compatible)
 
 ## Student workflow

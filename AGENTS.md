@@ -20,6 +20,7 @@ course at HKUST-GZ (TAI Lab).
 - **sch-submit** — Register a Skill or Agent via GitHub Issues
 - **sch-search** — LLM-driven semantic search across all registered Skills
 - **sch-install** — Install a Skill from the registry
+- **sch-deps** — Check, add, or fix dependencies for a Skill or Agent
 
 ## How it works
 
