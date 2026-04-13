@@ -660,7 +660,7 @@
 
     /* ── Quick Start ── */
     .quickstart {
-      max-width: 800px;
+      max-width: 1080px;
       margin: 0 auto;
       padding: 0 1.5rem 2.5rem;
     }
@@ -740,6 +740,8 @@
       font-size: 0.8rem;
       font-style: italic;
       color: var(--text-secondary);
+      overflow-wrap: break-word;
+      word-break: break-all;
     }
     .step-prompt::before {
       content: 'Chat \203A  ';
@@ -823,8 +825,9 @@
     @media (max-width: 640px) {
       .hero h1 { font-size: 1.75rem; }
       .grid { grid-template-columns: 1fr; }
-      .nav { padding: 0 1rem; }
-      .nav-links { display: none; }
+      .nav { padding: 0 1rem; flex-wrap: wrap; }
+      .nav-links { gap: 0.1rem; margin-left: auto; font-size: 0.75rem; }
+      .nav-links a { padding: 0.3rem 0.4rem; }
       .hero-stats { gap: 1.25rem; }
     }
   </style>
@@ -841,8 +844,6 @@
   <div class="nav-links">
     <a href="#agents-anchor">Agents</a>
     <a href="#skills-anchor">Skills</a>
-    <a href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">GitHub</a>
-    <a href="https://github.com/Trust-App-AI-Lab/StudyClawHub/blob/main/docs/studyclawhub-skill-format.md" target="_blank">Docs</a>
   </div>
   <div class="nav-spacer"></div>
 </nav>
@@ -867,8 +868,9 @@
     </div>
   </div>
   <div class="hero-actions">
-    <a class="btn btn-primary" href="#skills-section">Browse Skills</a>
-    <a class="btn btn-primary" href="javascript:openSubmit()">+ Submit Skill / Agent</a>
+    <a class="btn btn-primary" href="#agents-anchor">Browse Agents</a>
+    <a class="btn btn-primary" href="#skills-anchor">Browse Skills</a>
+    <a class="btn btn-primary" href="javascript:openSubmit()">+ Submit</a>
     <a class="btn btn-outline" href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">View on GitHub</a>
   </div>
 </section>
@@ -921,11 +923,6 @@
 <div class="container" id="skills-section">
   <div class="toolbar">
     <input class="toolbar-search" id="search-input" type="text" placeholder="Search skills & agents..." oninput="applyFilter()">
-    <select class="toolbar-select" id="sort-select" onchange="applyFilter()">
-      <option value="stars">Most starred</option>
-      <option value="newest">Newest first</option>
-      <option value="name">A → Z</option>
-    </select>
   </div>
   <div id="agents-anchor" style="scroll-margin-top:3.5rem"></div>
   <div class="agents-section" id="hub-agents-section" style="display:none">
@@ -944,7 +941,15 @@
     <div id="agents-results"></div>
   </div>
   <div id="skills-anchor" style="scroll-margin-top:3.5rem"></div>
-  <div class="result-count" id="result-count"></div>
+  <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;margin-top:1.5rem;border-top:1px solid var(--border);padding-top:1.5rem">
+    <h3 style="margin:0">Skills</h3>
+    <select class="toolbar-select" id="sort-select" onchange="applyFilter()">
+      <option value="stars">Most starred</option>
+      <option value="newest">Newest first</option>
+      <option value="name">A → Z</option>
+    </select>
+    <span class="result-count" id="result-count" style="margin-left:auto"></span>
+  </div>
   <div class="grid" id="results"></div>
   <div id="pagination"></div>
 </div>
