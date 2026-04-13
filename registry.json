@@ -215,6 +215,22 @@
       "registeredAt": "2026-04-13T09:22:59.746271+00:00",
       "updatedAt": "2026-04-13T11:43:20.276927+00:00",
       "agent": ""
+    },
+    {
+      "name": "sch-delete",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
+      "path": "hub-skills/sch-delete",
+      "author": "EnyanDai",
+      "description": "Delete a Skill or Agent from StudyClawHub. Use when a student says 'sch delete', 'delete skill', 'remove from StudyClawHub', 'unregister skill'.",
+      "version": "0.1.0",
+      "tags": [
+        "hub",
+        "delete",
+        "remove"
+      ],
+      "agent": "studyclawhub",
+      "registeredAt": "2026-04-13T14:59:43.204033+00:00"
     }
   ]
 }
