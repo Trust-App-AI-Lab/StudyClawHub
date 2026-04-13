@@ -14,7 +14,7 @@
    ```bash
    BASE="https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/hub-skills"
 
-   for skill in sch-create sch-submit sch-install sch-search sch-deps; do
+   for skill in sch-create sch-adapt sch-submit sch-install sch-search sch-deps; do
      mkdir -p {install_path}/$skill
      curl -fsSL "$BASE/$skill/SKILL.md" -o {install_path}/$skill/SKILL.md
    done
@@ -23,7 +23,8 @@
    use `gh api` to fetch each file.
 
 3. Tell the user what was installed:
-   - `/sch-create` — Create a new Skill
+   - `/sch-create` — Create a new Skill from scratch
+   - `/sch-adapt` — Adapt existing project into a Skill
    - `/sch-submit` — Submit to StudyClawHub
    - `/sch-install` — Install from registry
    - `/sch-search` — Search for Skills
