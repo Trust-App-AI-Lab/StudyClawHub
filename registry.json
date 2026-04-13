@@ -19,7 +19,11 @@
       "author": "EnyanDai",
       "description": "Create a new Skill from scratch. Guided scaffolding for StudyClawHub / ClawHub.",
       "version": "0.2.0",
-      "tags": ["hub", "create", "scaffold"],
+      "tags": [
+        "hub",
+        "create",
+        "scaffold"
+      ],
       "agent": "studyclawhub",
       "registeredAt": "2026-04-12T00:00:00Z",
       "updatedAt": "2026-04-13T00:00:00Z"
@@ -32,7 +36,11 @@
       "author": "EnyanDai",
       "description": "Submit and register a Skill or Agent to StudyClawHub via GitHub Issues.",
       "version": "0.1.0",
-      "tags": ["hub", "submit", "publish"],
+      "tags": [
+        "hub",
+        "submit",
+        "publish"
+      ],
       "agent": "studyclawhub",
       "registeredAt": "2026-04-12T00:00:00Z",
       "updatedAt": "2026-04-13T00:00:00Z"
@@ -45,7 +53,11 @@
       "author": "EnyanDai",
       "description": "Install a Skill or Agent from StudyClawHub. Clones the repo and sets up locally.",
       "version": "0.1.0",
-      "tags": ["hub", "install", "download"],
+      "tags": [
+        "hub",
+        "install",
+        "download"
+      ],
       "agent": "studyclawhub",
       "registeredAt": "2026-04-12T00:00:00Z",
       "updatedAt": "2026-04-13T00:00:00Z"
@@ -58,7 +70,11 @@
       "author": "EnyanDai",
       "description": "LLM-driven semantic search across all registered Skills on StudyClawHub.",
       "version": "0.1.0",
-      "tags": ["hub", "search", "discover"],
+      "tags": [
+        "hub",
+        "search",
+        "discover"
+      ],
       "agent": "studyclawhub",
       "registeredAt": "2026-04-12T00:00:00Z",
       "updatedAt": "2026-04-13T00:00:00Z"
@@ -71,7 +87,11 @@
       "author": "EnyanDai",
       "description": "Check, add, or fix dependencies for a Skill or Agent.",
       "version": "0.1.0",
-      "tags": ["hub", "deps", "dependencies"],
+      "tags": [
+        "hub",
+        "deps",
+        "dependencies"
+      ],
       "agent": "studyclawhub",
       "registeredAt": "2026-04-13T00:00:00Z"
     },
@@ -195,19 +215,6 @@
       "registeredAt": "2026-04-13T09:22:59.746271+00:00",
       "updatedAt": "2026-04-13T11:43:20.276927+00:00",
       "agent": ""
-    },
-    {
-      "name": "test-skill",
-      "type": "skill",
-      "repo": "https://github.com/findys/test",
-      "path": "./test-skill/SKILL.md",
-      "author": "shuo",
-      "description": "A test skill for StudyClawHub.",
-      "version": "1.0.0",
-      "tags": [
-        "test"
-      ],
-      "registeredAt": "2026-04-13T13:09:20.365329+00:00"
     }
   ]
 }
