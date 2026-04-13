@@ -77,77 +77,15 @@ cp -r {path} {target_dir}/{skill-name}
 rm -rf /tmp/sch-dl
 ```
 
-### Step 4: Install dependencies
-
-After cloning, read the SKILL.md(s) in the repo and parse
-`metadata.openclaw` from the YAML frontmatter.
-
-#### 4a: Check `requires.env`
-
-If the skill declares `requires.env`, check each environment variable:
-
-```bash
-echo $ENV_VAR_NAME
-```
-
-For any that are **not set**, warn the student:
-
-> This skill requires the environment variable `{VAR_NAME}` but it is
-> not set. You can set it with:
-> ```bash
-> export {VAR_NAME}="your-value-here"
-> ```
-
-If a `primaryEnv` is declared, highlight it as the most important one.
-
-Do **not** block the installation — just warn.
-
-#### 4b: Check `requires.bins`
-
-If the skill declares `requires.bins`, check each binary:
-
-```bash
-which {binary_name}
-```
-
-For any that are **missing**, warn the student.
-
-#### 4c: Auto-install packages from `metadata.openclaw.install`
-
-If the skill declares `metadata.openclaw.install`, ask the student:
-
-> This skill has dependencies to install. Install them now? (Y/n)
-
-If yes, process each entry. Each entry has a `kind` and a `package`.
-Run the corresponding command:
-
-| kind       | Command                          | Notes                                    |
-|------------|----------------------------------|------------------------------------------|
-| `brew`     | `brew install {package}`         | macOS / Linuxbrew                        |
-| `node`     | `npm install -g {package}`       | Or pnpm/yarn if student prefers          |
-| `go`       | `go install {package}`           | Requires Go on PATH                      |
-| `uv`       | `uv tool install {package}`      | Installs to `~/.local/bin`               |
-| `download` | Fetch URL and extract            | Check `url`, `type` fields in the entry  |
-
-**Installer priority:** If multiple entries provide the same binary,
-prefer: `brew` > `uv` > `node` > `go` > `download`. Only run one
-installer per binary.
-
-**Platform filtering:** If an entry has an `os` field (e.g.
-`os: ["darwin"]`), skip it on non-matching platforms.
-
-**Error handling:** If an installer fails, warn but continue. Never
-block the overall installation.
-
-### Step 5: Confirm
+### Step 4: Confirm
 
 Tell the student the Skill has been installed. Show a summary:
 
 - Skill name and version
 - Install location
-- Dependencies installed (if any)
-- Warnings (missing env vars, failed dependency installs, etc.)
 - Trigger phrases from the SKILL.md description
+
+Suggest running `/sch-deps` to check and install dependencies.
 
 ## Notes
 

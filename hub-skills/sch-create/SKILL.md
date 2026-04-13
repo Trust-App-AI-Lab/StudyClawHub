@@ -111,8 +111,7 @@ metadata:
 - `version`: `1.0.0` for new skills, or match existing version if the
   project already has one.
 - `tags`: At least one tag, lowercase, related to the skill's domain.
-- `metadata.openclaw`: Only include if the skill actually needs env vars,
-  binaries, or dependencies. Omit entirely for pure-prompt skills.
+- `metadata.openclaw`: Optional. Use `/sch-deps` to manage dependencies.
 
 #### Body content
 
@@ -149,8 +148,6 @@ Check the generated Skill:
 - [ ] `author` matches student's GitHub username
 - [ ] `version` is valid semver
 - [ ] `tags` has at least one tag
-- [ ] `metadata.openclaw.requires.env` — declared vars are actually used
-- [ ] `metadata.openclaw.requires.bins` — declared binaries are actually used
 - [ ] Body has clear step-by-step instructions tailored to the project
 - [ ] No binary files in the Skill folder
 

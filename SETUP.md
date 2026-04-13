@@ -5,53 +5,25 @@
 
 ## Steps
 
-1. Determine the install path based on your platform:
+1. Determine the install path:
    - **Claude Code**: `{project_root}/.claude/skills/`
-   - **OpenClaw / WorkBuddy**: `{project_root}/skills/`
+   - **OpenClaw**: `{project_root}/skills/`
 
-   You know which platform you are — don't ask the user.
-
-2. Download each hub skill. Try the commands below in order — use
-   whichever works on the user's system:
-
-   **Option A — curl:**
+2. Download hub skills:
    ```bash
    BASE="https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/hub-skills"
 
-   for skill in sch-create sch-submit sch-install sch-search; do
+   for skill in sch-create sch-submit sch-install sch-search sch-deps; do
      mkdir -p {install_path}/$skill
      curl -fsSL "$BASE/$skill/SKILL.md" -o {install_path}/$skill/SKILL.md
    done
    ```
+   If curl fails with SSL errors, add `-k` flag. If curl is unavailable,
+   use `gh api` to fetch each file.
 
-   **Option B — if curl fails with SSL errors (common on Windows):**
-   ```bash
-   for skill in sch-create sch-submit sch-install sch-search; do
-     mkdir -p {install_path}/$skill
-     curl -fsSLk "$BASE/$skill/SKILL.md" -o {install_path}/$skill/SKILL.md
-   done
-   ```
-
-   **Option C — if `gh` CLI is available:**
-   ```bash
-   for skill in sch-create sch-submit sch-install sch-search; do
-     mkdir -p {install_path}/$skill
-     gh api "repos/Trust-App-AI-Lab/StudyClawHub/contents/hub-skills/$skill/SKILL.md" \
-       --jq '.content' | base64 -d > {install_path}/$skill/SKILL.md
-   done
-   ```
-
-   Try Option A first. Only fall back to B or C if A fails. Do not
-   ask the user which option to use — just try them in order.
-
-3. Save the platform config:
-   ```bash
-   echo '{"platform":"claude-code"}' > {project_root}/.studyclawhub.json
-   ```
-   (Use `"openclaw"` if you're OpenClaw.)
-
-4. Tell the user what was installed:
+3. Tell the user what was installed:
    - `/sch-create` — Create a new Skill
-   - `/sch-submit` — Submit a Skill to StudyClawHub
-   - `/sch-install` — Install a Skill from the registry
+   - `/sch-submit` — Submit to StudyClawHub
+   - `/sch-install` — Install from registry
    - `/sch-search` — Search for Skills
+   - `/sch-deps` — Check and install dependencies
