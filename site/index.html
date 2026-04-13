@@ -971,6 +971,12 @@
       <input class="form-input" id="f-path" type="text" placeholder="." value="." oninput="updatePreview()" />
     </div>
 
+    <div class="form-group" id="agent-name-group" style="display:none">
+      <label for="f-agent">Agent name</label>
+      <div class="hint">If this skill belongs to an Agent, enter the Agent's name. Leave empty for standalone skills.</div>
+      <input class="form-input" id="f-agent" type="text" placeholder="" oninput="updatePreview()" />
+    </div>
+
     <div class="form-group">
       <label for="f-author">GitHub Username</label>
       <input class="form-input" id="f-author" type="text" placeholder="your-github-username" oninput="updatePreview()" />
@@ -1321,23 +1327,50 @@ function updatePreview() {
   const name = document.getElementById('f-name').value.trim();
   const repo = document.getElementById('f-repo').value.trim();
   const path = document.getElementById('f-path').value.trim() || '.';
+  const agent = document.getElementById('f-agent').value.trim();
   const author = document.getElementById('f-author').value.trim();
+  const isAgent = type === 'agent';
 
-  // Update hint based on type
-  document.getElementById('name-hint').textContent = 'Lowercase, kebab-case (e.g. my-cool-skill)';
-  document.getElementById('f-name').placeholder = 'my-cool-skill';
+  // Show/hide agent name field (only for skills, not agents themselves)
+  document.getElementById('agent-name-group').style.display =
+    isAgent ? 'none' : '';
+
+  // Update labels, hints, and placeholders based on type
+  const nameInput = document.getElementById('f-name');
+  const nameHint = document.getElementById('name-hint');
+  const descInput = document.getElementById('f-desc');
+  const pathLabel = document.querySelector('label[for="f-path"]');
+  const pathHint = pathLabel.nextElementSibling;
+  const pathInput = document.getElementById('f-path');
+  const repoHint = document.querySelector('label[for="f-repo"]').nextElementSibling;
+
+  if (isAgent) {
+    nameHint.textContent = 'Lowercase, kebab-case (e.g. my-awesome-agent)';
+    nameInput.placeholder = 'my-awesome-agent';
+    descInput.placeholder = 'A short description of your agent project';
+    pathLabel.textContent = 'Path';
+    pathHint.textContent = 'Usually "." for agents (entire repo is the agent)';
+    pathInput.placeholder = '.';
+    repoHint.textContent = 'The repo that contains your agent project';
+  } else {
+    nameHint.textContent = 'Lowercase, kebab-case (e.g. my-cool-skill)';
+    nameInput.placeholder = 'my-cool-skill';
+    descInput.placeholder = 'A short description of your skill';
+    pathLabel.textContent = 'Path to Skill Folder';
+    pathHint.textContent = 'Relative path from repo root (use "." if SKILL.md is at root)';
+    pathInput.placeholder = '.';
+    repoHint.textContent = 'The repo where your Skill lives (can be private)';
+  }
 
   const preview = document.getElementById('submit-preview');
   const body = document.getElementById('preview-body');
 
   if (name || repo || author) {
     preview.classList.add('active');
-    body.textContent =
-      `Type: ${type}\n` +
-      `Name: ${name || '(empty)'}\n` +
-      `Repo: ${repo || '(empty)'}\n` +
-      `Path: ${path}\n` +
-      `Author: ${author || '(empty)'}`;
+    let text = `Type: ${type}\nName: ${name || '(empty)'}\nRepo: ${repo || '(empty)'}\nPath: ${path}`;
+    if (type === 'skill' && agent) text += `\nAgent: ${agent}`;
+    text += `\nAuthor: ${author || '(empty)'}`;
+    body.textContent = text;
   } else {
     preview.classList.remove('active');
   }
@@ -1360,7 +1393,7 @@ function submitSkill() {
 
   // Validate name format — both skills and agents use kebab-case
   if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) {
-    alert('Name must be lowercase kebab-case (e.g. my-cool-skill).');
+    alert('Name must be lowercase kebab-case (e.g. ' + (type === 'agent' ? 'my-awesome-agent' : 'my-cool-skill') + ').');
     return;
   }
 
@@ -1380,7 +1413,7 @@ function submitSkill() {
     `### GitHub repo URL\n\n${repo}\n\n` +
     `### Path to Skill folder\n\n${path}\n\n` +
     `### Type\n\n${type}\n\n` +
-    `### Agent name\n\n\n\n` +
+    `### Agent name\n\n${(document.getElementById('f-agent').value.trim()) || ''}\n\n` +
     `### Your GitHub username\n\n${author}`;
 
   const issueUrl = `https://github.com/${REPO}/issues/new?` +
