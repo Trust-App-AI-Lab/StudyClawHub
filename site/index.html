@@ -1277,10 +1277,8 @@ function updatePreview() {
   const author = document.getElementById('f-author').value.trim();
 
   // Update hint based on type
-  document.getElementById('name-hint').textContent = type === 'agent'
-    ? 'Alphanumeric with hyphens (e.g. MyAgent)'
-    : 'Lowercase, kebab-case (e.g. my-cool-skill)';
-  document.getElementById('f-name').placeholder = type === 'agent' ? 'MyAgent' : 'my-cool-skill';
+  document.getElementById('name-hint').textContent = 'Lowercase, kebab-case (e.g. my-cool-skill)';
+  document.getElementById('f-name').placeholder = 'my-cool-skill';
 
   const preview = document.getElementById('submit-preview');
   const body = document.getElementById('preview-body');
@@ -1313,13 +1311,9 @@ function submitSkill() {
     return;
   }
 
-  // Validate name format
-  if (type === 'skill' && !/^[a-z0-9][a-z0-9-]*$/.test(name)) {
-    alert('Skill name must be lowercase kebab-case (e.g. my-cool-skill).');
-    return;
-  }
-  if (type === 'agent' && !/^[a-zA-Z0-9][a-zA-Z0-9_-]*$/.test(name)) {
-    alert('Agent name must be alphanumeric with hyphens/underscores (e.g. MyAgent).');
+  // Validate name format — both skills and agents use kebab-case
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) {
+    alert('Name must be lowercase kebab-case (e.g. my-cool-skill).');
     return;
   }
 

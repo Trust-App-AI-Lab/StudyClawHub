@@ -3,7 +3,7 @@
   "description": "StudyClawHub Skill & Agent Registry",
   "skills": [
     {
-      "name": "StudyClawHub",
+      "name": "studyclawhub",
       "type": "agent",
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
       "path": ".",
@@ -17,7 +17,7 @@
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
       "path": "hub-skills/sch-create",
       "author": "EnyanDai",
-      "agent": "StudyClawHub",
+      "agent": "studyclawhub",
       "registeredAt": "2026-04-12T00:00:00Z"
     },
     {
@@ -26,7 +26,7 @@
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
       "path": "hub-skills/sch-submit",
       "author": "EnyanDai",
-      "agent": "StudyClawHub",
+      "agent": "studyclawhub",
       "registeredAt": "2026-04-12T00:00:00Z"
     },
     {
@@ -35,7 +35,7 @@
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
       "path": "hub-skills/sch-install",
       "author": "EnyanDai",
-      "agent": "StudyClawHub",
+      "agent": "studyclawhub",
       "registeredAt": "2026-04-12T00:00:00Z"
     },
     {
@@ -44,11 +44,11 @@
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
       "path": "hub-skills/sch-search",
       "author": "EnyanDai",
-      "agent": "StudyClawHub",
+      "agent": "studyclawhub",
       "registeredAt": "2026-04-12T00:00:00Z"
     },
     {
-      "name": "PokerBot",
+      "name": "poker-bot",
       "type": "agent",
       "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
       "path": ".",
@@ -78,7 +78,7 @@
         "gto",
         "entry-point"
       ],
-      "agent": "PokerBot",
+      "agent": "poker-bot",
       "registeredAt": "2026-04-12T18:38:14.611152+00:00"
     },
     {
@@ -96,7 +96,7 @@
         "tools",
         "internal"
       ],
-      "agent": "PokerBot",
+      "agent": "poker-bot",
       "registeredAt": "2026-04-12T18:38:22.263146+00:00"
     },
     {
@@ -113,7 +113,7 @@
         "fallback",
         "runtime"
       ],
-      "agent": "PokerBot",
+      "agent": "poker-bot",
       "registeredAt": "2026-04-12T18:38:31.839856+00:00"
     },
     {
@@ -130,7 +130,7 @@
         "infrastructure",
         "internal"
       ],
-      "agent": "PokerBot",
+      "agent": "poker-bot",
       "registeredAt": "2026-04-12T18:49:45.239994+00:00"
     },
     {
@@ -147,7 +147,7 @@
         "management",
         "internal"
       ],
-      "agent": "PokerBot",
+      "agent": "poker-bot",
       "registeredAt": "2026-04-12T18:50:44.084314+00:00"
     },
     {
@@ -166,7 +166,7 @@
       ],
       "registeredAt": "2026-04-13T09:22:59.746271+00:00",
       "updatedAt": "2026-04-13T11:43:20.276927+00:00",
-      "agent": "### Your GitHub username"
+      "agent": ""
     },
     {
       "name": "test-skill",

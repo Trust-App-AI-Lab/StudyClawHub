@@ -68,10 +68,8 @@ jobs:
           errors = []
           if not name:
               errors.append('Missing skill name')
-          elif entry_type == 'skill' and not re.match(r'^[a-z0-9][a-z0-9-]*$', name):
-              errors.append(f'Invalid name "{name}" — must be kebab-case')
-          elif entry_type == 'agent' and not re.match(r'^[a-zA-Z0-9][a-zA-Z0-9_-]*$', name):
-              errors.append(f'Invalid name "{name}" — must be alphanumeric with hyphens/underscores')
+          elif not re.match(r'^[a-z0-9][a-z0-9-]*$', name):
+              errors.append(f'Invalid name "{name}" — must be kebab-case (lowercase, digits, hyphens)')
           if not repo:
               errors.append('Missing repo URL')
           elif not repo.startswith('https://github.com/'):

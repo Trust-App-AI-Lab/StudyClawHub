@@ -1,5 +1,5 @@
 ---
-name: StudyClawHub
+name: studyclawhub
 description: "A lightweight Skill & Agent registry for HKUST-GZ students. Browse, search, create, submit, and install Skills directly from Claude Code or OpenClaw."
 author: EnyanDai
 version: 0.1.0

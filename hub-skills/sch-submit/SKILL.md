@@ -68,8 +68,7 @@ each `SKILL.md`. The frontmatter format is the same for both:
 
 - [ ] YAML frontmatter has required fields: `name`, `description`
 - [ ] Recommended fields present: `author`, `version`, `tags`
-- [ ] Skill `name` is kebab-case: `^[a-z0-9][a-z0-9-]*$`
-- [ ] Agent `name` allows mixed case: `^[a-zA-Z0-9][a-zA-Z0-9_-]*$`
+- [ ] `name` is kebab-case: `^[a-z0-9][a-z0-9-]*$`
 - [ ] `author` matches their GitHub username
 - [ ] `tags` has at least one tag
 - [ ] `version` is valid semver
