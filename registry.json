@@ -167,6 +167,19 @@
       "registeredAt": "2026-04-13T09:22:59.746271+00:00",
       "updatedAt": "2026-04-13T11:43:20.276927+00:00",
       "agent": "### Your GitHub username"
+    },
+    {
+      "name": "test-skill",
+      "type": "skill",
+      "repo": "https://github.com/findys/test",
+      "path": "./test-skill/SKILL.md",
+      "author": "shuo",
+      "description": "A test skill for StudyClawHub.",
+      "version": "1.0.0",
+      "tags": [
+        "test"
+      ],
+      "registeredAt": "2026-04-13T13:09:20.365329+00:00"
     }
   ]
 }
