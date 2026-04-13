@@ -1,4 +1,4 @@
-name: Process Skill Registration
+name: Process Skill Registration / Deletion
 
 on:
   issues:
@@ -160,6 +160,126 @@ jobs:
             const body = success
               ? '✅ ${{ steps.register.outputs.comment }}\n\nThe skills index will be rebuilt shortly. Your Skill will appear on the website within a few minutes.'
               : '❌ ${{ steps.register.outputs.comment }}\n\nPlease fix the errors and open a new issue.';
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });
+            if (success) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                state: 'closed'
+              });
+            }
+
+  delete:
+    if: startsWith(github.event.issue.title, 'delete:')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Parse and delete from registry
+        run: |
+          python3 << 'SCRIPT'
+          import json, re, os, sys
+
+          title = os.environ.get('ISSUE_TITLE', '')
+          issue_author = os.environ.get('ISSUE_AUTHOR', '')
+          author_assoc = os.environ.get('AUTHOR_ASSOCIATION', '')
+
+          # Extract skill name from title "delete: skill-name"
+          m = re.match(r'^delete:\s*(.+)$', title.strip(), re.IGNORECASE)
+          if not m:
+              msg = 'Could not parse skill name from issue title.'
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write(f'comment={msg}\n')
+                  f.write('success=false\n')
+              print(msg, file=sys.stderr)
+              sys.exit(1)
+
+          name = m.group(1).strip()
+
+          # Load registry
+          with open('registry.json') as f:
+              registry = json.load(f)
+
+          # Find the entry
+          entry = next((s for s in registry['skills'] if s['name'] == name), None)
+          if not entry:
+              msg = f'Skill **{name}** not found in registry.'
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write(f'comment={msg}\n')
+                  f.write('success=false\n')
+              print(msg, file=sys.stderr)
+              sys.exit(1)
+
+          # Auth check: must be the author OR a repo admin/member
+          is_admin = author_assoc in ('OWNER', 'MEMBER', 'COLLABORATOR')
+          is_author = issue_author.lower() == entry.get('author', '').lower()
+          if not is_admin and not is_author:
+              msg = f'Permission denied. Only the author (@{entry.get("author")}) or repo admins can delete **{name}**.'
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write(f'comment={msg}\n')
+                  f.write('success=false\n')
+              print(msg, file=sys.stderr)
+              sys.exit(1)
+
+          # If deleting an agent, also remove its child skills
+          removed = [name]
+          if entry.get('type') == 'agent':
+              children = [s['name'] for s in registry['skills'] if s.get('agent') == name]
+              removed.extend(children)
+
+          registry['skills'] = [s for s in registry['skills'] if s['name'] not in removed]
+
+          with open('registry.json', 'w') as f:
+              json.dump(registry, f, indent=2, ensure_ascii=False)
+
+          if len(removed) > 1:
+              msg = f'Deleted agent **{name}** and {len(removed)-1} child skill(s): {", ".join(removed[1:])}'
+          else:
+              msg = f'Deleted **{name}** from registry.'
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'comment={msg}\n')
+              f.write('success=true\n')
+
+          print(msg)
+          SCRIPT
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          AUTHOR_ASSOCIATION: ${{ github.event.issue.author_association }}
+        id: delete
+
+      - name: Commit registry update
+        if: steps.delete.outputs.success == 'true'
+        run: |
+          git config user.name "StudyClawHub Bot"
+          git config user.email "bot@studyclawhub"
+          git add registry.json
+          git commit -m "delete: remove skill from #${{ github.event.issue.number }}"
+          git pull --rebase origin main
+          git push
+
+      - name: Trigger index rebuild
+        if: steps.delete.outputs.success == 'true'
+        continue-on-error: true
+        run: gh workflow run build-index.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment and close issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const success = '${{ steps.delete.outputs.success }}' === 'true';
+            const body = success
+              ? '✅ ${{ steps.delete.outputs.comment }}'
+              : '❌ ${{ steps.delete.outputs.comment }}';
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
