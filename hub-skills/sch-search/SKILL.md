@@ -2,7 +2,7 @@
 name: sch-search
 description: "Search for Skills on StudyClawHub. Use when a student says 'sch search', 'search StudyClawHub', 'find a skill on sch', 'browse StudyClawHub', or 'sch find'. LLM-driven semantic search — fetches all skills, understands user intent, ranks by relevance, and visualizes results on the website."
 author: EnyanDai
-version: 3.0.0
+version: 0.1.0
 tags:
   - hub
   - search

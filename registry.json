@@ -17,8 +17,12 @@
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
       "path": "hub-skills/sch-create",
       "author": "EnyanDai",
+      "description": "Create a new Skill from scratch. Guided scaffolding for StudyClawHub / ClawHub.",
+      "version": "0.2.0",
+      "tags": ["hub", "create", "scaffold"],
       "agent": "studyclawhub",
-      "registeredAt": "2026-04-12T00:00:00Z"
+      "registeredAt": "2026-04-12T00:00:00Z",
+      "updatedAt": "2026-04-13T00:00:00Z"
     },
     {
       "name": "sch-submit",
@@ -26,8 +30,12 @@
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
       "path": "hub-skills/sch-submit",
       "author": "EnyanDai",
+      "description": "Submit and register a Skill or Agent to StudyClawHub via GitHub Issues.",
+      "version": "0.1.0",
+      "tags": ["hub", "submit", "publish"],
       "agent": "studyclawhub",
-      "registeredAt": "2026-04-12T00:00:00Z"
+      "registeredAt": "2026-04-12T00:00:00Z",
+      "updatedAt": "2026-04-13T00:00:00Z"
     },
     {
       "name": "sch-install",
@@ -35,8 +43,12 @@
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
       "path": "hub-skills/sch-install",
       "author": "EnyanDai",
+      "description": "Install a Skill or Agent from StudyClawHub. Clones the repo and sets up locally.",
+      "version": "0.1.0",
+      "tags": ["hub", "install", "download"],
       "agent": "studyclawhub",
-      "registeredAt": "2026-04-12T00:00:00Z"
+      "registeredAt": "2026-04-12T00:00:00Z",
+      "updatedAt": "2026-04-13T00:00:00Z"
     },
     {
       "name": "sch-search",
@@ -44,8 +56,24 @@
       "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
       "path": "hub-skills/sch-search",
       "author": "EnyanDai",
+      "description": "LLM-driven semantic search across all registered Skills on StudyClawHub.",
+      "version": "0.1.0",
+      "tags": ["hub", "search", "discover"],
       "agent": "studyclawhub",
-      "registeredAt": "2026-04-12T00:00:00Z"
+      "registeredAt": "2026-04-12T00:00:00Z",
+      "updatedAt": "2026-04-13T00:00:00Z"
+    },
+    {
+      "name": "sch-deps",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/StudyClawHub",
+      "path": "hub-skills/sch-deps",
+      "author": "EnyanDai",
+      "description": "Check, add, or fix dependencies for a Skill or Agent.",
+      "version": "0.1.0",
+      "tags": ["hub", "deps", "dependencies"],
+      "agent": "studyclawhub",
+      "registeredAt": "2026-04-13T00:00:00Z"
     },
     {
       "name": "poker-bot",

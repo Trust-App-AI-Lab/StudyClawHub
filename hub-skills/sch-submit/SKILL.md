@@ -59,7 +59,18 @@ If no SKILL.md is found, tell the student to run `/sch-create` first.
 - **Independent** — register each selected skill separately, no
   agent association.
 
-**If only one SKILL.md is found**, register it as a standalone skill.
+**If only one SKILL.md is found:**
+
+- If it's at the repo root (`./SKILL.md`), register as a standalone skill.
+- If it's in a subdirectory (e.g. `./skills/foo/SKILL.md`), ask:
+  > This skill is not at the repo root. Is it:
+  > 1. A **child skill** of an Agent (the repo has or should have an `AGENTS.md` at root)?
+  > 2. An **independent skill** that just happens to be in a subdirectory?
+  - If **child skill** — check for `AGENTS.md` at root. If it exists, read
+    the agent name from it. If not, help the student create one (same flow
+    as the multi-skill Agent path above). Register the agent first, then
+    the skill with `agent` field set.
+  - If **independent** — register as a standalone skill.
 
 ### Step 2: Validate each Skill / Agent
 
