@@ -12,40 +12,12 @@ permissions:
   contents: write
   pages: write
   id-token: write
-  issues: read
 
 jobs:
   build-index:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Fetch install counts
-        run: |
-          gh issue list --repo "$GITHUB_REPOSITORY" --label install \
-            --state all --limit 9999 --json title \
-            --jq '.[].title' > /tmp/install-titles.txt 2>/dev/null || true
-
-          python3 << 'COUNTS'
-          import json
-          from collections import Counter
-
-          counts = Counter()
-          try:
-              with open('/tmp/install-titles.txt') as f:
-                  for line in f:
-                      line = line.strip()
-                      if line.startswith('install: '):
-                          counts[line[len('install: '):]] += 1
-          except FileNotFoundError:
-              pass
-
-          with open('/tmp/install-counts.json', 'w') as f:
-              json.dump(dict(counts), f)
-          print(f"Install counts: {len(counts)} skills tracked")
-          COUNTS
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build skills-index.json
         run: |
@@ -91,12 +63,6 @@ jobs:
 
           with open('registry.json') as f:
               registry = json.load(f)
-
-          try:
-              with open('/tmp/install-counts.json') as f:
-                  install_counts = json.load(f)
-          except:
-              install_counts = {}
 
           skills = []
           for entry in registry.get('skills', []):
@@ -164,7 +130,6 @@ jobs:
                   "path": path,
                   "registeredAt": entry.get("registeredAt", ""),
                   "stars": stars,
-                  "installs": install_counts.get(skill_name, 0),
               }
               if entry.get("agent"):
                   skill_entry["agent"] = entry["agent"]

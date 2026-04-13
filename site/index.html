@@ -879,7 +879,6 @@
   <div class="toolbar">
     <select class="toolbar-select" id="sort-select" onchange="applySort()">
       <option value="stars">Most starred</option>
-      <option value="installs">Most installed</option>
       <option value="newest">Newest first</option>
       <option value="name">A → Z</option>
     </select>
@@ -892,8 +891,7 @@
       <h3 style="margin:0">Agents</h3>
       <select class="toolbar-select" id="agent-sort-select" onchange="applyAgentSort()">
         <option value="stars">Most starred</option>
-        <option value="installs">Most installed</option>
-        <option value="newest">Newest first</option>
+          <option value="newest">Newest first</option>
         <option value="name">A → Z</option>
       </select>
     </div>
@@ -1037,7 +1035,6 @@ function applyAgentSort() {
   const sort = document.getElementById('agent-sort-select').value;
   let sorted = [...allAgents];
   if (sort === 'stars') sorted.sort((a,b) => (b.stars||0) - (a.stars||0));
-  else if (sort === 'installs') sorted.sort((a,b) => (b.installs||0) - (a.installs||0));
   else if (sort === 'newest') sorted.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
   else if (sort === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name));
   renderAgents(sorted);
@@ -1066,7 +1063,6 @@ function renderAgents(agents) {
             @${esc(a.author)}
           </a>
           <span>★ ${a.stars||0}</span>
-          <span>↓ ${a.installs||0}</span>
           <a href="${esc(a.repo)}" target="_blank">repo →</a>
         </div>
       </div>
@@ -1099,7 +1095,6 @@ function applySort() {
   const sort = document.getElementById('sort-select').value;
   let sorted = [...allSkills];
   if (sort === 'stars') sorted.sort((a,b) => (b.stars||0) - (a.stars||0));
-  else if (sort === 'installs') sorted.sort((a,b) => (b.installs||0) - (a.installs||0));
   else if (sort === 'newest') sorted.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
   else if (sort === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name));
   renderResults(sorted);
@@ -1185,7 +1180,6 @@ function renderPage() {
           ${(s.tags||[]).slice(0,3).map(t => `<span class="tag">${esc(t)}</span>`).join('')}
         </div>
         <span class="card-stat">★ ${s.stars||0}</span>
-        <span class="card-stat">↓ ${s.installs||0}</span>
       </div>
     </div>
   `).join('');
@@ -1231,7 +1225,6 @@ function showDetail(name) {
         </a>
         <span>v${esc(s.version||'1.0.0')}</span>
         <span>★ ${s.stars||0} stars</span>
-        <span>↓ ${s.installs||0} installs</span>
         <div class="card-tags">${(s.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
         <a href="${esc(s.repo)}" target="_blank">GitHub repo →</a>
       </div>

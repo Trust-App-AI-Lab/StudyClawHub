@@ -139,26 +139,7 @@ installer per binary.
 **Error handling:** If an installer fails, warn but continue. Never
 block the overall installation.
 
-### Step 5: Log the install and suggest starring
-
-After successful installation, log it by creating a GitHub Issue:
-
-```bash
-gh issue create \
-  --repo Trust-App-AI-Lab/StudyClawHub \
-  --title "install: {skill-name}" \
-  --label "install" \
-  --body "Installed **{skill-name}** by @{skill-author}"
-```
-
-If `gh` CLI is not available, skip this step silently — install
-counting is optional and should never block the actual installation.
-
-Also suggest the student star the author's repo:
-
-> If you like this Skill, consider starring the repo: {repo_url}
-
-### Step 6: Confirm
+### Step 5: Confirm
 
 Tell the student the Skill has been installed. Show a summary:
 
@@ -176,9 +157,6 @@ Tell the student the Skill has been installed. Show a summary:
   skills may depend on the repo's directory structure.
 - If the student wants to modify an installed Skill, they can edit it
   locally. To contribute changes back, they should fork the author's repo.
-- Popularity is tracked in two ways: GitHub stars (fetched via API)
-  and install count (tracked via GitHub Issues with "install" label).
-- Install logging is best-effort. If it fails, the installation still
-  succeeds.
+- Popularity is tracked via GitHub stars (fetched via API).
 - Dependency installation follows ClawHub conventions: same `kind` types,
   same priority order, same platform filtering.
