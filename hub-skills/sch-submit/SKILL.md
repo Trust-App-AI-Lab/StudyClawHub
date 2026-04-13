@@ -75,9 +75,36 @@ each `SKILL.md`. The frontmatter format is the same for both:
 - [ ] `author` matches their GitHub username
 - [ ] `tags` has at least one tag
 - [ ] `version` is valid semver
+- [ ] Required binaries are available on the local system (see below)
 
-If validation fails on any, help the student fix the issues before
-proceeding.
+**Check required binaries:**
+
+If `metadata.openclaw.requires.bins` or `metadata.openclaw.requires.anyBins`
+is declared, verify each binary is installed:
+
+```bash
+which {bin-name} 2>/dev/null || command -v {bin-name} 2>/dev/null
+```
+
+- `bins` — all must be present. Warn the student for each missing one.
+- `anyBins` — at least one must be present. Warn if none are found.
+
+For agents, also check binaries declared in each child skill's SKILL.md.
+
+This is a **warning only** — do not block submission. The student may
+be developing on a machine without all tools but deploying elsewhere.
+Show a summary like:
+
+> Required binaries check:
+> - git: found
+> - gh: found
+> - pdflatex: **not found** (declared in sch-report)
+>
+> 1 missing binary. Submission will proceed — make sure users have
+> these tools installed before running the skill.
+
+If validation fails on any other check, help the student fix the issues
+before proceeding.
 
 ### Step 3: Push to GitHub
 
