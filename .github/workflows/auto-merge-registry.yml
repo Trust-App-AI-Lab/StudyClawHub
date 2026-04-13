@@ -30,7 +30,7 @@ jobs:
 
           # Parse form fields from issue body
           def parse_field(text, field_id):
-              pattern = rf'### {field_id}\s*\n\s*(.+)'
+              pattern = rf'### {field_id}\s*\n\s*(?!###)(.+)'
               m = re.search(pattern, text, re.IGNORECASE)
               if m:
                   return m.group(1).strip()
