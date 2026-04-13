@@ -891,7 +891,7 @@
 <!-- Main -->
 <div class="container" id="skills-section">
   <div class="toolbar">
-    <input class="toolbar-search" id="search-input" type="text" placeholder="Search skills..." oninput="applyFilter()">
+    <input class="toolbar-search" id="search-input" type="text" placeholder="Search skills & agents..." oninput="applyFilter()">
     <select class="toolbar-select" id="sort-select" onchange="applyFilter()">
       <option value="stars">Most starred</option>
       <option value="newest">Newest first</option>
@@ -901,9 +901,13 @@
   <div class="result-count" id="result-count"></div>
   <div class="grid" id="results"></div>
   <div id="pagination"></div>
+  <div class="agents-section" id="hub-agents-section" style="display:none">
+    <h3 style="margin:0 0 0.75rem">Hub Agents</h3>
+    <div id="hub-agents-results"></div>
+  </div>
   <div class="agents-section" id="agents-section" style="display:none">
     <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem">
-      <h3 style="margin:0">Agents</h3>
+      <h3 style="margin:0">Community Agents</h3>
       <select class="toolbar-select" id="agent-sort-select" onchange="applyAgentSort()">
         <option value="stars">Most starred</option>
           <option value="newest">Newest first</option>
@@ -1010,14 +1014,21 @@ const REPO = 'Trust-App-AI-Lab/StudyClawHub';
 
 let allSkills = [];
 let allAgents = [];
+let hubAgents = [];
+let communityAgents = [];
 let currentPage = 1;
 const PAGE_SIZE = 12;
 let currentDisplaySkills = [];
 const AGENT_PREVIEW_COUNT = 3;
+let HUB_AGENT_NAMES = [];
 
 async function boot() {
   try {
-    const res = await fetch(INDEX_URL);
+    const [res, hubRes] = await Promise.all([
+      fetch(INDEX_URL),
+      fetch('hub-agents.json').catch(() => ({ ok: false }))
+    ]);
+    if (hubRes.ok) HUB_AGENT_NAMES = await hubRes.json();
     const data = await res.json();
     const all = data.skills || [];
 
@@ -1035,6 +1046,10 @@ async function boot() {
     // Attach child skills to agents
     allAgents.forEach(a => { a.children = childSkillMap[a.name] || []; });
 
+    // Split hub vs community agents by hardcoded list
+    hubAgents = allAgents.filter(a => HUB_AGENT_NAMES.includes(a.name));
+    communityAgents = allAgents.filter(a => !HUB_AGENT_NAMES.includes(a.name));
+
     // All skills (including registered child skills, but not agents themselves)
     allSkills = all.filter(s => s.type !== 'agent');
 
@@ -1045,6 +1060,7 @@ async function boot() {
     document.getElementById('stat-authors').textContent = authors.size;
 
     applySort();
+    renderHubAgents();
     renderAgents();
   } catch (e) {
     document.getElementById('results').innerHTML =
@@ -1054,50 +1070,59 @@ async function boot() {
 
 function applyAgentSort() {
   const sort = document.getElementById('agent-sort-select').value;
-  let sorted = [...allAgents];
+  let sorted = [...communityAgents];
   if (sort === 'stars') sorted.sort((a,b) => (b.stars||0) - (a.stars||0));
   else if (sort === 'newest') sorted.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
   else if (sort === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name));
   renderAgents(sorted);
 }
 
-function renderAgents(agents) {
-  agents = agents || allAgents;
-  const section = document.getElementById('agents-section');
-  if (!allAgents.length) { section.style.display = 'none'; return; }
-  section.style.display = '';
+function renderAgentCard(a) {
+  const preview = a.children.slice(0, AGENT_PREVIEW_COUNT);
+  const rest = a.children.length - AGENT_PREVIEW_COUNT;
+  return `
+  <div class="agent-card">
+    <div class="agent-left">
+      <div>
+        <span class="agent-name">${esc(a.name)}</span>
+        <span class="agent-badge">${HUB_AGENT_NAMES.includes(a.name) ? 'Hub Agent' : 'Agent'} · ${a.children.length} skill${a.children.length!==1?'s':''}</span>
+      </div>
+      <div class="agent-desc">${esc(a.description)}</div>
+      <div class="agent-meta">
+        <a class="card-author" href="https://github.com/${esc(a.author)}" target="_blank">
+          <img src="https://github.com/${esc(a.author)}.png?size=36" alt="" loading="lazy" />
+          @${esc(a.author)}
+        </a>
+        <span>★ ${a.stars||0}</span>
+        <a href="${esc(a.repo)}" target="_blank">repo →</a>
+      </div>
+    </div>
+    <div class="agent-right" id="agent-skills-${esc(a.name)}">
+      ${preview.map(s => `
+        <div class="agent-skill" onclick="showDetail('${esc(s.name)}')">
+          <span class="agent-skill-name">${esc(s.name)}</span>
+          <span class="agent-skill-desc">${esc(s.description)}</span>
+        </div>
+      `).join('')}
+      ${rest > 0 ? `<button class="agent-expand" onclick="expandAgent('${esc(a.name)}')">Show all ${a.children.length} skills ↓</button>` : ''}
+    </div>
+  </div>`;
+}
 
-  document.getElementById('agents-results').innerHTML = agents.map(a => {
-    const preview = a.children.slice(0, AGENT_PREVIEW_COUNT);
-    const rest = a.children.length - AGENT_PREVIEW_COUNT;
-    return `
-    <div class="agent-card">
-      <div class="agent-left">
-        <div>
-          <span class="agent-name">${esc(a.name)}</span>
-          <span class="agent-badge">Agent · ${a.children.length} skill${a.children.length!==1?'s':''}</span>
-        </div>
-        <div class="agent-desc">${esc(a.description)}</div>
-        <div class="agent-meta">
-          <a class="card-author" href="https://github.com/${esc(a.author)}" target="_blank">
-            <img src="https://github.com/${esc(a.author)}.png?size=36" alt="" loading="lazy" />
-            @${esc(a.author)}
-          </a>
-          <span>★ ${a.stars||0}</span>
-          <a href="${esc(a.repo)}" target="_blank">repo →</a>
-        </div>
-      </div>
-      <div class="agent-right" id="agent-skills-${esc(a.name)}">
-        ${preview.map(s => `
-          <div class="agent-skill" onclick="showDetail('${esc(s.name)}')">
-            <span class="agent-skill-name">${esc(s.name)}</span>
-            <span class="agent-skill-desc">${esc(s.description)}</span>
-          </div>
-        `).join('')}
-        ${rest > 0 ? `<button class="agent-expand" onclick="expandAgent('${esc(a.name)}')">Show all ${a.children.length} skills ↓</button>` : ''}
-      </div>
-    </div>`;
-  }).join('');
+function renderHubAgents(agents) {
+  agents = agents || hubAgents;
+  const section = document.getElementById('hub-agents-section');
+  if (!agents.length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  document.getElementById('hub-agents-results').innerHTML = agents.map(renderAgentCard).join('');
+}
+
+function renderAgents(agents) {
+  agents = agents || communityAgents;
+  const section = document.getElementById('agents-section');
+  if (!agents.length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  document.getElementById('agents-results').innerHTML = agents.map(renderAgentCard).join('');
 }
 
 function expandAgent(name) {
@@ -1134,22 +1159,24 @@ function applyFilter() {
   else if (sort === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name));
   renderResults(sorted);
 
-  // Also filter agents
-  const agentSection = document.getElementById('agents-section');
-  if (query && agentSection) {
-    const matchedAgents = allAgents.filter(a => {
-      const hay = [a.name, a.description, a.author, ...(a.tags||[]),
-        ...(a.children||[]).flatMap(c => [c.name, c.description, ...(c.tags||[])])
-      ].join(' ').toLowerCase();
-      return query.split(/\s+/).every(word => hay.includes(word));
-    });
-    if (matchedAgents.length === 0) {
-      agentSection.style.display = 'none';
-    } else {
-      agentSection.style.display = '';
-    }
-  } else if (agentSection && allAgents.length) {
-    agentSection.style.display = '';
+  // Also filter and re-render both hub and community agents
+  const agentMatcher = a => {
+    const hay = [a.name, a.description, a.author, ...(a.tags||[]),
+      ...(a.children||[]).flatMap(c => [c.name, c.description, ...(c.tags||[])])
+    ].join(' ').toLowerCase();
+    return query.split(/\s+/).every(word => hay.includes(word));
+  };
+  if (query) {
+    renderHubAgents(hubAgents.filter(agentMatcher));
+    const matchedCommunity = communityAgents.filter(agentMatcher);
+    const agentSort = document.getElementById('agent-sort-select').value;
+    if (agentSort === 'stars') matchedCommunity.sort((a,b) => (b.stars||0) - (a.stars||0));
+    else if (agentSort === 'newest') matchedCommunity.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
+    else if (agentSort === 'name') matchedCommunity.sort((a,b) => a.name.localeCompare(b.name));
+    renderAgents(matchedCommunity);
+  } else {
+    renderHubAgents();
+    renderAgents();
   }
 }
 
