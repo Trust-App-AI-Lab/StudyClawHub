@@ -135,6 +135,12 @@ jobs:
           git pull --rebase origin main
           git push
 
+      - name: Trigger index rebuild
+        if: steps.register.outputs.success == 'true'
+        run: gh workflow run build-index.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Comment and close issue
         uses: actions/github-script@v7
         with:
