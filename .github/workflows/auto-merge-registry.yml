@@ -104,7 +104,10 @@ jobs:
           if tags:
               entry['tags'] = tags
           if agent_name and entry_type == 'skill':
-              entry['agent'] = agent_name
+              # Only set agent if it exists in registry
+              agent_exists = any(s['name'] == agent_name and s.get('type') == 'agent' for s in registry['skills'])
+              if agent_exists:
+                  entry['agent'] = agent_name
 
           # Check for duplicates
           existing = [s for s in registry['skills'] if s['name'] == name]
