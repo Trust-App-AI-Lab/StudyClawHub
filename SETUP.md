@@ -7,7 +7,8 @@
 
 1. Determine the install path:
    - **Claude Code**: `{project_root}/.claude/skills/`
-   - **OpenClaw**: `{project_root}/skills/`
+   - **OpenClaw**: `{project_root}/.openclaw/skills/`
+   - **WorkBuddy**: `{project_root}/.workbuddy/skills/`
 
 2. Download hub skills:
    ```bash
