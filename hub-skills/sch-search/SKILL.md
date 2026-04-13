@@ -1,6 +1,6 @@
 ---
 name: sch-search
-description: "Search for Skills on StudyClawHub. Use when a student says 'sch search', 'search StudyClawHub', 'find a skill on sch', 'browse StudyClawHub', or 'sch find'. LLM-driven semantic search — fetches all skills, understands user intent, ranks by relevance, and visualizes results on the website."
+description: "Search for Skills on StudyClawHub. Use when a student says 'sch search', 'search StudyClawHub', 'find a skill on sch', 'browse StudyClawHub', or 'sch find'. LLM-driven semantic search — fetches all skills, understands user intent, ranks by relevance."
 author: EnyanDai
 version: 0.1.0
 tags:
@@ -33,7 +33,11 @@ Ask the student what they're looking for. They might say:
 
 ### Step 2: Fetch the index
 
-Fetch `skills-index.json` from the StudyClawHub repo:
+If you already fetched `skills-index.json` earlier in this conversation,
+reuse the cached result — do NOT fetch again. Unless the student explicitly
+asks to refresh (e.g. "refresh", "重新拉", "latest", "最新的").
+
+Otherwise, fetch it from:
 
 ```
 https://trust-app-ai-lab.github.io/StudyClawHub/skills-index.json
@@ -73,20 +77,8 @@ Show the top results in a clear format:
 
 Briefly explain why you ranked them this way if it's not obvious.
 
-### Step 5: Visualize on website
+### Step 5: Offer next steps
 
-After ranking, open the StudyClawHub website and inject the ranking:
-
-1. Open `https://trust-app-ai-lab.github.io/StudyClawHub/` in the browser
-2. Wait for the page to finish loading
-3. Execute JavaScript on the page to call the public API:
-
-```javascript
-window.applyCustomOrder(["skill-name-1", "skill-name-2", ...], "the search query")
-```
-
-The first argument is an array of skill names in ranked order.
-The second argument is the search query string (optional, for display).
-
-The website will instantly re-render with the custom ranking and show
-a banner indicating that a custom ranking is active.
+After showing results, offer the student:
+- `/sch-install {name}` to install a skill
+- Link to the skill's GitHub repo for more details
