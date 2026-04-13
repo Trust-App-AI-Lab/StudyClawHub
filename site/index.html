@@ -842,8 +842,7 @@
 <nav class="nav">
   <div class="nav-logo">Study<span>Claw</span>Hub</div>
   <div class="nav-links">
-    <a href="#agents-anchor">Agents</a>
-    <a href="#skills-anchor">Skills</a>
+    <a href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">GitHub</a>
   </div>
   <div class="nav-spacer"></div>
 </nav>
@@ -871,7 +870,6 @@
     <a class="btn btn-primary" href="#agents-anchor">Browse Agents</a>
     <a class="btn btn-primary" href="#skills-anchor">Browse Skills</a>
     <a class="btn btn-primary" href="javascript:openSubmit()">+ Submit</a>
-    <a class="btn btn-outline" href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">View on GitHub</a>
   </div>
 </section>
 
@@ -1518,4 +1516,10 @@ function submitSkill() {
 }
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { close
+  if (e.key === 'Escape') { closeDetail(); closeSubmit(); }
+});
+
+boot();
+</script>
+</body>
+</html>
