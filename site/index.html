@@ -256,6 +256,20 @@
       outline: none;
     }
     .toolbar-select:hover { border-color: var(--border-hover); }
+    .toolbar-search {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.82rem;
+      font-family: inherit;
+      outline: none;
+    }
+    .toolbar-search:focus { border-color: var(--accent); }
+    .toolbar-search::placeholder { color: var(--text-muted); }
     .result-count {
       font-size: 0.8rem;
       color: var(--text-muted);
@@ -877,7 +891,8 @@
 <!-- Main -->
 <div class="container" id="skills-section">
   <div class="toolbar">
-    <select class="toolbar-select" id="sort-select" onchange="applySort()">
+    <input class="toolbar-search" id="search-input" type="text" placeholder="Search skills..." oninput="applyFilter()">
+    <select class="toolbar-select" id="sort-select" onchange="applyFilter()">
       <option value="stars">Most starred</option>
       <option value="newest">Newest first</option>
       <option value="name">A → Z</option>
@@ -1091,13 +1106,45 @@ function expandAgent(name) {
   `).join('');
 }
 
-function applySort() {
+function applySort() { applyFilter(); }
+
+function applyFilter() {
+  const query = (document.getElementById('search-input').value || '').trim().toLowerCase();
   const sort = document.getElementById('sort-select').value;
-  let sorted = [...allSkills];
+
+  // Filter
+  let filtered = allSkills;
+  if (query) {
+    filtered = allSkills.filter(s => {
+      const hay = [s.name, s.description, s.author, ...(s.tags||[])].join(' ').toLowerCase();
+      return query.split(/\s+/).every(word => hay.includes(word));
+    });
+  }
+
+  // Sort
+  let sorted = [...filtered];
   if (sort === 'stars') sorted.sort((a,b) => (b.stars||0) - (a.stars||0));
   else if (sort === 'newest') sorted.sort((a,b) => (b.registeredAt||'').localeCompare(a.registeredAt||''));
   else if (sort === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name));
   renderResults(sorted);
+
+  // Also filter agents
+  const agentSection = document.getElementById('agents-section');
+  if (query && agentSection) {
+    const matchedAgents = allAgents.filter(a => {
+      const hay = [a.name, a.description, a.author, ...(a.tags||[]),
+        ...(a.children||[]).flatMap(c => [c.name, c.description, ...(c.tags||[])])
+      ].join(' ').toLowerCase();
+      return query.split(/\s+/).every(word => hay.includes(word));
+    });
+    if (matchedAgents.length === 0) {
+      agentSection.style.display = 'none';
+    } else {
+      agentSection.style.display = '';
+    }
+  } else if (agentSection && allAgents.length) {
+    agentSection.style.display = '';
+  }
 }
 
 /**
