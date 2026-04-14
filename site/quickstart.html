@@ -126,10 +126,12 @@
     .nav-logo {
       font-size: 1.15rem;
       font-weight: 700;
-      color: var(--text);
       letter-spacing: -0.02em;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .nav-logo span { color: var(--accent); }
     .nav-links { display: flex; gap: 0.25rem; margin-left: 1rem; }
     .nav-links a {
       color: var(--text-secondary);
@@ -290,7 +292,7 @@
 
 <!-- Nav -->
 <nav class="nav">
-  <a class="nav-logo" href="index.html">Study<span>Claw</span>Hub</a>
+  <a class="nav-logo" href="index.html">StudyClawHub</a>
   <div class="nav-links">
     <a href="quickstart.html" class="active">Quick Start</a>
     <a href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">GitHub</a>
