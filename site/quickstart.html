@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Start — StudyClawHub</title>
+  <meta name="description" content="Get started with StudyClawHub in 4 steps. Install, create, submit, and discover skills." />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f0f1f5;
+      --surface: #f8f9fb;
+      --surface-hover: #edeef2;
+      --border: #d8dbe2;
+      --border-hover: #bfc3cc;
+      --text: #1a1d23;
+      --text-secondary: #4b5563;
+      --text-muted: #6b7280;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --green: #16a34a;
+      --purple: #7c3aed;
+      --tag-bg: rgba(37,99,235,0.06);
+      --tag-border: rgba(37,99,235,0.18);
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    /* ── Background glow ── */
+    .bg-glow {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .bg-glow::before,
+    .bg-glow::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.35;
+      animation: drift 20s ease-in-out infinite alternate;
+    }
+    .bg-glow::before {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(37,99,235,0.3), transparent 70%);
+      top: -10%;
+      right: -5%;
+    }
+    .bg-glow::after {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(124,58,237,0.25), transparent 70%);
+      bottom: 10%;
+      left: -8%;
+      animation-delay: -10s;
+    }
+    .bg-glow-extra {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.2;
+      background: radial-gradient(circle, rgba(22,163,74,0.3), transparent 70%);
+      top: 40%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: drift2 25s ease-in-out infinite alternate;
+    }
+    @keyframes drift {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-40px, 30px) scale(1.1); }
+    }
+    @keyframes drift2 {
+      0%   { transform: translateX(-50%) translate(0, 0) scale(1); }
+      100% { transform: translateX(-50%) translate(30px, -40px) scale(1.15); }
+    }
+
+    /* ── Grid pattern overlay ── */
+    .bg-grid {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: -1;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.3;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 70%);
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(240,241,245,0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .nav-logo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 0.25rem; margin-left: 1rem; }
+    .nav-links a {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--text);
+      background: var(--surface);
+    }
+    .nav-spacer { flex: 1; }
+
+    /* ── Page header ── */
+    .page-header {
+      text-align: center;
+      padding: 4rem 1rem 2rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .page-header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .page-header h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ── Quick Start ── */
+    .quickstart {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+    }
+    .quickstart-hint {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      margin-bottom: 1.5rem;
+    }
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .step {
+      display: flex;
+      gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1rem 1.25rem;
+      transition: all 0.15s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .step:hover { border-color: var(--border-hover); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .step-num {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-top: 0.1rem;
+    }
+    .step-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .step-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .step-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .step-desc code {
+      font-size: 0.75rem;
+      background: var(--bg);
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      color: var(--text-secondary);
+    }
+    .step-prompt {
+      display: block;
+      margin-top: 0.5rem;
+      background: #f0f4ff;
+      border: 1px solid #c7d7fe;
+      border-radius: var(--radius);
+      padding: 0.5rem 0.75rem;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-style: italic;
+      color: var(--text-secondary);
+      overflow-wrap: break-word;
+      word-break: break-all;
+    }
+    .step-prompt::before {
+      content: 'Chat \203A  ';
+      font-style: normal;
+      font-weight: 600;
+      font-size: 0.7rem;
+      color: var(--accent);
+    }
+    .step-or {
+      display: block;
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ── Back link ── */
+    .back-link {
+      display: block;
+      text-align: center;
+      padding: 2rem 1rem 4rem;
+      font-size: 0.9rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .page-header h1 { font-size: 1.75rem; }
+      .nav { padding: 0 1rem; flex-wrap: wrap; }
+      .nav-links { gap: 0.1rem; margin-left: auto; font-size: 0.75rem; }
+      .nav-links a { padding: 0.3rem 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Background effects -->
+<div class="bg-glow"><div class="bg-glow-extra"></div></div>
+<div class="bg-grid"></div>
+
+<!-- Nav -->
+<nav class="nav">
+  <a class="nav-logo" href="index.html">Study<span>Claw</span>Hub</a>
+  <div class="nav-links">
+    <a href="quickstart.html" class="active">Quick Start</a>
+    <a href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">GitHub</a>
+  </div>
+  <div class="nav-spacer"></div>
+</nav>
+
+<!-- Header -->
+<section class="page-header">
+  <h1><em>Quick Start</em></h1>
+  <p>Get up and running with StudyClawHub in 4 steps.</p>
+</section>
+
+<!-- Quick Start steps -->
+<section class="quickstart">
+  <p class="quickstart-hint">Stuck on any step? Just ask your Claude / Claw — it can help with everything.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Install StudyClawHub</div>
+        <div class="step-desc">Tell your Claude / Claw:</div>
+        <code class="step-prompt">Follow https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/SETUP.md to install</code>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Create or adapt a Skill</div>
+        <div class="step-desc">Tell your Claude / Claw:</div>
+        <code class="step-prompt">Help me turn my project into a StudyClawHub skill</code>
+        <code class="step-prompt">/sch-create</code>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Submit to registry</div>
+        <div class="step-desc">Tell your Claude / Claw:</div>
+        <code class="step-prompt">Submit my skill to StudyClawHub</code>
+        <code class="step-prompt">/sch-submit</code>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Discover & install</div>
+        <div class="step-desc">Tell your Claude / Claw:</div>
+        <code class="step-prompt">Search StudyClawHub for a skill about community detection</code>
+        <code class="step-prompt">/sch-search community detection</code>
+        <code class="step-prompt">/sch-install network-analyzer</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="back-link">
+  <a href="index.html">&larr; Back to StudyClawHub</a>
+</div>
+
+</body>
+</html>

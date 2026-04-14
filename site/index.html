@@ -665,106 +665,6 @@
       cursor: default;
     }
 
-    /* ── Quick Start ── */
-    .quickstart {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 0 1.5rem 2.5rem;
-    }
-    .quickstart h2 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 0.4rem;
-    }
-    .quickstart-hint {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      margin-bottom: 1.2rem;
-    }
-    .steps {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    .step {
-      display: flex;
-      gap: 1rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1rem 1.25rem;
-      transition: all 0.15s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-    .step:hover { border-color: var(--border-hover); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-    .step-num {
-      flex-shrink: 0;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--tag-bg);
-      border: 1px solid var(--tag-border);
-      color: var(--accent);
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin-top: 0.1rem;
-    }
-    .step-body {
-      flex: 1;
-      min-width: 0;
-    }
-    .step-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 0.3rem;
-    }
-    .step-desc {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-    .step-desc code {
-      font-size: 0.75rem;
-      background: var(--bg);
-      padding: 0.1rem 0.35rem;
-      border-radius: 4px;
-      color: var(--text-secondary);
-    }
-    .step-prompt {
-      display: block;
-      margin-top: 0.5rem;
-      background: #f0f4ff;
-      border: 1px solid #c7d7fe;
-      border-radius: var(--radius);
-      padding: 0.5rem 0.75rem;
-      font-family: inherit;
-      font-size: 0.8rem;
-      font-style: italic;
-      color: var(--text-secondary);
-      overflow-wrap: break-word;
-      word-break: break-all;
-    }
-    .step-prompt::before {
-      content: 'Chat \203A  ';
-      font-style: normal;
-      font-weight: 600;
-      font-size: 0.7rem;
-      color: var(--accent);
-    }
-    .step-or {
-      display: block;
-      text-align: center;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-top: 0.3rem;
-    }
-
     /* ── Submit Form ── */
     .submit-form h2 {
       font-size: 1.25rem;
@@ -849,6 +749,7 @@
 <nav class="nav">
   <div class="nav-logo">Study<span>Claw</span>Hub</div>
   <div class="nav-links">
+    <a href="quickstart.html">Quick Start</a>
     <a href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">GitHub</a>
   </div>
   <div class="nav-spacer"></div>
@@ -874,55 +775,12 @@
     </div>
   </div>
   <div class="hero-actions">
-    <a class="btn btn-primary" href="#agents-anchor">Browse Agents</a>
+    <a class="btn btn-primary" href="quickstart.html">Quick Start</a>
     <a class="btn btn-primary" href="#skills-anchor">Browse Skills</a>
     <a class="btn btn-primary" href="javascript:openSubmit()">+ Submit</a>
   </div>
 </section>
 
-<!-- Quick Start -->
-<section class="quickstart">
-  <h2>Quick Start</h2>
-  <p class="quickstart-hint">Stuck on any step? Just ask your Claude / Claw — it can help with everything.</p>
-  <div class="steps">
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-body">
-        <div class="step-title">Install StudyClawHub</div>
-        <div class="step-desc">Tell your Claude / Claw:</div>
-        <code class="step-prompt">Follow https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/SETUP.md to install</code>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-body">
-        <div class="step-title">Create or adapt a Skill</div>
-        <div class="step-desc">Tell your Claude / Claw:</div>
-        <code class="step-prompt">Help me turn my project into a StudyClawHub skill</code>
-        <code class="step-prompt">/sch-create</code>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-body">
-        <div class="step-title">Submit to registry</div>
-        <div class="step-desc">Tell your Claude / Claw:</div>
-        <code class="step-prompt">Submit my skill to StudyClawHub</code>
-        <code class="step-prompt">/sch-submit</code>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-body">
-        <div class="step-title">Discover & install</div>
-        <div class="step-desc">Tell your Claude / Claw:</div>
-        <code class="step-prompt">Search StudyClawHub for a skill about community detection</code>
-        <code class="step-prompt">/sch-search community detection</code>
-        <code class="step-prompt">/sch-install network-analyzer</code>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- Main -->
 <div class="container" id="skills-section">
