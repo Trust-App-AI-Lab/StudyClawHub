@@ -296,6 +296,22 @@
         "visualization"
       ],
       "registeredAt": "2026-04-18T08:48:28.474032+00:00"
+    },
+    {
+      "name": "paper-analyze",
+      "type": "skill",
+      "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
+      "path": "paper-analyze",
+      "author": "Shengyi-Chung",
+      "description": "Deep semantic analysis for arXiv papers. Trigger: '总结这篇论文的主要贡献', '这周哪些论文提出了全新的算法模型？', '分析论文的新颖度和创新点'",
+      "version": "1.0.0",
+      "tags": [
+        "nlp",
+        "summarization",
+        "information-extraction",
+        "llm"
+      ],
+      "registeredAt": "2026-04-18T08:52:25.467605+00:00"
     }
   ]
 }
