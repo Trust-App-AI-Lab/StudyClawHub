@@ -305,7 +305,7 @@
       "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
       "path": "paper-analyze",
       "author": "Shengyi-Chung",
-      "description": "Deep semantic analysis for arXiv papers. Trigger: '总结这篇论文的主要贡献', '这周哪些论文提出了全新的算法模型？', '分析论文的新颖度和创新点'",
+      "description": "Analyze and rank papers by relevance.",
       "version": "1.0.0",
       "tags": [
         "nlp",
@@ -313,7 +313,9 @@
         "information-extraction",
         "llm"
       ],
-      "registeredAt": "2026-04-18T08:52:25.467605+00:00"
+      "registeredAt": "2026-04-18T08:52:25.467605+00:00",
+      "agent": "paper-researcher",
+      "updatedAt": "2026-04-18T10:52:35.114573+00:00"
     },
     {
       "name": "paper-researcher",
