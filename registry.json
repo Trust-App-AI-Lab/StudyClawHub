@@ -332,6 +332,23 @@
         "literature-review"
       ],
       "registeredAt": "2026-04-18T10:48:40.270399+00:00"
+    },
+    {
+      "name": "paper-report-generator",
+      "type": "skill",
+      "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
+      "path": "paper-report-generator",
+      "author": "Shengyi-Chung",
+      "description": "Generate research reports from analyzed papers.",
+      "version": "1.0.0",
+      "tags": [
+        "productivity",
+        "report-automation",
+        "markdown",
+        "summarization"
+      ],
+      "agent": "paper-researcher",
+      "registeredAt": "2026-04-18T10:52:46.335902+00:00"
     }
   ]
 }
