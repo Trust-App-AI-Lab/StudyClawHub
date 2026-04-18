@@ -271,7 +271,7 @@
       "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
       "path": "paper-search",
       "author": "Shengyi-Chung",
-      "description": "Build social networks from arXiv papers. Trigger: '查找关于 [关键词] 的最新论文', '分析 [领域] 的学者关系', '搜索本周关于 [主题] 的新论文', '构建 [领域] 的合作网络图'",
+      "description": "Search arXiv papers and build author collaboration networks.",
       "version": "1.0.0",
       "tags": [
         "social-network-analysis",
@@ -279,7 +279,9 @@
         "arxiv",
         "graph-construction"
       ],
-      "registeredAt": "2026-04-18T08:31:10.870944+00:00"
+      "registeredAt": "2026-04-18T08:31:10.870944+00:00",
+      "agent": "paper-researcher",
+      "updatedAt": "2026-04-18T10:52:24.329973+00:00"
     },
     {
       "name": "briefing-report-generator",
