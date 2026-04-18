@@ -280,6 +280,22 @@
         "graph-construction"
       ],
       "registeredAt": "2026-04-18T08:31:10.870944+00:00"
+    },
+    {
+      "name": "briefing-report-generator",
+      "type": "skill",
+      "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
+      "path": "briefing-report-generator",
+      "author": "Shengyi-Chung",
+      "description": "Generate research briefing reports from analyzed papers. Trigger: '生成今天的 arXiv 研究简报', '帮我汇总这几篇论文的对比表格', '生成研究简报'",
+      "version": "1.0.0",
+      "tags": [
+        "productivity",
+        "report-automation",
+        "markdown",
+        "visualization"
+      ],
+      "registeredAt": "2026-04-18T08:48:28.474032+00:00"
     }
   ]
 }
