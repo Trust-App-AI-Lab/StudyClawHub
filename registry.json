@@ -312,6 +312,22 @@
         "llm"
       ],
       "registeredAt": "2026-04-18T08:52:25.467605+00:00"
+    },
+    {
+      "name": "paper-researcher",
+      "type": "agent",
+      "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
+      "path": ".",
+      "author": "Shengyi-Chung",
+      "description": "A specialized agent for academic paper research workflow. Capabilities: search papers from arXiv, analyze relevance and extract key contributions, generate research reports, and manage follow-up queries.",
+      "version": "1.0.0",
+      "tags": [
+        "academic-research",
+        "arxiv",
+        "paper-analysis",
+        "literature-review"
+      ],
+      "registeredAt": "2026-04-18T10:48:40.270399+00:00"
     }
   ]
 }
