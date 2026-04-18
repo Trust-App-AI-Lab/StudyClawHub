@@ -349,6 +349,23 @@
       ],
       "agent": "paper-researcher",
       "registeredAt": "2026-04-18T10:52:46.335902+00:00"
+    },
+    {
+      "name": "query-holder",
+      "type": "skill",
+      "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
+      "path": "query-holder",
+      "author": "Shengyi-Chung",
+      "description": "Manage follow-up queries about retrieved papers.",
+      "version": "1.0.0",
+      "tags": [
+        "retrieval",
+        "context-management",
+        "nlp",
+        "conversation"
+      ],
+      "agent": "paper-researcher",
+      "registeredAt": "2026-04-18T11:06:26.282743+00:00"
     }
   ]
 }
