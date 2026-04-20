@@ -366,6 +366,21 @@
       ],
       "agent": "paper-researcher",
       "registeredAt": "2026-04-18T11:06:26.282743+00:00"
+    },
+    {
+      "name": "github-skill-discovery",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/github-skill-discovery",
+      "path": ".",
+      "author": "thcxiker",
+      "description": "\"Search GitHub or curated README sections for high-star GitHub Skills relevant to university workflows, rank them with explicit evidence, and print a shortlist. Use when the user wants discovery only, including `awesome-claude-skills` scans or student-relevant skill ranking, but not outreach or registration.\"",
+      "version": "1.0.0",
+      "tags": [
+        "search",
+        "discovery",
+        "ranking"
+      ],
+      "registeredAt": "2026-04-20T03:30:35.445982+00:00"
     }
   ]
 }
