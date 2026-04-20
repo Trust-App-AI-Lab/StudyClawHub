@@ -381,6 +381,21 @@
         "ranking"
       ],
       "registeredAt": "2026-04-20T03:30:35.445982+00:00"
+    },
+    {
+      "name": "github-skill-outreach",
+      "type": "skill",
+      "repo": "https://github.com/Trust-App-AI-Lab/github-skill-outreach",
+      "path": ".",
+      "author": "thcxiker",
+      "description": "\"Contact maintainers of an already selected GitHub Skill with a yes/no StudyClawHub registration request, poll replies, and register approved skills. Use when the user already has a target repo and wants opt-in outreach or registration, not candidate discovery.\"",
+      "version": "1.0.0",
+      "tags": [
+        "outreach",
+        "contact",
+        "register"
+      ],
+      "registeredAt": "2026-04-20T03:55:45.612285+00:00"
     }
   ]
 }
