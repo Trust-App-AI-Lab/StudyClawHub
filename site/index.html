@@ -693,6 +693,48 @@
       color: var(--text-muted);
       margin-bottom: 0.35rem;
     }
+    .path-examples {
+      margin: 0.35rem 0 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .path-example {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      padding: 0.32rem 0.6rem;
+      border-radius: 4px;
+      line-height: 1.4;
+    }
+    .path-example-ok  { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .path-example-bad { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .path-example-icon {
+      flex: 0 0 auto;
+      font-weight: 700;
+      font-size: 0.9em;
+      width: 1.05em;
+      text-align: center;
+    }
+    .path-example code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: rgba(255,255,255,0.7);
+      padding: 0.08rem 0.38rem;
+      border-radius: 3px;
+      font-size: 0.93em;
+    }
+    .path-example-note {
+      color: inherit;
+      opacity: 0.78;
+      font-size: 0.82em;
+    }
+    .path-rule {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.3rem;
+    }
+    .path-rule strong { color: var(--text); }
     .form-input {
       width: 100%;
       padding: 0.55rem 0.75rem;
@@ -926,9 +968,9 @@
       <input class="form-input" id="f-repo" type="url" placeholder="https://github.com/your-username/your-repo" oninput="updatePreview()" />
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="path-group">
       <label for="f-path">Path to Skill Folder</label>
-      <div class="hint" id="path-hint">Directory containing SKILL.md, relative to repo root — <strong>not the skill name</strong>. Examples: <code>.claude/skills/my-skill</code>, <code>.codebuddy/skills/my-skill</code>, <code>skills/foo</code>. Use <code>.</code> if SKILL.md is at repo root.</div>
+      <div id="path-hint-container"></div>
       <input class="form-input" id="f-path" type="text" placeholder=".claude/skills/my-skill" value="." oninput="updatePreview()" />
     </div>
 
@@ -1357,8 +1399,8 @@ function updatePreview() {
   const nameInput = document.getElementById('f-name');
   const nameHint = document.getElementById('name-hint');
   const descInput = document.getElementById('f-desc');
-  const pathLabel = document.querySelector('label[for="f-path"]');
-  const pathHint = pathLabel.nextElementSibling;
+  const pathGroup = document.getElementById('path-group');
+  const pathHintContainer = document.getElementById('path-hint-container');
   const pathInput = document.getElementById('f-path');
   const repoHint = document.querySelector('label[for="f-repo"]').nextElementSibling;
 
@@ -1366,18 +1408,19 @@ function updatePreview() {
     nameHint.textContent = 'Lowercase, kebab-case (e.g. my-awesome-agent)';
     nameInput.placeholder = 'my-awesome-agent';
     descInput.placeholder = 'A short description of your agent project';
-    pathLabel.textContent = 'Path';
-    pathHint.innerHTML = 'Directory containing <code>AGENTS.md</code>, relative to repo root. Usually <code>.</code> for agents (AGENTS.md at repo root).';
-    pathInput.placeholder = '.';
-    repoHint.textContent = 'The repo that contains your agent project';
+    // Agents are always the whole repo — hide the Path field and force path="."
+    pathGroup.style.display = 'none';
+    pathInput.value = '.';
+    repoHint.textContent = 'The repo that contains your agent project (the entire repo IS the agent)';
+    pathHintContainer.innerHTML = '';
   } else {
     nameHint.textContent = 'Lowercase, kebab-case (e.g. my-cool-skill)';
     nameInput.placeholder = 'my-cool-skill';
     descInput.placeholder = 'A short description of your skill';
-    pathLabel.textContent = 'Path to Skill Folder';
-    pathHint.innerHTML = 'Directory containing <code>SKILL.md</code>, relative to repo root — <strong>not the skill name</strong>. Examples: <code>.claude/skills/my-skill</code>, <code>.codebuddy/skills/my-skill</code>, <code>skills/foo</code>. Use <code>.</code> if SKILL.md is at repo root.';
+    pathGroup.style.display = '';
     pathInput.placeholder = '.claude/skills/my-skill';
     repoHint.textContent = 'The repo where your Skill lives (can be private)';
+    pathHintContainer.innerHTML = renderPathHint(false);
   }
 
   const preview = document.getElementById('submit-preview');
@@ -1392,6 +1435,30 @@ function updatePreview() {
   } else {
     preview.classList.remove('active');
   }
+}
+
+// ── Path hint (good/bad examples) ──
+// Only rendered for skills; agents are always the whole repo (path = ".").
+function renderPathHint() {
+  const okRows = [
+    { code: '.claude/skills/my-skill' },
+    { code: '.codebuddy/skills/my-skill' },
+    { code: 'hub-skills/sch-create' },
+    { code: '.', note: 'SKILL.md is at the repo root' },
+  ];
+  const badRow = { code: 'my-skill', note: 'this is the skill name, not a path' };
+
+  const row = (cls, icon, code, note) =>
+    `<div class="path-example ${cls}">
+       <span class="path-example-icon">${icon}</span>
+       <code>${code}</code>${note ? `<span class="path-example-note">&mdash; ${note}</span>` : ''}
+     </div>`;
+
+  return `<div class="path-rule">The directory containing <strong>SKILL.md</strong>, relative to repo root &mdash; <strong>not the skill name</strong>.</div>
+    <div class="path-examples">
+      ${okRows.map(r => row('path-example-ok', '✓', r.code, r.note || '')).join('')}
+      ${row('path-example-bad', '✗', badRow.code, badRow.note)}
+    </div>`;
 }
 
 // ── Submit status helpers ──
@@ -1515,6 +1582,14 @@ async function submitSkill(force = false) {
 
     if (result.state === 'path-missing') {
       const metaFile = result.metaFile;
+      if (type === 'agent') {
+        // Agents are always registered as the whole repo; the only valid
+        // location for AGENTS.md is the repo root. Don't offer path chips.
+        showSubmitStatus('error',
+          `<span class="submit-status-title">❌ No <code>AGENTS.md</code> at repo root</span>
+           <div class="submit-status-note">Agents are registered as a whole repo, so <code>AGENTS.md</code> must sit at the repo root (on branch <code>${escapeHtml(result.branch)}</code>). Create one and push, then try again.</div>`);
+        return;
+      }
       const chips = result.candidates.length
         ? `<div class="submit-status-note">Did you mean one of these? <em>(click to auto-fill)</em></div>
            <div class="submit-status-candidates">${result.candidates.map(c =>
