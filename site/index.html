@@ -801,6 +801,176 @@
       margin-right: 0.4em;
     }
     @keyframes submit-spin { to { transform: rotate(360deg); } }
+
+    /* ── Child skills picker & batch progress (agent submission) ── */
+    .child-skills-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+    }
+    .child-skill-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .child-skill-row:hover { border-color: var(--border-hover); }
+    .child-skill-row input[type="checkbox"] {
+      margin-top: 0.25rem;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+    .child-skill-row.registered {
+      opacity: 0.62;
+      background: var(--surface);
+    }
+    .child-skill-main { flex: 1; min-width: 0; }
+    .child-skill-name {
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .child-skill-name code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: var(--tag-bg);
+      color: var(--accent);
+      padding: 0.08rem 0.38rem;
+      border-radius: 3px;
+    }
+    .child-skill-badge {
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 0.08rem 0.42rem;
+      border-radius: 3px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+    .child-skill-path {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      margin-top: 0.15rem;
+    }
+    .child-skill-desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-top: 0.3rem;
+      line-height: 1.45;
+    }
+    .child-skills-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .child-skills-actions a {
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Batch progress (after the user confirms selection) */
+    .batch-progress {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+    .batch-step {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      transition: all 0.15s;
+    }
+    .batch-step.active {
+      border-color: var(--accent);
+      background: #eff6ff;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+    }
+    .batch-step.done {
+      border-color: #a7f3d0;
+      background: #ecfdf5;
+    }
+    .batch-step.pending { opacity: 0.55; }
+    .batch-step-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+    .batch-step.active .batch-step-num {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .batch-step.done .batch-step-num {
+      background: #16a34a;
+      border-color: #16a34a;
+      color: #fff;
+    }
+    .batch-step-body { flex: 1; min-width: 0; }
+    .batch-step-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .batch-step-title code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    .batch-step-meta {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.1rem;
+    }
+    .batch-step-action {
+      flex-shrink: 0;
+    }
+    .batch-step-action .btn {
+      font-size: 0.78rem;
+      padding: 0.38rem 0.75rem;
+    }
+    .batch-intro {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      line-height: 1.55;
+    }
+    .batch-intro strong { color: var(--text); }
+
     .form-preview {
       background: var(--bg);
       border: 1px solid var(--border);
@@ -925,8 +1095,8 @@
     <div class="form-group">
       <label for="f-type">Type</label>
       <select class="form-input" id="f-type" onchange="updatePreview()">
-        <option value="skill">Skill</option>
-        <option value="agent">Agent</option>
+        <option value="agent">Agent (whole project — recommended if your repo contains multiple skills)</option>
+        <option value="skill">Skill (a single SKILL.md)</option>
       </select>
     </div>
 
@@ -986,6 +1156,14 @@
       <button class="btn btn-outline" onclick="closeSubmit()">Cancel</button>
     </div>
     <div class="submit-status" id="submit-status"></div>
+  </div>
+</div>
+
+<!-- Agent batch submission overlay (child skills picker + progress) -->
+<div class="overlay" id="batch-overlay" onclick="if(event.target===this)closeBatch()">
+  <div class="detail">
+    <button class="detail-close" onclick="closeBatch()">&times;</button>
+    <div id="batch-content"></div>
   </div>
 </div>
 
@@ -1617,9 +1795,50 @@ async function submitSkill(force = false) {
     // result.state === 'ok' — fall through to open issue
   }
 
-  // Build GitHub Issue URL with pre-filled body
-  const issueTitle = `register: ${name}`;
-  const issueBody =
+  const agentField = document.getElementById('f-agent').value.trim();
+
+  // Agent branch: scan repo for child SKILL.md, offer batch registration.
+  if (type === 'agent') {
+    setSubmitBtnBusy(true);
+    showSubmitStatus('info', '<span class="submit-spinner"></span>Scanning repo for child skills…');
+    let children;
+    try {
+      children = await scanChildSkills(owner, repoName);
+    } finally {
+      setSubmitBtnBusy(false);
+    }
+
+    const agentIssue = buildIssueEntry({ name, desc, version, tags, repo, path, type: 'agent', agent: '', author });
+
+    if (!children || children.length === 0) {
+      // No SKILL.md found anywhere — just submit the agent itself.
+      hideSubmitStatus();
+      closeSubmit();
+      window.open(buildIssueUrl(agentIssue), '_blank');
+      return;
+    }
+
+    hideSubmitStatus();
+    openBatchPicker({
+      agentName: name,
+      agentAuthor: author,
+      agentRepo: repo,
+      agentIssue,
+      children,
+    });
+    return;
+  }
+
+  // Regular skill flow — single issue.
+  const issue = buildIssueEntry({ name, desc, version, tags, repo, path, type, agent: agentField, author });
+  window.open(buildIssueUrl(issue), '_blank');
+  hideSubmitStatus();
+  closeSubmit();
+}
+
+// Build a {title, body} for a GitHub register issue.
+function buildIssueEntry({ name, desc, version, tags, repo, path, type, agent, author }) {
+  const body =
     `### Skill name\n\n${name}\n\n` +
     `### Description\n\n${desc || '(none)'}\n\n` +
     `### Version\n\n${version}\n\n` +
@@ -1627,15 +1846,322 @@ async function submitSkill(force = false) {
     `### GitHub repo URL\n\n${repo}\n\n` +
     `### Path to Skill folder\n\n${path}\n\n` +
     `### Type\n\n${type}\n\n` +
-    `### Agent name\n\n${(document.getElementById('f-agent').value.trim()) || ''}\n\n` +
+    `### Agent name\n\n${agent || ''}\n\n` +
     `### Your GitHub username\n\n${author}`;
+  return { title: `register: ${name}`, body, name };
+}
 
-  const issueUrl = `https://github.com/${REPO}/issues/new?` +
-    `title=${encodeURIComponent(issueTitle)}` +
-    `&body=${encodeURIComponent(issueBody)}`;
+function buildIssueUrl({ title, body }) {
+  return `https://github.com/${REPO}/issues/new?` +
+    `title=${encodeURIComponent(title)}` +
+    `&body=${encodeURIComponent(body)}`;
+}
 
-  window.open(issueUrl, '_blank');
-  hideSubmitStatus();
+// ── Scan a repo's default branch for all SKILL.md files and parse their frontmatter ──
+async function scanChildSkills(owner, repo) {
+  let branch = 'main';
+  try {
+    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+    if (!r.ok) return null;
+    const data = await r.json();
+    branch = data.default_branch || 'main';
+  } catch (_) {
+    return null;
+  }
+
+  let candidates = [];
+  try {
+    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`);
+    if (!r.ok) return [];
+    const tree = await r.json();
+    const tail = '/SKILL.md';
+    candidates = (tree.tree || [])
+      .filter(e => e.type === 'blob' && (e.path === 'SKILL.md' || e.path.endsWith(tail)))
+      .map(e => e.path === 'SKILL.md' ? '.' : e.path.slice(0, -tail.length));
+  } catch (_) {
+    return [];
+  }
+
+  // Fetch and parse each SKILL.md's frontmatter (name + description). Run in
+  // parallel for speed; swallow individual failures so one bad file doesn't
+  // sink the whole scan.
+  const results = await Promise.all(candidates.map(async (p) => {
+    const url = p === '.'
+      ? `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/SKILL.md`
+      : `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${p}/SKILL.md`;
+    try {
+      const r = await fetch(url);
+      if (!r.ok) return null;
+      const text = await r.text();
+      const meta = parseFrontmatter(text);
+      return {
+        path: p,
+        name: meta.name || '',
+        description: meta.description || '',
+        version: meta.version || '',
+        tags: meta.tagsRaw || '',
+      };
+    } catch (_) {
+      return null;
+    }
+  }));
+  return results.filter(Boolean);
+}
+
+// Tiny frontmatter parser — only extracts fields we need. Supports plain
+// scalars, quoted strings, simple lists, and folded/literal block scalars
+// (`key: >` or `key: |` followed by indented lines). Not a full YAML impl.
+function parseFrontmatter(text) {
+  const m = text.match(/^---\s*\n([\s\S]*?)\n---/);
+  if (!m) return {};
+  const lines = m[1].split(/\r?\n/);
+  const out = {};
+  let currentKey = null;
+  let listBuf = [];
+  let blockKey = null;     // key currently accumulating a block scalar
+  let blockBuf = [];
+  let blockIndent = null;  // indent level that started the block
+
+  const flushList = () => {
+    if (currentKey && listBuf.length) {
+      out[currentKey] = listBuf.slice();
+    }
+    listBuf = [];
+  };
+  const flushBlock = () => {
+    if (blockKey) {
+      out[blockKey] = blockBuf.join(' ').replace(/\s+/g, ' ').trim();
+    }
+    blockKey = null;
+    blockBuf = [];
+    blockIndent = null;
+  };
+
+  for (const raw of lines) {
+    // Inside a block scalar?
+    if (blockKey) {
+      const m2 = raw.match(/^(\s+)(.*)$/);
+      if (m2 && (blockIndent === null || m2[1].length >= blockIndent)) {
+        if (blockIndent === null) blockIndent = m2[1].length;
+        blockBuf.push(m2[2]);
+        continue;
+      }
+      flushBlock();
+    }
+
+    const listM = raw.match(/^\s+-\s+(.*)$/);
+    if (listM && currentKey) {
+      listBuf.push(listM[1].trim().replace(/^['"]|['"]$/g, ''));
+      continue;
+    }
+    flushList();
+
+    const kv = raw.match(/^(\w+)\s*:\s*(.*)$/);
+    if (!kv) { currentKey = null; continue; }
+    const key = kv[1];
+    let val = kv[2].trim();
+    currentKey = key;
+
+    // Block scalar indicator: `key: >` or `key: |` (with optional chomping)
+    if (/^[>|][+-]?\s*$/.test(val)) {
+      blockKey = key;
+      blockBuf = [];
+      blockIndent = null;
+      continue;
+    }
+
+    if (!val) continue;
+    if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+      val = val.slice(1, -1);
+    }
+    out[key] = val;
+  }
+  flushList();
+  flushBlock();
+
+  // Normalize tags into a comma-separated string for the issue body
+  if (Array.isArray(out.tags)) {
+    out.tagsRaw = out.tags.join(', ');
+  } else if (typeof out.tags === 'string') {
+    out.tagsRaw = out.tags;
+  }
+  return out;
+}
+
+// ── Batch submission modal (agent + child skills) ──
+// State is kept on window so the sequential "Open next" buttons can drive it.
+let batchState = null;
+
+function openBatchPicker(ctx) {
+  // Which child-skill names are already in the registry? Default-uncheck those.
+  const registered = new Set(allSkills.map(s => s.name).concat(allAgents.map(a => a.name)));
+  const children = ctx.children.map(c => ({
+    ...c,
+    // If SKILL.md has no name, fall back to the directory basename
+    effectiveName: c.name || (c.path === '.' ? ctx.agentName : c.path.split('/').pop()),
+    alreadyRegistered: registered.has(c.name) && c.name !== ctx.agentName,
+    selected: !(registered.has(c.name) && c.name !== ctx.agentName),
+  }));
+
+  batchState = {
+    ctx,
+    children,
+    queue: [],          // filled when user confirms selection
+    currentIndex: 0,
+    opened: new Set(),  // step indices the user has clicked
+  };
+
+  document.getElementById('batch-overlay').classList.add('active');
+  renderBatchPicker();
+}
+
+function renderBatchPicker() {
+  const { ctx, children } = batchState;
+  const rows = children.map((c, i) => `
+    <label class="child-skill-row ${c.alreadyRegistered ? 'registered' : ''}">
+      <input type="checkbox" ${c.selected ? 'checked' : ''} onchange="toggleChild(${i})" />
+      <div class="child-skill-main">
+        <div class="child-skill-name">
+          <code>${escapeHtml(c.effectiveName)}</code>
+          ${c.alreadyRegistered ? '<span class="child-skill-badge">Already registered</span>' : ''}
+        </div>
+        <div class="child-skill-path">${escapeHtml(c.path === '.' ? '(repo root)' : c.path)}/SKILL.md</div>
+        ${c.description ? `<div class="child-skill-desc">${escapeHtml(c.description)}</div>` : ''}
+      </div>
+    </label>
+  `).join('');
+
+  const total = children.length;
+  const selectableCount = children.filter(c => !c.alreadyRegistered).length;
+
+  document.getElementById('batch-content').innerHTML = `
+    <h2>Found ${total} skill${total === 1 ? '' : 's'} under <code>${escapeHtml(ctx.agentName)}</code></h2>
+    <p class="subtitle">Pick which ones to register together with the agent. Already-registered skills are pre-unchecked but you can still re-submit to update them.</p>
+
+    <div class="child-skills-actions">
+      <span>${selectableCount} available · <span id="batch-selected-count">${children.filter(c => c.selected).length}</span> selected</span>
+      <span>
+        <a onclick="selectAllChildren(true)">Select all</a> ·
+        <a onclick="selectAllChildren(false)">None</a>
+      </span>
+    </div>
+
+    <div class="child-skills-list">${rows}</div>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="confirmBatchSelection()">Continue →</button>
+      <button class="btn btn-outline" onclick="closeBatch()">Cancel</button>
+    </div>
+  `;
+}
+
+function toggleChild(i) {
+  batchState.children[i].selected = !batchState.children[i].selected;
+  document.getElementById('batch-selected-count').textContent =
+    batchState.children.filter(c => c.selected).length;
+}
+
+function selectAllChildren(on) {
+  batchState.children.forEach(c => { c.selected = on; });
+  renderBatchPicker();
+}
+
+function confirmBatchSelection() {
+  const { ctx, children } = batchState;
+  const selected = children.filter(c => c.selected);
+
+  // Queue: agent issue first, then each selected skill.
+  const queue = [
+    { label: `Agent — ${ctx.agentName}`, ...ctx.agentIssue, kind: 'agent' },
+  ];
+  for (const c of selected) {
+    const issue = buildIssueEntry({
+      name: c.effectiveName,
+      desc: c.description,
+      version: c.version || '0.1.0',
+      tags: c.tags || '',
+      repo: ctx.agentRepo,
+      path: c.path,
+      type: 'skill',
+      agent: ctx.agentName,
+      author: ctx.agentAuthor,
+    });
+    queue.push({ label: `Skill — ${c.effectiveName}`, ...issue, kind: 'skill' });
+  }
+
+  batchState.queue = queue;
+  batchState.currentIndex = 0;
+  batchState.opened = new Set();
+  renderBatchProgress();
+}
+
+function renderBatchProgress() {
+  const { queue, opened } = batchState;
+  const total = queue.length;
+  const doneCount = opened.size;
+
+  const steps = queue.map((step, i) => {
+    let cls = 'pending';
+    if (opened.has(i)) cls = 'done';
+    else if (i === findActiveIndex()) cls = 'active';
+
+    const btnHtml =
+      cls === 'done'
+        ? `<span style="color:#16a34a;font-size:0.82rem;font-weight:600;">✓ Opened</span>`
+        : cls === 'active'
+          ? `<button class="btn btn-primary" onclick="openBatchStep(${i})">Open issue →</button>`
+          : `<button class="btn btn-outline" disabled>Waiting</button>`;
+
+    return `
+      <div class="batch-step ${cls}">
+        <div class="batch-step-num">${i + 1}</div>
+        <div class="batch-step-body">
+          <div class="batch-step-title">${escapeHtml(step.label)}</div>
+          <div class="batch-step-meta">Issue title: <code>${escapeHtml(step.title)}</code></div>
+        </div>
+        <div class="batch-step-action">${btnHtml}</div>
+      </div>
+    `;
+  }).join('');
+
+  const allDone = doneCount >= total;
+
+  document.getElementById('batch-content').innerHTML = `
+    <h2>Submit ${total} issue${total === 1 ? '' : 's'}</h2>
+    <p class="batch-intro">
+      GitHub requires one issue per registration. Click <strong>Open issue →</strong> to open each one in a new tab,
+      submit it on GitHub, then come back here and move to the next.
+      The backend processes them in order and rebuilds the registry once everything is merged.
+    </p>
+
+    <div class="batch-progress">${steps}</div>
+
+    <div class="form-actions">
+      ${allDone
+        ? `<button class="btn btn-primary" onclick="closeBatch()">All done — close</button>`
+        : `<button class="btn btn-outline" onclick="closeBatch()">Cancel remaining</button>`}
+    </div>
+  `;
+}
+
+function findActiveIndex() {
+  const { queue, opened } = batchState;
+  for (let i = 0; i < queue.length; i++) {
+    if (!opened.has(i)) return i;
+  }
+  return -1;
+}
+
+function openBatchStep(i) {
+  const step = batchState.queue[i];
+  window.open(buildIssueUrl(step), '_blank');
+  batchState.opened.add(i);
+  renderBatchProgress();
+}
+
+function closeBatch() {
+  document.getElementById('batch-overlay').classList.remove('active');
+  batchState = null;
   closeSubmit();
 }
 
@@ -1646,7 +2172,14 @@ function escapeHtml(s) {
 }
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeDetail(); closeSubmit(); }
+  if (e.key === 'Escape') {
+    if (document.getElementById('batch-overlay').classList.contains('active')) {
+      closeBatch();
+    } else {
+      closeDetail();
+      closeSubmit();
+    }
+  }
 });
 
 boot();
