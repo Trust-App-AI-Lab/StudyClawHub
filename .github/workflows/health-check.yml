@@ -1,0 +1,314 @@
+name: Registry Health Check
+
+on:
+  schedule:
+    # Every Sunday at 00:00 UTC (Monday 08:00 Beijing)
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: registry-update
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan registry
+        id: scan
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 << 'SCRIPT'
+          import json, re, os, sys, urllib.request, urllib.error
+          from datetime import datetime, timezone
+
+          TOKEN = os.environ.get('GH_TOKEN', '')
+
+          import time
+
+          def api_get(url, retries=2):
+              headers = {
+                  'User-Agent': 'StudyClawHub-HealthCheck',
+                  'Accept': 'application/vnd.github.v3+json',
+              }
+              if TOKEN:
+                  headers['Authorization'] = f'Bearer {TOKEN}'
+              last_exc = None
+              for attempt in range(retries + 1):
+                  try:
+                      req = urllib.request.Request(url, headers=headers)
+                      with urllib.request.urlopen(req, timeout=15) as resp:
+                          return json.loads(resp.read())
+                  except urllib.error.HTTPError:
+                      raise  # HTTP errors are definitive, don't retry
+                  except Exception as e:
+                      last_exc = e
+                      if attempt < retries:
+                          time.sleep(2 ** attempt)
+              raise last_exc
+
+          def head_ok(url, retries=1):
+              for attempt in range(retries + 1):
+                  try:
+                      req = urllib.request.Request(url, headers={'User-Agent': 'StudyClawHub-HealthCheck'})
+                      req.get_method = lambda: 'HEAD'
+                      with urllib.request.urlopen(req, timeout=10) as resp:
+                          return 200 <= resp.status < 400
+                  except urllib.error.HTTPError:
+                      return False  # definitive
+                  except Exception:
+                      if attempt < retries:
+                          time.sleep(1)
+              return False
+
+          def scan_tree(owner, repo, branch, md_file):
+              """Recursively list all {md_file} locations in the repo. Returns parent dirs."""
+              url = f'https://api.github.com/repos/{owner}/{repo}/git/trees/{branch}?recursive=1'
+              try:
+                  data = api_get(url)
+              except Exception:
+                  return []
+              out = []
+              for item in data.get('tree', []):
+                  p = item.get('path', '')
+                  if p == md_file:
+                      out.append('.')
+                  elif p.endswith(f'/{md_file}'):
+                      out.append(p[: -(len(md_file) + 1)])
+              return out
+
+          with open('registry.json') as f:
+              registry = json.load(f)
+
+          skills = registry['skills']
+          by_name = {s['name']: s for s in skills}
+
+          autofix = []   # path drifts with exactly 1 candidate — safe to auto-repair
+          issues = []    # problems needing human attention
+
+          for s in skills:
+              name = s['name']
+              repo_url = s.get('repo', '')
+              path = s.get('path', '.') or '.'
+              entry_type = s.get('type', 'skill')
+              author = s.get('author', '')
+
+              def add(severity, msg):
+                  issues.append({
+                      'severity': severity, 'name': name, 'type': entry_type,
+                      'author': author, 'repo': repo_url, 'issue': msg,
+                  })
+
+              m = re.match(r'https://github\.com/([^/]+)/([^/?#]+?)(?:\.git)?/?$', repo_url)
+              if not m:
+                  add('broken', f'Invalid repo URL: `{repo_url}`')
+                  continue
+              owner, repo = m.group(1), m.group(2)
+
+              # Repo accessibility
+              try:
+                  repo_data = api_get(f'https://api.github.com/repos/{owner}/{repo}')
+              except urllib.error.HTTPError as e:
+                  if e.code == 404:
+                      add('broken', 'Repo not accessible (404) — may have been deleted or made private')
+                  else:
+                      add('warn', f'Repo API returned HTTP {e.code}')
+                  continue
+              except Exception as e:
+                  add('warn', f'Could not reach repo: {type(e).__name__}')
+                  continue
+
+              default_branch = repo_data.get('default_branch', 'main')
+              if repo_data.get('archived'):
+                  add('warn', 'Repo is archived')
+              if repo_data.get('disabled'):
+                  add('broken', 'Repo is disabled')
+
+              # Metadata file at path.
+              # Skip for private repos — GITHUB_TOKEN can't read other private
+              # repos, and raw.githubusercontent.com always 404s without auth.
+              # We trust the registry metadata in that case.
+              if not repo_data.get('private'):
+                  md_file = 'AGENTS.md' if entry_type == 'agent' else 'SKILL.md'
+                  md_rel = md_file if path == '.' else f'{path.strip("/")}/{md_file}'
+                  md_url = f'https://raw.githubusercontent.com/{owner}/{repo}/{default_branch}/{md_rel}'
+                  if not head_ok(md_url):
+                      candidates = scan_tree(owner, repo, default_branch, md_file)
+                      # If registered path is itself a candidate, the file does
+                      # exist there — the HEAD probably failed for some other
+                      # reason (branch protection, transient). Treat as healthy.
+                      if path not in candidates:
+                          candidates = [c for c in candidates if c != path]
+                          if len(candidates) == 1:
+                              autofix.append({
+                                  'name': name, 'type': entry_type, 'author': author,
+                                  'repo': repo_url, 'old_path': path, 'new_path': candidates[0],
+                              })
+                          elif candidates:
+                              head = ', '.join(f'`{c}`' for c in candidates[:5])
+                              add('broken', f'`{md_rel}` not found on `{default_branch}` (candidates: {head})')
+                          else:
+                              add('broken', f'`{md_rel}` not found on `{default_branch}` and no {md_file} anywhere in repo')
+
+              # Orphan agent reference
+              agent_ref = s.get('agent')
+              if agent_ref:
+                  parent = by_name.get(agent_ref)
+                  if not parent:
+                      add('broken', f'References missing agent `{agent_ref}`')
+                  elif parent.get('type') != 'agent':
+                      add('broken', f'Parent `{agent_ref}` is not type=agent')
+
+          # Apply auto-fixes to registry.json
+          if autofix:
+              fix_map = {a['name']: a['new_path'] for a in autofix}
+              for s in registry['skills']:
+                  if s['name'] in fix_map:
+                      s['path'] = fix_map[s['name']]
+                      s['updatedAt'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
+              with open('registry.json', 'w') as f:
+                  json.dump(registry, f, indent=2, ensure_ascii=False)
+
+          # Persist for downstream steps
+          with open('/tmp/autofix.json', 'w') as f:
+              json.dump(autofix, f)
+          with open('/tmp/issues.json', 'w') as f:
+              json.dump(issues, f)
+
+          now = datetime.now(timezone.utc).isoformat(timespec='seconds')
+          broken = [i for i in issues if i['severity'] == 'broken']
+          warn   = [i for i in issues if i['severity'] == 'warn']
+
+          lines = [
+              f'_Last checked: {now}_',
+              '',
+              f'**{len(skills)} total** · **{len(broken)} broken** · **{len(warn)} warnings** · **{len(autofix)} auto-fixed**',
+              '',
+          ]
+          if autofix:
+              lines += ['### 🤖 Auto-fixed this run', '']
+              for a in autofix:
+                  lines.append(f'- `{a["name"]}` — path `{a["old_path"]}` → `{a["new_path"]}`')
+              lines.append('')
+          if broken:
+              lines += ['### ❌ Broken', '']
+              for w in broken:
+                  lines.append(f'- **`{w["name"]}`** ({w["type"]}) — @{w["author"]} · {w["issue"]}')
+                  lines.append(f'  Repo: {w["repo"]}')
+              lines.append('')
+          if warn:
+              lines += ['### ⚠️ Warnings', '']
+              for w in warn:
+                  lines.append(f'- **`{w["name"]}`** ({w["type"]}) — @{w["author"]} · {w["issue"]}')
+                  lines.append(f'  Repo: {w["repo"]}')
+              lines.append('')
+          if not broken and not warn and not autofix:
+              lines.append('All entries healthy. ✅')
+
+          with open('/tmp/report.md', 'w') as f:
+              f.write('\n'.join(lines))
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f'broken_count={len(broken)}\n')
+              f.write(f'warn_count={len(warn)}\n')
+              f.write(f'autofix_count={len(autofix)}\n')
+              f.write(f'total={len(skills)}\n')
+
+          print(f'total={len(skills)} broken={len(broken)} warn={len(warn)} autofix={len(autofix)}')
+          SCRIPT
+
+      - name: Commit auto-fixes
+        if: steps.scan.outputs.autofix_count != '0'
+        run: |
+          git config user.name "StudyClawHub Bot"
+          git config user.email "bot@studyclawhub"
+          git add registry.json
+          git commit -m "health-check: auto-fix path drift for ${{ steps.scan.outputs.autofix_count }} entries"
+          git pull --rebase origin main
+          git push
+
+      - name: Trigger index rebuild
+        if: steps.scan.outputs.autofix_count != '0'
+        continue-on-error: true
+        run: gh workflow run build-index.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on original register issues for each auto-fix
+        if: steps.scan.outputs.autofix_count != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const fixes = JSON.parse(fs.readFileSync('/tmp/autofix.json', 'utf8'));
+
+            for (const fix of fixes) {
+              // Find earliest closed register: issue for this skill
+              const q = `repo:${context.repo.owner}/${context.repo.repo} in:title "register: ${fix.name}" is:issue is:closed`;
+              const res = await github.rest.search.issuesAndPullRequests({
+                q, sort: 'created', order: 'asc', per_page: 1,
+              });
+              if (res.data.items.length === 0) {
+                console.log(`No original register issue found for ${fix.name}`);
+                continue;
+              }
+              const orig = res.data.items[0];
+              const body = `🤖 Health-check detected that \`${fix.name}\` moved from \`${fix.old_path}\` to \`${fix.new_path}\`. Registry updated automatically. cc @${fix.author}`;
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: orig.number,
+                body,
+              });
+              console.log(`Commented on #${orig.number} for ${fix.name}`);
+            }
+
+      - name: Update sticky health report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('/tmp/report.md', 'utf8');
+            const broken   = Number('${{ steps.scan.outputs.broken_count }}');
+            const warn     = Number('${{ steps.scan.outputs.warn_count }}');
+            const autofix  = Number('${{ steps.scan.outputs.autofix_count }}');
+
+            const needs = broken + warn > 0;
+            const title = needs
+              ? `Registry Health: ${broken + warn} entries need attention`
+              : `Registry Health: All Clear`;
+
+            // Find existing sticky by title prefix
+            const q = `repo:${context.repo.owner}/${context.repo.repo} in:title "Registry Health" is:issue`;
+            const res = await github.rest.search.issuesAndPullRequests({ q, per_page: 10 });
+            const existing = res.data.items.find(i => i.title.startsWith('Registry Health'));
+
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                title,
+                body,
+                state: needs ? 'open' : 'closed',
+              });
+              console.log(`Updated #${existing.number} (state=${needs ? 'open' : 'closed'})`);
+            } else if (needs || autofix > 0) {
+              // Create only if there's something to report
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+              });
+              console.log(`Created #${created.data.number}`);
+            } else {
+              console.log('All healthy and no existing issue — nothing to do.');
+            }
