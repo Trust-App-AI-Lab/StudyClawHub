@@ -103,11 +103,16 @@ jobs:
               entry['version'] = version
           if tags:
               entry['tags'] = tags
+          agent_pending = False
           if agent_name and entry_type == 'skill':
-              # Only set agent if it exists in registry
-              agent_exists = any(s['name'] == agent_name and s.get('type') == 'agent' for s in registry['skills'])
-              if agent_exists:
-                  entry['agent'] = agent_name
+              # Always record the agent linkage. If the agent isn't registered
+              # yet, it will be picked up automatically once it appears in the
+              # registry — the frontend filters unknown agent names at render time.
+              entry['agent'] = agent_name
+              agent_pending = not any(
+                  s['name'] == agent_name and s.get('type') == 'agent'
+                  for s in registry['skills']
+              )
 
           # Check for duplicates
           existing = [s for s in registry['skills'] if s['name'] == name]
@@ -124,8 +129,15 @@ jobs:
           with open('registry.json', 'w') as f:
               json.dump(registry, f, indent=2, ensure_ascii=False)
 
+          comment = f'Successfully {action} **{name}** by @{author}'
+          if agent_pending:
+              comment += (
+                  f'\\n\\nNote: parent agent **{agent_name}** is not registered yet. '
+                  f'This skill will be linked automatically once that agent is registered.'
+              )
+
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write(f'comment=Successfully {action} **{name}** by @{author}\n')
+              f.write(f'comment={comment}\n')
               f.write('success=true\n')
 
           print(f'{action}: {name} by @{author}')
