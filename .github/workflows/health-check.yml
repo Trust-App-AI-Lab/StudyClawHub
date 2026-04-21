@@ -112,12 +112,15 @@ jobs:
                   continue
               owner, repo = m.group(1), m.group(2)
 
-              # Repo accessibility
+              # Repo accessibility. Note: the workflow GITHUB_TOKEN can only
+              # read the current repo, so private repos in other owners /
+              # orgs surface as 404. We can't tell "deleted" apart from
+              # "private + no access", so 404 is only a warning, not broken.
               try:
                   repo_data = api_get(f'https://api.github.com/repos/{owner}/{repo}')
               except urllib.error.HTTPError as e:
                   if e.code == 404:
-                      add('broken', 'Repo not accessible (404) — may have been deleted or made private')
+                      add('warn', 'Repo not accessible via API — likely private, possibly deleted. Registry metadata is used as fallback.')
                   else:
                       add('warn', f'Repo API returned HTTP {e.code}')
                   continue
