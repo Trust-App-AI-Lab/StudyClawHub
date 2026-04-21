@@ -1671,40 +1671,64 @@ function pickPath(path) {
 }
 
 // ── Path verification (GitHub API) ──
-// Returns: { state: 'ok' | 'path-missing' | 'repo-inaccessible' | 'network-error',
+// Returns: { state: 'ok' | 'path-missing' | 'repo-not-found' | 'rate-limited' | 'network-error',
 //            candidates: [], metaFile, branch }
+//
+// Strategy: try raw.githubusercontent.com HEAD first (no API quota cost) and
+// only fall back to the /repos API when that HEAD fails. This means the common
+// case (public repo on main with correct path) uses zero API requests, so
+// clients that have hit the 60/hr anonymous limit can still verify.
 async function verifySkillPath({ owner, repo, path, type }) {
   const metaFile = type === 'agent' ? 'AGENTS.md' : 'SKILL.md';
+  const cleanPath = (path === '.' || path === '') ? '' : path.replace(/^\/+|\/+$/g, '');
+  const rawUrl = (branch) => cleanPath
+    ? `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${cleanPath}/${metaFile}`
+    : `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${metaFile}`;
 
-  // Step 1: is the repo public & reachable?
+  const isRateLimited = (resp) =>
+    resp.status === 403 && resp.headers.get('X-RateLimit-Remaining') === '0';
+
+  // Step 1: HEAD raw on `main` — raw.githubusercontent.com is unauthenticated
+  // and doesn't count against the API quota.
   let branch = 'main';
   try {
+    const r = await fetch(rawUrl('main'), { method: 'HEAD' });
+    if (r.ok) return { state: 'ok', candidates: [], metaFile, branch };
+  } catch (_) {
+    return { state: 'network-error', candidates: [], metaFile, branch };
+  }
+
+  // Step 2: HEAD failed — could be non-main default branch, wrong path, or
+  // private/deleted repo. Look up /repos to find default_branch and to tell
+  // 403 (rate-limited) apart from 404 (private / doesn't exist).
+  try {
     const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+    if (isRateLimited(r)) {
+      return { state: 'rate-limited', candidates: [], metaFile, branch };
+    }
     if (r.status === 404 || r.status === 403) {
-      return { state: 'repo-inaccessible', candidates: [], metaFile, branch };
+      return { state: 'repo-not-found', candidates: [], metaFile, branch };
     }
     if (!r.ok) {
       return { state: 'network-error', candidates: [], metaFile, branch };
     }
     const data = await r.json();
     branch = data.default_branch || 'main';
+    if (branch !== 'main') {
+      try {
+        const r2 = await fetch(rawUrl(branch), { method: 'HEAD' });
+        if (r2.ok) return { state: 'ok', candidates: [], metaFile, branch };
+      } catch (_) {
+        return { state: 'network-error', candidates: [], metaFile, branch };
+      }
+    }
   } catch (_) {
     return { state: 'network-error', candidates: [], metaFile, branch };
   }
 
-  // Step 2: does SKILL.md / AGENTS.md exist at the given path on the default branch?
-  const cleanPath = (path === '.' || path === '') ? '' : path.replace(/^\/+|\/+$/g, '');
-  const fileUrl = cleanPath
-    ? `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${cleanPath}/${metaFile}`
-    : `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${metaFile}`;
-  try {
-    const r = await fetch(fileUrl, { method: 'HEAD' });
-    if (r.ok) return { state: 'ok', candidates: [], metaFile, branch };
-  } catch (_) {
-    return { state: 'network-error', candidates: [], metaFile, branch };
-  }
-
-  // Step 3: scan the repo tree for candidate paths
+  // Step 3: scan the repo tree for candidate paths. If this request is
+  // rate-limited we just return with empty candidates — path-missing is
+  // still the right state, we just can't suggest alternatives.
   let candidates = [];
   try {
     const r = await fetch(
@@ -1767,22 +1791,37 @@ async function submitSkill(force = false) {
       setSubmitBtnBusy(false);
     }
 
-    if (result.state === 'path-missing') {
+    if (result.state === 'path-missing' || result.state === 'rate-limited') {
       const metaFile = result.metaFile;
-      const chips = result.candidates.length
-        ? `<div class="submit-status-note">Did you mean one of these? <em>(click to auto-fill)</em></div>
+      const shownPath = path === '.' ? metaFile : `${path}/${metaFile}`;
+      let detail;
+      if (result.candidates && result.candidates.length) {
+        detail = `<div class="submit-status-note">Did you mean one of these? <em>(click to auto-fill)</em></div>
            <div class="submit-status-candidates">${result.candidates.map(c =>
              `<button type="button" class="submit-status-chip" onclick="pickPath(${JSON.stringify(c).replace(/"/g, '&quot;')})">${escapeHtml(c)}</button>`
-           ).join('')}</div>`
-        : `<div class="submit-status-note">No <code>${metaFile}</code> found anywhere in this repo's default branch (<code>${result.branch}</code>). Make sure you've pushed your changes.</div>`;
-      const shownPath = path === '.' ? metaFile : `${path}/${metaFile}`;
+           ).join('')}</div>`;
+      } else if (result.state === 'path-missing') {
+        // Tree scan completed and found nothing — confirmed the file isn't there.
+        detail = `<div class="submit-status-note">No <code>${metaFile}</code> found anywhere in this repo's default branch (<code>${result.branch}</code>). Make sure you've pushed your changes.</div>`;
+      } else {
+        // rate-limited — we didn't actually scan, so just nudge without
+        // mentioning the rate limit (it'd confuse users into thinking the
+        // tool is broken).
+        detail = `<div class="submit-status-note">Double-check your Path is correct, then click <strong>Submit anyway</strong> to proceed.</div>`;
+      }
       showSubmitStatus('error',
-        `<span class="submit-status-title">❌ Could not find <code>${escapeHtml(shownPath)}</code></span>${chips}`);
+        `<span class="submit-status-title">❌ Could not find <code>${escapeHtml(shownPath)}</code></span>${detail}`);
+      // Only offer Submit anyway when we couldn't actually verify (rate-limited).
+      // For confirmed path-missing, force the user to fix the path or pick a
+      // candidate — otherwise we'd create a registry entry with a broken path.
+      if (result.state === 'rate-limited') {
+        document.getElementById('submit-anyway-btn').style.display = '';
+      }
       return;
     }
 
-    if (result.state === 'repo-inaccessible' || result.state === 'network-error') {
-      const reason = result.state === 'repo-inaccessible'
+    if (result.state === 'repo-not-found' || result.state === 'network-error') {
+      const reason = result.state === 'repo-not-found'
         ? 'This repo appears to be private or does not exist.'
         : 'Network error while contacting GitHub.';
       showSubmitStatus('warn',
@@ -1801,17 +1840,29 @@ async function submitSkill(force = false) {
   if (type === 'agent') {
     setSubmitBtnBusy(true);
     showSubmitStatus('info', '<span class="submit-spinner"></span>Scanning repo for child skills…');
-    let children;
+    let scan;
     try {
-      children = await scanChildSkills(owner, repoName);
+      scan = await scanChildSkills(owner, repoName);
     } finally {
       setSubmitBtnBusy(false);
     }
 
     const agentIssue = buildIssueEntry({ name, desc, version, tags, repo, path, type: 'agent', agent: '', author });
 
-    if (!children || children.length === 0) {
-      // No SKILL.md found anywhere — just submit the agent itself.
+    if (scan.state === 'rate-limited') {
+      // Can't list the repo's files right now — submit the agent anyway and
+      // tell the user the child-skill picker was skipped so they can register
+      // children individually later.
+      window.open(buildIssueUrl(agentIssue), '_blank');
+      showSubmitStatus('warn',
+        `<span class="submit-status-title">ℹ️ Agent issue opened in a new tab</span>
+         <div class="submit-status-note">Couldn't scan this repo for child skills right now. You can register them individually any time via this Submit form.</div>`);
+      return;
+    }
+
+    if (scan.state !== 'ok' || scan.skills.length === 0) {
+      // No SKILL.md found anywhere (or scan failed for other reasons) —
+      // just submit the agent itself.
       hideSubmitStatus();
       closeSubmit();
       window.open(buildIssueUrl(agentIssue), '_blank');
@@ -1824,7 +1875,7 @@ async function submitSkill(force = false) {
       agentAuthor: author,
       agentRepo: repo,
       agentIssue,
-      children,
+      children: scan.skills,
     });
     return;
   }
@@ -1858,33 +1909,43 @@ function buildIssueUrl({ title, body }) {
 }
 
 // ── Scan a repo's default branch for all SKILL.md files and parse their frontmatter ──
+// Returns: { state: 'ok' | 'rate-limited' | 'error', skills: [...] }
+// Listing files requires the GitHub API (tree endpoint), so this can fail
+// under the 60/hr anonymous quota. The caller distinguishes 'rate-limited'
+// to tell the user why the child-skill picker didn't appear.
 async function scanChildSkills(owner, repo) {
+  const isRateLimited = (resp) =>
+    resp.status === 403 && resp.headers.get('X-RateLimit-Remaining') === '0';
+
   let branch = 'main';
   try {
     const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
-    if (!r.ok) return null;
+    if (isRateLimited(r)) return { state: 'rate-limited', skills: [] };
+    if (!r.ok) return { state: 'error', skills: [] };
     const data = await r.json();
     branch = data.default_branch || 'main';
   } catch (_) {
-    return null;
+    return { state: 'error', skills: [] };
   }
 
   let candidates = [];
   try {
     const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`);
-    if (!r.ok) return [];
+    if (isRateLimited(r)) return { state: 'rate-limited', skills: [] };
+    if (!r.ok) return { state: 'error', skills: [] };
     const tree = await r.json();
     const tail = '/SKILL.md';
     candidates = (tree.tree || [])
       .filter(e => e.type === 'blob' && (e.path === 'SKILL.md' || e.path.endsWith(tail)))
       .map(e => e.path === 'SKILL.md' ? '.' : e.path.slice(0, -tail.length));
   } catch (_) {
-    return [];
+    return { state: 'error', skills: [] };
   }
 
   // Fetch and parse each SKILL.md's frontmatter (name + description). Run in
   // parallel for speed; swallow individual failures so one bad file doesn't
-  // sink the whole scan.
+  // sink the whole scan. raw.githubusercontent.com is unauthenticated so
+  // these fetches don't consume the API quota.
   const results = await Promise.all(candidates.map(async (p) => {
     const url = p === '.'
       ? `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/SKILL.md`
@@ -1905,7 +1966,7 @@ async function scanChildSkills(owner, repo) {
       return null;
     }
   }));
-  return results.filter(Boolean);
+  return { state: 'ok', skills: results.filter(Boolean) };
 }
 
 // Tiny frontmatter parser — only extracts fields we need. Supports plain
