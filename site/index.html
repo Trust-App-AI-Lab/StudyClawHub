@@ -711,7 +711,63 @@
       display: flex;
       gap: 0.75rem;
       margin-top: 1.5rem;
+      flex-wrap: wrap;
     }
+    .submit-status {
+      display: none;
+      margin-top: 0.9rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+    .submit-status.active { display: block; }
+    .submit-status.info    { background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; }
+    .submit-status.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .submit-status.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .submit-status.warn    { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+    .submit-status code {
+      background: rgba(0,0,0,0.08);
+      padding: 0.08rem 0.32rem;
+      border-radius: 3px;
+      font-size: 0.82em;
+    }
+    .submit-status-title { font-weight: 600; }
+    .submit-status-note {
+      margin-top: 0.35rem;
+      font-size: 0.8rem;
+      opacity: 0.85;
+    }
+    .submit-status-candidates {
+      margin-top: 0.55rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .submit-status-chip {
+      background: #fff;
+      border: 1px solid currentColor;
+      border-radius: 4px;
+      padding: 0.25rem 0.55rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: inherit;
+      transition: background 0.12s;
+    }
+    .submit-status-chip:hover { background: rgba(0,0,0,0.05); }
+    .submit-spinner {
+      display: inline-block;
+      width: 0.8em;
+      height: 0.8em;
+      border: 2px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: submit-spin 0.75s linear infinite;
+      vertical-align: -0.08em;
+      margin-right: 0.4em;
+    }
+    @keyframes submit-spin { to { transform: rotate(360deg); } }
     .form-preview {
       background: var(--bg);
       border: 1px solid var(--border);
@@ -872,8 +928,8 @@
 
     <div class="form-group">
       <label for="f-path">Path to Skill Folder</label>
-      <div class="hint">Relative path from repo root (use "." if SKILL.md is at root)</div>
-      <input class="form-input" id="f-path" type="text" placeholder="." value="." oninput="updatePreview()" />
+      <div class="hint" id="path-hint">Directory containing SKILL.md, relative to repo root — <strong>not the skill name</strong>. Examples: <code>.claude/skills/my-skill</code>, <code>.codebuddy/skills/my-skill</code>, <code>skills/foo</code>. Use <code>.</code> if SKILL.md is at repo root.</div>
+      <input class="form-input" id="f-path" type="text" placeholder=".claude/skills/my-skill" value="." oninput="updatePreview()" />
     </div>
 
     <div class="form-group" id="agent-name-group" style="display:none">
@@ -893,9 +949,11 @@
     </div>
 
     <div class="form-actions">
-      <button class="btn btn-primary" onclick="submitSkill()">Submit to GitHub</button>
+      <button class="btn btn-primary" id="submit-btn" onclick="submitSkill()">Submit to GitHub</button>
+      <button class="btn btn-outline" id="submit-anyway-btn" style="display:none" onclick="submitSkill(true)">Submit anyway</button>
       <button class="btn btn-outline" onclick="closeSubmit()">Cancel</button>
     </div>
+    <div class="submit-status" id="submit-status"></div>
   </div>
 </div>
 
@@ -1278,6 +1336,8 @@ function openSubmit() {
 function closeSubmit() {
   document.getElementById('submit-overlay').classList.remove('active');
   document.body.style.overflow = '';
+  hideSubmitStatus();
+  setSubmitBtnBusy(false);
 }
 
 function updatePreview() {
@@ -1307,7 +1367,7 @@ function updatePreview() {
     nameInput.placeholder = 'my-awesome-agent';
     descInput.placeholder = 'A short description of your agent project';
     pathLabel.textContent = 'Path';
-    pathHint.textContent = 'Usually "." for agents (entire repo is the agent)';
+    pathHint.innerHTML = 'Directory containing <code>AGENTS.md</code>, relative to repo root. Usually <code>.</code> for agents (AGENTS.md at repo root).';
     pathInput.placeholder = '.';
     repoHint.textContent = 'The repo that contains your agent project';
   } else {
@@ -1315,8 +1375,8 @@ function updatePreview() {
     nameInput.placeholder = 'my-cool-skill';
     descInput.placeholder = 'A short description of your skill';
     pathLabel.textContent = 'Path to Skill Folder';
-    pathHint.textContent = 'Relative path from repo root (use "." if SKILL.md is at root)';
-    pathInput.placeholder = '.';
+    pathHint.innerHTML = 'Directory containing <code>SKILL.md</code>, relative to repo root — <strong>not the skill name</strong>. Examples: <code>.claude/skills/my-skill</code>, <code>.codebuddy/skills/my-skill</code>, <code>skills/foo</code>. Use <code>.</code> if SKILL.md is at repo root.';
+    pathInput.placeholder = '.claude/skills/my-skill';
     repoHint.textContent = 'The repo where your Skill lives (can be private)';
   }
 
@@ -1334,7 +1394,85 @@ function updatePreview() {
   }
 }
 
-function submitSkill() {
+// ── Submit status helpers ──
+function showSubmitStatus(kind, html) {
+  const el = document.getElementById('submit-status');
+  el.className = 'submit-status active ' + kind;
+  el.innerHTML = html;
+}
+function hideSubmitStatus() {
+  const el = document.getElementById('submit-status');
+  el.className = 'submit-status';
+  el.innerHTML = '';
+  document.getElementById('submit-anyway-btn').style.display = 'none';
+}
+function setSubmitBtnBusy(busy) {
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = busy;
+  btn.textContent = busy ? 'Verifying…' : 'Submit to GitHub';
+}
+function pickPath(path) {
+  // Called from a candidate chip — fill the Path field and re-enable form
+  document.getElementById('f-path').value = path;
+  updatePreview();
+  hideSubmitStatus();
+}
+
+// ── Path verification (GitHub API) ──
+// Returns: { state: 'ok' | 'path-missing' | 'repo-inaccessible' | 'network-error',
+//            candidates: [], metaFile, branch }
+async function verifySkillPath({ owner, repo, path, type }) {
+  const metaFile = type === 'agent' ? 'AGENTS.md' : 'SKILL.md';
+
+  // Step 1: is the repo public & reachable?
+  let branch = 'main';
+  try {
+    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+    if (r.status === 404 || r.status === 403) {
+      return { state: 'repo-inaccessible', candidates: [], metaFile, branch };
+    }
+    if (!r.ok) {
+      return { state: 'network-error', candidates: [], metaFile, branch };
+    }
+    const data = await r.json();
+    branch = data.default_branch || 'main';
+  } catch (_) {
+    return { state: 'network-error', candidates: [], metaFile, branch };
+  }
+
+  // Step 2: does SKILL.md / AGENTS.md exist at the given path on the default branch?
+  const cleanPath = (path === '.' || path === '') ? '' : path.replace(/^\/+|\/+$/g, '');
+  const fileUrl = cleanPath
+    ? `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${cleanPath}/${metaFile}`
+    : `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${metaFile}`;
+  try {
+    const r = await fetch(fileUrl, { method: 'HEAD' });
+    if (r.ok) return { state: 'ok', candidates: [], metaFile, branch };
+  } catch (_) {
+    return { state: 'network-error', candidates: [], metaFile, branch };
+  }
+
+  // Step 3: scan the repo tree for candidate paths
+  let candidates = [];
+  try {
+    const r = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/git/trees/${branch}?recursive=1`
+    );
+    if (r.ok) {
+      const tree = await r.json();
+      const tail = '/' + metaFile;
+      candidates = (tree.tree || [])
+        .filter(e => e.type === 'blob' && (e.path === metaFile || e.path.endsWith(tail)))
+        .map(e => e.path === metaFile ? '.' : e.path.slice(0, -tail.length))
+        .slice(0, 8);
+    }
+  } catch (_) { /* network issue on tree scan — candidates stay empty */ }
+
+  return { state: 'path-missing', candidates, metaFile, branch };
+}
+
+// ── Submit handler ──
+async function submitSkill(force = false) {
   const type = document.getElementById('f-type').value;
   const name = document.getElementById('f-name').value.trim();
   const desc = document.getElementById('f-desc').value.trim();
@@ -1345,20 +1483,62 @@ function submitSkill() {
   const author = document.getElementById('f-author').value.trim();
 
   if (!name || !repo || !author) {
-    alert('Please fill in Name, Repo URL, and GitHub Username.');
+    showSubmitStatus('error', '<span class="submit-status-title">Missing fields</span><div class="submit-status-note">Please fill in Name, Repo URL, and GitHub Username.</div>');
     return;
   }
 
   // Validate name format — both skills and agents use kebab-case
   if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) {
-    alert('Name must be lowercase kebab-case (e.g. ' + (type === 'agent' ? 'my-awesome-agent' : 'my-cool-skill') + ').');
+    showSubmitStatus('error', `<span class="submit-status-title">Invalid name</span><div class="submit-status-note">Name must be lowercase kebab-case (e.g. ${type === 'agent' ? 'my-awesome-agent' : 'my-cool-skill'}).</div>`);
     return;
   }
 
   // Validate repo URL
-  if (!/^https:\/\/github\.com\/[^/]+\/[^/]+/.test(repo)) {
-    alert('Please enter a valid GitHub repo URL (https://github.com/owner/repo).');
+  const repoMatch = repo.match(/^https:\/\/github\.com\/([^/]+)\/([^/.]+?)(?:\.git)?\/?(?:$|[?#])/);
+  if (!repoMatch) {
+    showSubmitStatus('error', '<span class="submit-status-title">Invalid repo URL</span><div class="submit-status-note">Use the form <code>https://github.com/owner/repo</code>.</div>');
     return;
+  }
+  const owner = repoMatch[1];
+  const repoName = repoMatch[2];
+
+  // Path verification — skip if user clicked "Submit anyway"
+  if (!force) {
+    setSubmitBtnBusy(true);
+    showSubmitStatus('info', '<span class="submit-spinner"></span>Checking your repo…');
+    let result;
+    try {
+      result = await verifySkillPath({ owner, repo: repoName, path, type });
+    } finally {
+      setSubmitBtnBusy(false);
+    }
+
+    if (result.state === 'path-missing') {
+      const metaFile = result.metaFile;
+      const chips = result.candidates.length
+        ? `<div class="submit-status-note">Did you mean one of these? <em>(click to auto-fill)</em></div>
+           <div class="submit-status-candidates">${result.candidates.map(c =>
+             `<button type="button" class="submit-status-chip" onclick="pickPath(${JSON.stringify(c).replace(/"/g, '&quot;')})">${escapeHtml(c)}</button>`
+           ).join('')}</div>`
+        : `<div class="submit-status-note">No <code>${metaFile}</code> found anywhere in this repo's default branch (<code>${result.branch}</code>). Make sure you've pushed your changes.</div>`;
+      const shownPath = path === '.' ? metaFile : `${path}/${metaFile}`;
+      showSubmitStatus('error',
+        `<span class="submit-status-title">❌ Could not find <code>${escapeHtml(shownPath)}</code></span>${chips}`);
+      return;
+    }
+
+    if (result.state === 'repo-inaccessible' || result.state === 'network-error') {
+      const reason = result.state === 'repo-inaccessible'
+        ? 'This repo appears to be private or does not exist.'
+        : 'Network error while contacting GitHub.';
+      showSubmitStatus('warn',
+        `<span class="submit-status-title">⚠️ Could not verify path</span>
+         <div class="submit-status-note">${reason} Double-check your Path is correct, then click <strong>Submit anyway</strong> to proceed.</div>`);
+      document.getElementById('submit-anyway-btn').style.display = '';
+      return;
+    }
+
+    // result.state === 'ok' — fall through to open issue
   }
 
   // Build GitHub Issue URL with pre-filled body
@@ -1379,7 +1559,14 @@ function submitSkill() {
     `&body=${encodeURIComponent(issueBody)}`;
 
   window.open(issueUrl, '_blank');
+  hideSubmitStatus();
   closeSubmit();
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
 }
 
 document.addEventListener('keydown', e => {
