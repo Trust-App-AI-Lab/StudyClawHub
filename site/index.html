@@ -1408,11 +1408,10 @@ function updatePreview() {
     nameHint.textContent = 'Lowercase, kebab-case (e.g. my-awesome-agent)';
     nameInput.placeholder = 'my-awesome-agent';
     descInput.placeholder = 'A short description of your agent project';
-    // Agents are always the whole repo — hide the Path field and force path="."
-    pathGroup.style.display = 'none';
-    pathInput.value = '.';
-    repoHint.textContent = 'The repo that contains your agent project (the entire repo IS the agent)';
-    pathHintContainer.innerHTML = '';
+    pathGroup.style.display = '';
+    pathInput.placeholder = '.';
+    repoHint.textContent = 'The repo that contains your agent project';
+    pathHintContainer.innerHTML = renderAgentPathHint();
   } else {
     nameHint.textContent = 'Lowercase, kebab-case (e.g. my-cool-skill)';
     nameInput.placeholder = 'my-cool-skill';
@@ -1420,7 +1419,7 @@ function updatePreview() {
     pathGroup.style.display = '';
     pathInput.placeholder = '.claude/skills/my-skill';
     repoHint.textContent = 'The repo where your Skill lives (can be private)';
-    pathHintContainer.innerHTML = renderPathHint(false);
+    pathHintContainer.innerHTML = renderPathHint();
   }
 
   const preview = document.getElementById('submit-preview');
@@ -1437,8 +1436,26 @@ function updatePreview() {
   }
 }
 
+// ── Path hint for agents — permissive, no strict validation ──
+function renderAgentPathHint() {
+  const okRows = [
+    { code: '.', note: 'AGENTS.md at the repo root (most common)' },
+    { code: '.claude/agents/my-agent' },
+    { code: 'agents/my-agent' },
+  ];
+  const row = (code, note) =>
+    `<div class="path-example path-example-ok">
+       <span class="path-example-icon">✓</span>
+       <code>${code}</code>${note ? `<span class="path-example-note">&mdash; ${note}</span>` : ''}
+     </div>`;
+  return `<div class="path-rule">The directory containing <strong>AGENTS.md</strong>, relative to repo root.</div>
+    <div class="path-examples">
+      ${okRows.map(r => row(r.code, r.note || '')).join('')}
+    </div>`;
+}
+
 // ── Path hint (good/bad examples) ──
-// Only rendered for skills; agents are always the whole repo (path = ".").
+// Rendered for skills. Agents use renderAgentPathHint() instead.
 function renderPathHint() {
   const okRows = [
     { code: '.claude/skills/my-skill' },
@@ -1569,8 +1586,10 @@ async function submitSkill(force = false) {
   const owner = repoMatch[1];
   const repoName = repoMatch[2];
 
-  // Path verification — skip if user clicked "Submit anyway"
-  if (!force) {
+  // Path verification — skip for agents (agent path conventions vary across
+  // frameworks, e.g. ".", ".claude/agents/<name>", "agents/<name>"), and
+  // skip entirely if the user clicked "Submit anyway".
+  if (!force && type !== 'agent') {
     setSubmitBtnBusy(true);
     showSubmitStatus('info', '<span class="submit-spinner"></span>Checking your repo…');
     let result;
@@ -1582,14 +1601,6 @@ async function submitSkill(force = false) {
 
     if (result.state === 'path-missing') {
       const metaFile = result.metaFile;
-      if (type === 'agent') {
-        // Agents are always registered as the whole repo; the only valid
-        // location for AGENTS.md is the repo root. Don't offer path chips.
-        showSubmitStatus('error',
-          `<span class="submit-status-title">❌ No <code>AGENTS.md</code> at repo root</span>
-           <div class="submit-status-note">Agents are registered as a whole repo, so <code>AGENTS.md</code> must sit at the repo root (on branch <code>${escapeHtml(result.branch)}</code>). Create one and push, then try again.</div>`);
-        return;
-      }
       const chips = result.candidates.length
         ? `<div class="submit-status-note">Did you mean one of these? <em>(click to auto-fill)</em></div>
            <div class="submit-status-candidates">${result.candidates.map(c =>
