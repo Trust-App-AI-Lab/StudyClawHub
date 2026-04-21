@@ -233,43 +233,10 @@
       "registeredAt": "2026-04-13T14:59:43.204033+00:00"
     },
     {
-      "name": "arxiv-network-builder",
-      "type": "skill",
-      "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
-      "path": "arxiv-network-builder",
-      "author": "Shengyi-Chung",
-      "description": "Build social networks from arXiv papers. Trigger: '查找关于 [关键词] 的最新论文', '分析 [领域] 的学者关系', '搜索本周关于 [主题] 的新论文', '构建 [领域] 的合作网络图'",
-      "version": "1.0.0",
-      "tags": [
-        "social-network-analysis",
-        "data-mining",
-        "arxiv",
-        "graph-construction"
-      ],
-      "registeredAt": "2026-04-18T07:45:14.888874+00:00",
-      "updatedAt": "2026-04-18T07:49:06.477482+00:00"
-    },
-    {
-      "name": "paper-analyzer",
-      "type": "skill",
-      "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
-      "path": "paper-analyzer",
-      "author": "Shengyi-Chung",
-      "description": "Deep semantic analysis for arXiv papers. Trigger: '总结这篇论文的主要贡献', '这周哪些论文提出了全新的算法模型？', '分析论文的新颖度和创新点'",
-      "version": "1.0.0",
-      "tags": [
-        "nlp",
-        "summarization",
-        "information-extraction",
-        "llm"
-      ],
-      "registeredAt": "2026-04-18T08:17:58.512548+00:00"
-    },
-    {
       "name": "paper-search",
       "type": "skill",
       "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
-      "path": "paper-search",
+      "path": ".codebuddy/skills/paper-search",
       "author": "Shengyi-Chung",
       "description": "Search arXiv papers and build author collaboration networks.",
       "version": "1.0.0",
@@ -281,13 +248,13 @@
       ],
       "registeredAt": "2026-04-18T08:31:10.870944+00:00",
       "agent": "paper-researcher",
-      "updatedAt": "2026-04-18T10:52:24.329973+00:00"
+      "updatedAt": "2026-04-21T05:03:01.897943+00:00"
     },
     {
       "name": "briefing-report-generator",
       "type": "skill",
       "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
-      "path": "briefing-report-generator",
+      "path": ".codebuddy/skills/briefing-report-generator",
       "author": "Shengyi-Chung",
       "description": "Generate research briefing reports from analyzed papers. Trigger: '生成今天的 arXiv 研究简报', '帮我汇总这几篇论文的对比表格', '生成研究简报'",
       "version": "1.0.0",
@@ -297,13 +264,15 @@
         "markdown",
         "visualization"
       ],
-      "registeredAt": "2026-04-18T08:48:28.474032+00:00"
+      "registeredAt": "2026-04-18T08:48:28.474032+00:00",
+      "agent": "paper-researcher",
+      "updatedAt": "2026-04-21T05:03:01.897943+00:00"
     },
     {
       "name": "paper-analyze",
       "type": "skill",
       "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
-      "path": "paper-analyze",
+      "path": ".codebuddy/skills/paper-analyze",
       "author": "Shengyi-Chung",
       "description": "Analyze and rank papers by relevance.",
       "version": "1.0.0",
@@ -315,7 +284,7 @@
       ],
       "registeredAt": "2026-04-18T08:52:25.467605+00:00",
       "agent": "paper-researcher",
-      "updatedAt": "2026-04-18T10:52:35.114573+00:00"
+      "updatedAt": "2026-04-21T05:03:01.897943+00:00"
     },
     {
       "name": "paper-researcher",
@@ -337,7 +306,7 @@
       "name": "paper-report-generator",
       "type": "skill",
       "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
-      "path": "paper-report-generator",
+      "path": ".codebuddy/skills/paper-report-generator",
       "author": "Shengyi-Chung",
       "description": "Generate research reports from analyzed papers.",
       "version": "1.0.0",
@@ -348,13 +317,14 @@
         "summarization"
       ],
       "agent": "paper-researcher",
-      "registeredAt": "2026-04-18T10:52:46.335902+00:00"
+      "registeredAt": "2026-04-18T10:52:46.335902+00:00",
+      "updatedAt": "2026-04-21T05:03:01.897943+00:00"
     },
     {
       "name": "query-holder",
       "type": "skill",
       "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
-      "path": "query-holder",
+      "path": ".codebuddy/skills/query-holder",
       "author": "Shengyi-Chung",
       "description": "Manage follow-up queries about retrieved papers.",
       "version": "1.0.0",
@@ -365,7 +335,8 @@
         "conversation"
       ],
       "agent": "paper-researcher",
-      "registeredAt": "2026-04-18T11:06:26.282743+00:00"
+      "registeredAt": "2026-04-18T11:06:26.282743+00:00",
+      "updatedAt": "2026-04-21T05:03:01.897943+00:00"
     },
     {
       "name": "github-skill-discovery",
