@@ -1688,12 +1688,18 @@ async function verifySkillPath({ owner, repo, path, type }) {
   const isRateLimited = (resp) =>
     resp.status === 403 && resp.headers.get('X-RateLimit-Remaining') === '0';
 
-  // Step 1: HEAD raw on `main` — raw.githubusercontent.com is unauthenticated
-  // and doesn't count against the API quota.
+  // Step 1: HEAD raw on common default branches — raw.githubusercontent.com
+  // is unauthenticated and doesn't count against the API quota. Try `main`
+  // first, then `master` as a fallback (covers legacy repos). Running them
+  // in parallel keeps latency flat when the repo is on master.
   let branch = 'main';
   try {
-    const r = await fetch(rawUrl('main'), { method: 'HEAD' });
-    if (r.ok) return { state: 'ok', candidates: [], metaFile, branch };
+    const [mainResp, masterResp] = await Promise.all([
+      fetch(rawUrl('main'), { method: 'HEAD' }),
+      fetch(rawUrl('master'), { method: 'HEAD' }),
+    ]);
+    if (mainResp.ok) return { state: 'ok', candidates: [], metaFile, branch: 'main' };
+    if (masterResp.ok) return { state: 'ok', candidates: [], metaFile, branch: 'master' };
   } catch (_) {
     return { state: 'network-error', candidates: [], metaFile, branch };
   }
@@ -1781,6 +1787,9 @@ async function submitSkill(force = false) {
   // Path verification — look up SKILL.md (for skills) or AGENTS.md (for agents)
   // on the repo's default branch, offer candidate paths on miss.
   // Skipped entirely if the user clicked "Submit anyway".
+  // verifiedBranch is hoisted so the agent child-skill scan can reuse it
+  // (avoids a redundant /repos API call).
+  let verifiedBranch = null;
   if (!force) {
     setSubmitBtnBusy(true);
     showSubmitStatus('info', '<span class="submit-spinner"></span>Checking your repo…');
@@ -1790,6 +1799,7 @@ async function submitSkill(force = false) {
     } finally {
       setSubmitBtnBusy(false);
     }
+    if (result.state === 'ok') verifiedBranch = result.branch;
 
     if (result.state === 'path-missing' || result.state === 'rate-limited') {
       const metaFile = result.metaFile;
@@ -1842,7 +1852,7 @@ async function submitSkill(force = false) {
     showSubmitStatus('info', '<span class="submit-spinner"></span>Scanning repo for child skills…');
     let scan;
     try {
-      scan = await scanChildSkills(owner, repoName);
+      scan = await scanChildSkills(owner, repoName, verifiedBranch);
     } finally {
       setSubmitBtnBusy(false);
     }
@@ -1913,19 +1923,25 @@ function buildIssueUrl({ title, body }) {
 // Listing files requires the GitHub API (tree endpoint), so this can fail
 // under the 60/hr anonymous quota. The caller distinguishes 'rate-limited'
 // to tell the user why the child-skill picker didn't appear.
-async function scanChildSkills(owner, repo) {
+//
+// If branchHint is provided (e.g. from a prior verifySkillPath), skip the
+// /repos API call entirely — saves a quota slot and lets this work even
+// when /repos is rate-limited.
+async function scanChildSkills(owner, repo, branchHint) {
   const isRateLimited = (resp) =>
     resp.status === 403 && resp.headers.get('X-RateLimit-Remaining') === '0';
 
-  let branch = 'main';
-  try {
-    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
-    if (isRateLimited(r)) return { state: 'rate-limited', skills: [] };
-    if (!r.ok) return { state: 'error', skills: [] };
-    const data = await r.json();
-    branch = data.default_branch || 'main';
-  } catch (_) {
-    return { state: 'error', skills: [] };
+  let branch = branchHint || 'main';
+  if (!branchHint) {
+    try {
+      const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+      if (isRateLimited(r)) return { state: 'rate-limited', skills: [] };
+      if (!r.ok) return { state: 'error', skills: [] };
+      const data = await r.json();
+      branch = data.default_branch || 'main';
+    } catch (_) {
+      return { state: 'error', skills: [] };
+    }
   }
 
   let candidates = [];
