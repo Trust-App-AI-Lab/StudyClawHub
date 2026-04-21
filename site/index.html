@@ -1095,8 +1095,8 @@
     <div class="form-group">
       <label for="f-type">Type</label>
       <select class="form-input" id="f-type" onchange="updatePreview()">
-        <option value="agent">Agent (whole project — recommended if your repo contains multiple skills)</option>
-        <option value="skill">Skill (a single SKILL.md)</option>
+        <option value="agent">Agent — a git project</option>
+        <option value="skill">Skill — a folder containing SKILL.md</option>
       </select>
     </div>
 
@@ -1754,10 +1754,10 @@ async function submitSkill(force = false) {
   const owner = repoMatch[1];
   const repoName = repoMatch[2];
 
-  // Path verification — skip for agents (agent path conventions vary across
-  // frameworks, e.g. ".", ".claude/agents/<name>", "agents/<name>"), and
-  // skip entirely if the user clicked "Submit anyway".
-  if (!force && type !== 'agent') {
+  // Path verification — look up SKILL.md (for skills) or AGENTS.md (for agents)
+  // on the repo's default branch, offer candidate paths on miss.
+  // Skipped entirely if the user clicked "Submit anyway".
+  if (!force) {
     setSubmitBtnBusy(true);
     showSubmitStatus('info', '<span class="submit-spinner"></span>Checking your repo…');
     let result;
