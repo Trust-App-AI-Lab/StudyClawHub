@@ -20,8 +20,10 @@ spec including `metadata.openclaw` fields.
 - **Static website**: `site/index.html` hosted on GitHub Pages. Browse-only
   with sorting by stars/installs/time. Exposes `window.applyCustomOrder()`
   JS API for the search Skill to inject LLM-driven rankings.
-- **Hub Skills**: `hub-skills/sch-create`, `hub-skills/sch-submit`, `hub-skills/sch-search`,
-  `hub-skills/sch-install`, `hub-skills/sch-deps` are the CLI/agent interaction layer.
+- **Hub Skills**: `.claude/skills/sch-create`, `.claude/skills/sch-submit`, `.claude/skills/sch-search`,
+  `.claude/skills/sch-install`, `.claude/skills/sch-deps` are the CLI/agent interaction layer.
+  We eat our own dog food — the hub skills live under `.claude/skills/` so a
+  developer working in this repo can use them directly via `/sch-*`.
 - **No Convex, no OpenAI, no server, no database.**
 
 ## Key files
@@ -29,11 +31,11 @@ spec including `metadata.openclaw` fields.
 - `registry.json` — skill registry (repo URLs + author info)
 - `skills-index.json` — auto-generated metadata index
 - `site/index.html` — static website
-- `hub-skills/sch-create` — scaffold a new ClawHub-compatible Skill
-- `hub-skills/sch-submit` — register a Skill via GitHub Issue
-- `hub-skills/sch-search` — LLM-driven semantic search
-- `hub-skills/sch-install` — install a Skill + log install count
-- `hub-skills/sch-deps` — check, add, or fix dependencies for a Skill
+- `.claude/skills/sch-create` — scaffold a new ClawHub-compatible Skill
+- `.claude/skills/sch-submit` — register a Skill via GitHub Issue
+- `.claude/skills/sch-search` — LLM-driven semantic search
+- `.claude/skills/sch-install` — install a Skill + log install count
+- `.claude/skills/sch-deps` — check, add, or fix dependencies for a Skill
 - `docs/studyclawhub-skill-format.md` — Skill format spec (ClawHub-compatible)
 
 ## Student workflow

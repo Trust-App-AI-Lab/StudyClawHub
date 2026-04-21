@@ -12,7 +12,7 @@
 
 2. Download hub skills:
    ```bash
-   BASE="https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/hub-skills"
+   BASE="https://raw.githubusercontent.com/Trust-App-AI-Lab/StudyClawHub/main/.claude/skills"
 
    for skill in sch-create sch-submit sch-install sch-search sch-deps sch-delete; do
      mkdir -p {install_path}/$skill
