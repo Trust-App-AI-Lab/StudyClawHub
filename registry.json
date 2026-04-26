@@ -148,23 +148,6 @@
       "registeredAt": "2026-04-12T18:38:22.263146+00:00"
     },
     {
-      "name": "pokernow-runtime",
-      "type": "skill",
-      "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
-      "path": ".claude/skills/pokernow-runtime",
-      "author": "EnyanDai",
-      "description": "PokerBot fallback SKILL -- pokernow.com adapter. Only triggered when user provides a pokernow.com/games/ URL.",
-      "version": "1.0.0",
-      "tags": [
-        "poker",
-        "pokernow",
-        "fallback",
-        "runtime"
-      ],
-      "agent": "poker-bot",
-      "registeredAt": "2026-04-12T18:38:31.839856+00:00"
-    },
-    {
       "name": "poker-server",
       "type": "skill",
       "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
