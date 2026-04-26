@@ -1672,21 +1672,38 @@ function pickPath(path) {
 
 // ── Path verification (GitHub API) ──
 // Returns: { state: 'ok' | 'path-missing' | 'repo-not-found' | 'rate-limited' | 'network-error',
-//            candidates: [], metaFile, branch }
+//            candidates: [], metaFiles: [...], branch }
 //
 // Strategy: try raw.githubusercontent.com HEAD first (no API quota cost) and
 // only fall back to the /repos API when that HEAD fails. This means the common
 // case (public repo on main with correct path) uses zero API requests, so
 // clients that have hit the 60/hr anonymous limit can still verify.
+//
+// Agents accept either AGENTS.md or CLAUDE.md as their metadata file.
 async function verifySkillPath({ owner, repo, path, type }) {
-  const metaFile = type === 'agent' ? 'AGENTS.md' : 'SKILL.md';
+  const metaFiles = type === 'agent' ? ['AGENTS.md', 'CLAUDE.md'] : ['SKILL.md'];
   const cleanPath = (path === '.' || path === '') ? '' : path.replace(/^\/+|\/+$/g, '');
-  const rawUrl = (branch) => cleanPath
+  const rawUrl = (branch, metaFile) => cleanPath
     ? `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${cleanPath}/${metaFile}`
     : `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${metaFile}`;
 
   const isRateLimited = (resp) =>
     resp.status === 403 && resp.headers.get('X-RateLimit-Remaining') === '0';
+
+  // HEAD every (branch, metaFile) combo in parallel; return the first hit.
+  // Returns { ok: true, branch } on success, { ok: false } on miss, or
+  // throws on network failure.
+  const headAny = async (branches) => {
+    const probes = [];
+    for (const b of branches) for (const mf of metaFiles) {
+      probes.push(fetch(rawUrl(b, mf), { method: 'HEAD' }).then(r => ({ r, b })));
+    }
+    const results = await Promise.all(probes);
+    for (const { r, b } of results) {
+      if (r.ok) return { ok: true, branch: b };
+    }
+    return { ok: false };
+  };
 
   // Step 1: HEAD raw on common default branches — raw.githubusercontent.com
   // is unauthenticated and doesn't count against the API quota. Try `main`
@@ -1694,14 +1711,10 @@ async function verifySkillPath({ owner, repo, path, type }) {
   // in parallel keeps latency flat when the repo is on master.
   let branch = 'main';
   try {
-    const [mainResp, masterResp] = await Promise.all([
-      fetch(rawUrl('main'), { method: 'HEAD' }),
-      fetch(rawUrl('master'), { method: 'HEAD' }),
-    ]);
-    if (mainResp.ok) return { state: 'ok', candidates: [], metaFile, branch: 'main' };
-    if (masterResp.ok) return { state: 'ok', candidates: [], metaFile, branch: 'master' };
+    const hit = await headAny(['main', 'master']);
+    if (hit.ok) return { state: 'ok', candidates: [], metaFiles, branch: hit.branch };
   } catch (_) {
-    return { state: 'network-error', candidates: [], metaFile, branch };
+    return { state: 'network-error', candidates: [], metaFiles, branch };
   }
 
   // Step 2: HEAD failed — could be non-main default branch, wrong path, or
@@ -1710,26 +1723,26 @@ async function verifySkillPath({ owner, repo, path, type }) {
   try {
     const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
     if (isRateLimited(r)) {
-      return { state: 'rate-limited', candidates: [], metaFile, branch };
+      return { state: 'rate-limited', candidates: [], metaFiles, branch };
     }
     if (r.status === 404 || r.status === 403) {
-      return { state: 'repo-not-found', candidates: [], metaFile, branch };
+      return { state: 'repo-not-found', candidates: [], metaFiles, branch };
     }
     if (!r.ok) {
-      return { state: 'network-error', candidates: [], metaFile, branch };
+      return { state: 'network-error', candidates: [], metaFiles, branch };
     }
     const data = await r.json();
     branch = data.default_branch || 'main';
-    if (branch !== 'main') {
+    if (branch !== 'main' && branch !== 'master') {
       try {
-        const r2 = await fetch(rawUrl(branch), { method: 'HEAD' });
-        if (r2.ok) return { state: 'ok', candidates: [], metaFile, branch };
+        const hit = await headAny([branch]);
+        if (hit.ok) return { state: 'ok', candidates: [], metaFiles, branch };
       } catch (_) {
-        return { state: 'network-error', candidates: [], metaFile, branch };
+        return { state: 'network-error', candidates: [], metaFiles, branch };
       }
     }
   } catch (_) {
-    return { state: 'network-error', candidates: [], metaFile, branch };
+    return { state: 'network-error', candidates: [], metaFiles, branch };
   }
 
   // Step 3: scan the repo tree for candidate paths. If this request is
@@ -1742,15 +1755,22 @@ async function verifySkillPath({ owner, repo, path, type }) {
     );
     if (r.ok) {
       const tree = await r.json();
-      const tail = '/' + metaFile;
-      candidates = (tree.tree || [])
-        .filter(e => e.type === 'blob' && (e.path === metaFile || e.path.endsWith(tail)))
-        .map(e => e.path === metaFile ? '.' : e.path.slice(0, -tail.length))
-        .slice(0, 8);
+      const seen = new Set();
+      for (const e of (tree.tree || [])) {
+        if (e.type !== 'blob') continue;
+        for (const mf of metaFiles) {
+          if (e.path === mf || e.path.endsWith('/' + mf)) {
+            const dir = e.path === mf ? '.' : e.path.slice(0, -(mf.length + 1));
+            if (!seen.has(dir)) { seen.add(dir); candidates.push(dir); }
+            break;
+          }
+        }
+        if (candidates.length >= 8) break;
+      }
     }
   } catch (_) { /* network issue on tree scan — candidates stay empty */ }
 
-  return { state: 'path-missing', candidates, metaFile, branch };
+  return { state: 'path-missing', candidates, metaFiles, branch };
 }
 
 // ── Submit handler ──
@@ -1802,8 +1822,11 @@ async function submitSkill(force = false) {
     if (result.state === 'ok') verifiedBranch = result.branch;
 
     if (result.state === 'path-missing' || result.state === 'rate-limited') {
-      const metaFile = result.metaFile;
-      const shownPath = path === '.' ? metaFile : `${path}/${metaFile}`;
+      const metaFiles = result.metaFiles || [];
+      // "AGENTS.md" or "AGENTS.md or CLAUDE.md" — rendered as one or two
+      // <code> spans so the punctuation reads naturally.
+      const fileLabel = metaFiles.map(mf => `<code>${mf}</code>`).join(' or ');
+      const titleLoc = path === '.' ? 'at the repo root' : `at <code>${escapeHtml(path)}</code>`;
       let detail;
       if (result.candidates && result.candidates.length) {
         detail = `<div class="submit-status-note">Did you mean one of these? <em>(click to auto-fill)</em></div>
@@ -1812,7 +1835,8 @@ async function submitSkill(force = false) {
            ).join('')}</div>`;
       } else if (result.state === 'path-missing') {
         // Tree scan completed and found nothing — confirmed the file isn't there.
-        detail = `<div class="submit-status-note">No <code>${metaFile}</code> found anywhere in this repo's default branch (<code>${result.branch}</code>). Make sure you've pushed your changes.</div>`;
+        const filesNoun = metaFiles.length > 1 ? 'metadata file' : `<code>${metaFiles[0]}</code>`;
+        detail = `<div class="submit-status-note">No ${filesNoun} found anywhere in this repo's default branch (<code>${result.branch}</code>). Make sure you've pushed your changes.</div>`;
       } else {
         // rate-limited — we didn't actually scan, so just nudge without
         // mentioning the rate limit (it'd confuse users into thinking the
@@ -1820,7 +1844,7 @@ async function submitSkill(force = false) {
         detail = `<div class="submit-status-note">Double-check your Path is correct, then click <strong>Submit anyway</strong> to proceed.</div>`;
       }
       showSubmitStatus('error',
-        `<span class="submit-status-title">❌ Could not find <code>${escapeHtml(shownPath)}</code></span>${detail}`);
+        `<span class="submit-status-title">❌ Could not find ${fileLabel} ${titleLoc}</span>${detail}`);
       // Only offer Submit anyway when we couldn't actually verify (rate-limited).
       // For confirmed path-missing, force the user to fix the path or pick a
       // candidate — otherwise we'd create a registry entry with a broken path.

@@ -139,11 +139,22 @@ jobs:
               # repos, and raw.githubusercontent.com always 404s without auth.
               # We trust the registry metadata in that case.
               if not repo_data.get('private'):
-                  md_file = 'AGENTS.md' if entry_type == 'agent' else 'SKILL.md'
-                  md_rel = md_file if path == '.' else f'{path.strip("/")}/{md_file}'
-                  md_url = f'https://raw.githubusercontent.com/{owner}/{repo}/{default_branch}/{md_rel}'
-                  if not head_ok(md_url):
-                      candidates = scan_tree(owner, repo, default_branch, md_file)
+                  # Agents accept either AGENTS.md or CLAUDE.md. Skills only
+                  # accept SKILL.md.
+                  md_files = ['AGENTS.md', 'CLAUDE.md'] if entry_type == 'agent' else ['SKILL.md']
+                  md_label = ' or '.join(f'`{m}`' for m in md_files)
+                  prefix = '' if path == '.' else f'{path.strip("/")}/'
+
+                  # Healthy if any acceptable metadata file exists at the path.
+                  if not any(head_ok(f'https://raw.githubusercontent.com/{owner}/{repo}/{default_branch}/{prefix}{m}') for m in md_files):
+                      # Collect candidate parent dirs from all acceptable filenames.
+                      candidates = []
+                      seen = set()
+                      for m in md_files:
+                          for c in scan_tree(owner, repo, default_branch, m):
+                              if c not in seen:
+                                  seen.add(c)
+                                  candidates.append(c)
                       # If registered path is itself a candidate, the file does
                       # exist there — the HEAD probably failed for some other
                       # reason (branch protection, transient). Treat as healthy.
@@ -156,9 +167,9 @@ jobs:
                               })
                           elif candidates:
                               head = ', '.join(f'`{c}`' for c in candidates[:5])
-                              add('broken', f'`{md_rel}` not found on `{default_branch}` (candidates: {head})')
+                              add('broken', f'{md_label} not found at `{path}` on `{default_branch}` (candidates: {head})')
                           else:
-                              add('broken', f'`{md_rel}` not found on `{default_branch}` and no {md_file} anywhere in repo')
+                              add('broken', f'{md_label} not found at `{path}` on `{default_branch}` and no metadata file anywhere in repo')
 
               # Orphan agent reference
               agent_ref = s.get('agent')
