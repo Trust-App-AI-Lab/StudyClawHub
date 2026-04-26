@@ -18,7 +18,12 @@ jobs:
     if: startsWith(github.event.issue.title, 'register:')
     runs-on: ubuntu-latest
     steps:
+      # Always check out the current tip of main, not the SHA from when the
+      # issue was opened — otherwise concurrent issues would each see stale
+      # registry.json and the second commit would conflict on rebase.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Parse issue and update registry
         run: |
@@ -189,7 +194,10 @@ jobs:
     if: startsWith(github.event.issue.title, 'delete:')
     runs-on: ubuntu-latest
     steps:
+      # See note above (register job) — always start from latest main.
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Check repo permission
         id: perms
