@@ -148,23 +148,6 @@
       "registeredAt": "2026-04-12T18:38:22.263146+00:00"
     },
     {
-      "name": "poker-server",
-      "type": "skill",
-      "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
-      "path": ".claude/skills/poker-server",
-      "author": "EnyanDai",
-      "description": "PokerBot infrastructure SKILL -- self-hosted poker engine + relay layer. Internal component, never user-triggered.",
-      "version": "1.0.0",
-      "tags": [
-        "poker",
-        "server",
-        "infrastructure",
-        "internal"
-      ],
-      "agent": "poker-bot",
-      "registeredAt": "2026-04-12T18:49:45.239994+00:00"
-    },
-    {
       "name": "bot-management",
       "type": "skill",
       "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
