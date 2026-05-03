@@ -353,6 +353,26 @@
         "social-network-analysis"
       ],
       "registeredAt": "2026-05-03T15:37:15.025894+00:00"
+    },
+    {
+      "name": "synapse-synth",
+      "type": "skill",
+      "repo": "https://github.com/GhanibhutiGogoi/synapse",
+      "path": "synapse-synth",
+      "author": "GhanibhutiGogoi",
+      "description": "Cross-references newly-ranked arXiv papers with AI industry news to compute industry-relevance scores and synthesize buildable project opportunities — concrete product ideas grounded in the bridge between new research and current market signals. The unique-value-add module of the Synapse agent. Two sub-tools: cross_ref (cosine similarity over TF token vectors → paper↔news links + a 0–2 industry-relevance score per paper) and opportunities (LLM-driven synthesis of {idea, rationale, paper_insight, market_signal} with a 5-rule quality rubric — must be buildable in <3 months, must use both the paper and the news, must be specific not vague, must not reinvent existing products).",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "news",
+        "cross-reference",
+        "synthesis",
+        "opportunities",
+        "creative-core",
+        "social-network-analysis"
+      ],
+      "agent": "synapse",
+      "registeredAt": "2026-05-03T15:37:31.593962+00:00"
     }
   ]
 }
