@@ -430,6 +430,26 @@
       ],
       "agent": "synapse",
       "registeredAt": "2026-05-03T16:00:18.565179+00:00"
+    },
+    {
+      "name": "synapse-pulse",
+      "type": "skill",
+      "repo": "https://github.com/GhanibhutiGogoi/synapse",
+      "path": "synapse-pulse",
+      "author": "GhanibhutiGogoi",
+      "description": "Aggregates AI industry news from heterogeneous sources via direct HTTP — no browser, no auth, no API keys. Three source kinds: HackerNews top stories (filtered to AI by keyword regex over titles), subreddit RSS (r/MachineLearning, r/LocalLLaMA, r/artificial), and any Atom/RSS feed (TechCrunch AI, VentureBeat AI, The Verge, MIT Tech Review). Each item gets a 0–3 score = AI-relevance (0–2, keyword TF over watchlist + AI vocabulary) + recency (0–1, full credit <24h, half <72h, zero past a week). Items below score 0.5 are treated as noise and don't propagate to the cross-referencing step. The news side of the daily Synapse pipeline; runs as stage 2 of /synapse-briefing.",
+      "version": "1.0.0",
+      "tags": [
+        "news",
+        "industry",
+        "aggregation",
+        "hackernews",
+        "reddit",
+        "rss",
+        "social-network-analysis"
+      ],
+      "agent": "synapse",
+      "registeredAt": "2026-05-03T16:00:49.950346+00:00"
     }
   ]
 }
