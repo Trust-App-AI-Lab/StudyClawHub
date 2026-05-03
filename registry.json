@@ -392,6 +392,25 @@
       ],
       "agent": "synapse",
       "registeredAt": "2026-05-03T15:44:20.044577+00:00"
+    },
+    {
+      "name": "synapse-briefing",
+      "type": "skill",
+      "repo": "https://github.com/GhanibhutiGogoi/synapse",
+      "path": "synapse-briefing",
+      "author": "GhanibhutiGogoi",
+      "description": "Entry-point skill of the Synapse agent. Orchestrates the daily pipeline (fetch papers → fetch news → rank both → cross-reference papers↔news → LLM summarize top 10 → LLM synthesize buildable opportunities) and renders a 4-section markdown digest: Top Research Today (table + top-3 expanded with structured summaries), Industry Pulse (top news grouped by source), Research↔Industry Bridges (paper-news cross-references with similarity scores), and Buildable Opportunities (concrete project ideas pairing paper insight with market signal). Also handles follow-up queries like \"show me papers about graph neural networks from this week\" and a status mode showing the last 7 daily runs. Triggers on \"synapse briefing\", \"morning report\", \"daily digest\", or the 9 AM cron.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "briefing",
+        "report",
+        "entry-point",
+        "orchestrator",
+        "social-network-analysis"
+      ],
+      "agent": "synapse",
+      "registeredAt": "2026-05-03T15:44:39.023552+00:00"
     }
   ]
 }
