@@ -333,6 +333,26 @@
         "register"
       ],
       "registeredAt": "2026-04-20T03:55:45.612285+00:00"
+    },
+    {
+      "name": "synapse",
+      "type": "agent",
+      "repo": "https://github.com/GhanibhutiGogoi/synapse",
+      "path": ".",
+      "author": "GhanibhutiGogoi",
+      "description": "Daily AI research × industry digest agent for OpenClaw. Cross-references new arXiv papers with AI industry news (HackerNews, Reddit, TechCrunch, VentureBeat, The Verge, MIT Tech Review), scores each paper for industry relevance, extracts structured summaries, and synthesizes buildable project ideas grounded in the bridge between research and current market signals. Runs once daily via OpenClaw cron at 9 AM and posts a 4-section markdown digest: Top Research, Industry Pulse, Research↔Industry Bridges, Buildable Opportunities. Five composing skills sharing one SQLite layer; no browser, no daemon.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "research",
+        "news",
+        "daily-digest",
+        "opportunity-synthesis",
+        "openclaw",
+        "agent",
+        "social-network-analysis"
+      ],
+      "registeredAt": "2026-05-03T15:37:15.025894+00:00"
     }
   ]
 }
