@@ -373,6 +373,25 @@
       ],
       "agent": "synapse",
       "registeredAt": "2026-05-03T15:37:31.593962+00:00"
+    },
+    {
+      "name": "synapse-watchlist",
+      "type": "skill",
+      "repo": "https://github.com/GhanibhutiGogoi/synapse",
+      "path": "synapse-watchlist",
+      "author": "GhanibhutiGogoi",
+      "description": "Manages the configuration that drives every other Synapse skill: research keywords × arXiv categories to monitor, news sources (HackerNews, Reddit subreddits, RSS feeds), and the user's industry-focus preference (which biases opportunity synthesis toward chosen verticals). All operations write to a shared SQLite DB at data/arxiv.db; pure config management with no networking. Commands include seed-defaults (42 topics × 8 sources for AI/ML/DL/NN), add-topic, remove-topic, set-priority, add-source, remove-source, set-industry-focus, list-topics, list-sources, show-prefs.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "watchlist",
+        "config",
+        "research",
+        "news",
+        "social-network-analysis"
+      ],
+      "agent": "synapse",
+      "registeredAt": "2026-05-03T15:44:20.044577+00:00"
     }
   ]
 }
