@@ -411,6 +411,25 @@
       ],
       "agent": "synapse",
       "registeredAt": "2026-05-03T15:44:39.023552+00:00"
+    },
+    {
+      "name": "synapse-monitor",
+      "type": "skill",
+      "repo": "https://github.com/GhanibhutiGogoi/synapse",
+      "path": "synapse-monitor",
+      "author": "GhanibhutiGogoi",
+      "description": "Daily arXiv ingestion and scoring pipeline. Three sub-tools: fetch_papers (queries the arXiv API once per (keyword × category) in the watchlist with polite 3 s delay, dedupes by arXiv ID, with a 4-day default window to handle arXiv's no-Sat/Sun announcement schedule), rank_papers (scores each paper 0–5 across keyword relevance + novelty regex + Semantic Scholar citation velocity with soft-fail), and summarize_papers (read/write helper for LLM-extracted {problem, method, contributions, results} summaries with explicit per-field quality rules — concrete problem statement, plain-language method, testable contributions, numeric results). The paper side of the daily Synapse pipeline; runs as stage 1 of /synapse-briefing.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "papers",
+        "ingestion",
+        "ranking",
+        "summarization",
+        "social-network-analysis"
+      ],
+      "agent": "synapse",
+      "registeredAt": "2026-05-03T16:00:18.565179+00:00"
     }
   ]
 }
