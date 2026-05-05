@@ -450,6 +450,19 @@
       ],
       "agent": "synapse",
       "registeredAt": "2026-05-03T16:00:49.950346+00:00"
+    },
+    {
+      "name": "arxiv-daily",
+      "type": "agent",
+      "repo": "https://github.com/LeyiSheng/cv-arxiv-daily.git",
+      "path": ".",
+      "author": "LeyiSheng",
+      "description": "(none)",
+      "version": "0.1.0",
+      "tags": [
+        "search"
+      ],
+      "registeredAt": "2026-05-05T09:23:35.549467+00:00"
     }
   ]
 }
