@@ -463,6 +463,21 @@
         "search"
       ],
       "registeredAt": "2026-05-05T09:23:35.549467+00:00"
+    },
+    {
+      "name": "music-community-analysis-agent",
+      "type": "agent",
+      "repo": "https://github.com/yxiao986/AIAA4641_Project",
+      "path": ".",
+      "author": "yxiao986",
+      "description": "A code-driven music community discovery Agent. It automates end-to-end Social Network Analysis (SNA) by chaining five independent skills. It handles graph construction, algorithmic clustering (Louvain/Girvan-Newman), LLM-powered semantic profiling, and interactive visualization of listener subcultures.",
+      "version": "0.1.0",
+      "tags": [
+        "Social Network Analysis",
+        "Music Community",
+        "Graph Algorithm"
+      ],
+      "registeredAt": "2026-05-06T12:48:38.657232+00:00"
     }
   ]
 }
