@@ -512,6 +512,24 @@
       ],
       "agent": "music-community-analysis-agent",
       "registeredAt": "2026-05-06T13:17:09.786273+00:00"
+    },
+    {
+      "name": "community-profiler",
+      "type": "skill",
+      "repo": "https://github.com/yxiao986/AIAA4641_Project.git",
+      "path": "skills/community-profiler",
+      "author": "ZuriZHAO",
+      "description": "Generate human-readable semantic profiles for detected music listener communities using LLM or heuristic fallback. Use when the user says 'profile communities', 'label communities', 'summarize music communities', or 'generate community_profiles.json'.",
+      "version": "0.1.0",
+      "tags": [
+        "llm",
+        "semantic-profiling",
+        "music-community",
+        "social-network-analysis",
+        "python"
+      ],
+      "agent": "music-community-analysis-agent",
+      "registeredAt": "2026-05-06T13:28:58.424940+00:00"
     }
   ]
 }
