@@ -530,6 +530,22 @@
       ],
       "agent": "music-community-analysis-agent",
       "registeredAt": "2026-05-06T13:28:58.424940+00:00"
+    },
+    {
+      "name": "community-visualization",
+      "type": "skill",
+      "repo": "https://github.com/yxiao986/AIAA4641_Project.git",
+      "path": "skills/community-visualization",
+      "author": "yyu-netize",
+      "description": "Build an interactive music community dashboard, static PNG, and rendered report from a network graph.",
+      "version": "0.1.0",
+      "tags": [
+        "search",
+        "graph",
+        "social-network"
+      ],
+      "agent": "music-community-analysis-agent",
+      "registeredAt": "2026-05-06T13:59:31.742730+00:00"
     }
   ]
 }
