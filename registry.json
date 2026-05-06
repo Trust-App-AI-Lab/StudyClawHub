@@ -478,6 +478,23 @@
         "Graph Algorithm"
       ],
       "registeredAt": "2026-05-06T12:48:38.657232+00:00"
+    },
+    {
+      "name": "community-detector",
+      "type": "skill",
+      "repo": "https://github.com/yxiao986/AIAA4641_Project",
+      "path": "./skills/community-detector",
+      "author": "yxiao986",
+      "description": "Detect communities in a social network using Louvain/Girvan-Newman. Use when user says 'detect communities', 'run clustering', or 'find subgroups'.",
+      "version": "0.1.0",
+      "tags": [
+        "graph",
+        "community-detection",
+        "clustering",
+        "python"
+      ],
+      "agent": "music-community-analysis-agent",
+      "registeredAt": "2026-05-06T13:02:53.533327+00:00"
     }
   ]
 }
