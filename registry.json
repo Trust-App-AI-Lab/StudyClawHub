@@ -495,6 +495,23 @@
       ],
       "agent": "music-community-analysis-agent",
       "registeredAt": "2026-05-06T13:02:53.533327+00:00"
+    },
+    {
+      "name": "community-linker",
+      "type": "skill",
+      "repo": "https://github.com/yxiao986/AIAA4641_Project",
+      "path": "skills/community-linker",
+      "author": "herry-sketch",
+      "description": "Builds a clean NetworkX graph from raw social network JSON  and exports it as GML",
+      "version": "0.1.0",
+      "tags": [
+        "social-network",
+        "graph",
+        "networkx",
+        "data-processing"
+      ],
+      "agent": "music-community-analysis-agent",
+      "registeredAt": "2026-05-06T13:17:09.786273+00:00"
     }
   ]
 }
