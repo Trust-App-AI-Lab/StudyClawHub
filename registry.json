@@ -546,6 +546,25 @@
       ],
       "agent": "music-community-analysis-agent",
       "registeredAt": "2026-05-06T13:59:31.742730+00:00"
+    },
+    {
+      "name": "data-scraper",
+      "type": "skill",
+      "repo": "https://github.com/yxiao986/AIAA4641_Project",
+      "path": "skills/data-scraper",
+      "author": "ywu044",
+      "description": "Collects a Last.fm music listener social graph via BFS expansion. Supports two modes: offline (HetRec 2011 dataset, with artist/tag/whole-network seeds) and online (live Last.fm REST API).",
+      "version": "1.0.0",
+      "tags": [
+        "data-collection",
+        "lastfm",
+        "social-network",
+        "music",
+        "scraper",
+        "bfs"
+      ],
+      "agent": "music-community-analysis-agent",
+      "registeredAt": "2026-05-06T14:09:50.510607+00:00"
     }
   ]
 }
