@@ -132,7 +132,7 @@ cleanup() {
 }
 
 main() {
-  INSTALLER_TMP="$(mktemp "${TMPDIR:-/tmp}/stuclaw-install.XXXXXX.sh")"
+  INSTALLER_TMP="$(mktemp "${TMPDIR:-/tmp}/stuclaw-install.XXXXXX")"
   trap cleanup EXIT
 
   log "StuClaw Desktop beta installer"
