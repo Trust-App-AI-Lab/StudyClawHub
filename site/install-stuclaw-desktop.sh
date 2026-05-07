@@ -4,6 +4,7 @@ set -euo pipefail
 OWNER="${STUCLAW_BETA_OWNER:-Trust-App-AI-Lab}"
 REPO="${STUCLAW_BETA_REPO:-stuclaw-desktop}"
 HOSTNAME="${STUCLAW_BETA_HOSTNAME:-github.com}"
+INSTALLER_TMP=""
 
 log() {
   printf '%s\n' "==> $*"
@@ -124,16 +125,21 @@ fetch_private_installer() {
   chmod +x "$out"
 }
 
+cleanup() {
+  if [[ -n "${INSTALLER_TMP:-}" ]]; then
+    rm -f "$INSTALLER_TMP"
+  fi
+}
+
 main() {
-  local installer=""
-  installer="$(mktemp "${TMPDIR:-/tmp}/stuclaw-install.XXXXXX.sh")"
-  trap 'rm -f "$installer"' EXIT
+  INSTALLER_TMP="$(mktemp "${TMPDIR:-/tmp}/stuclaw-install.XXXXXX.sh")"
+  trap cleanup EXIT
 
   log "StuClaw Desktop beta installer"
   ensure_gh
   ensure_gh_auth
-  fetch_private_installer "$installer"
-  bash "$installer" "$@"
+  fetch_private_installer "$INSTALLER_TMP"
+  bash "$INSTALLER_TMP" "$@"
 }
 
 main "$@"
