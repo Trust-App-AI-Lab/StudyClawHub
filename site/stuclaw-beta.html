@@ -260,8 +260,8 @@
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <div class="step-title">Accept</div>
-          <div class="step-copy">GitHub sends a private repository invitation.</div>
+          <div class="step-title">Accept if needed</div>
+          <div class="step-copy">GitHub may ask you to accept a private repository invitation.</div>
         </div>
         <div class="step">
           <div class="step-num">3</div>
@@ -275,6 +275,7 @@
 
         <div class="actions">
           <a id="github-button" class="btn btn-primary" href="#" aria-disabled="true">Continue with GitHub</a>
+          <a id="accept-button" class="btn btn-primary" href="#" target="_blank" rel="noopener" style="display:none">Accept GitHub invitation</a>
           <button id="copy-button" class="btn btn-outline" type="button">Copy install command</button>
           <span class="help">You may need to add and verify your school email in GitHub first.</span>
         </div>
@@ -304,6 +305,7 @@
     const apiBase = (params.get("api") || window.STUCLAW_BETA.apiBase || storedApi).replace(/\/+$/, "");
     const notice = document.getElementById("notice");
     const githubButton = document.getElementById("github-button");
+    const acceptButton = document.getElementById("accept-button");
     const install = document.getElementById("install");
     const config = document.getElementById("config");
     const apiInput = document.getElementById("api-input");
@@ -319,6 +321,12 @@
 
     function showInstall() {
       install.classList.add("show");
+    }
+
+    function showAcceptButton(inviteUrl) {
+      if (!inviteUrl) return;
+      acceptButton.href = inviteUrl;
+      acceptButton.style.display = "";
     }
 
     function configureApi() {
@@ -337,7 +345,11 @@
       const reason = params.get("reason");
       if (!status) return;
       if (status === "approved") {
-        showNotice("ok", "Access approved. Accept the GitHub repository invitation, then run the installer.");
+        const inviteUrl = params.get("invite_url") || "";
+        showAcceptButton(inviteUrl);
+        showNotice("ok", inviteUrl
+          ? "Access approved. Accept the GitHub repository invitation, then run the installer."
+          : "Access approved. Check GitHub notifications or email for the repository invitation, then run the installer.");
         showInstall();
       } else if (status === "existing") {
         showNotice("ok", "Your GitHub account already has access. You can run the installer now.");

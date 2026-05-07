@@ -64,9 +64,13 @@ async function finishGitHubOAuth(request, env) {
   const schoolEmail = findAllowedEmail(emails, env.ALLOWED_EMAIL_DOMAINS);
   if (!schoolEmail) return redirectResult(state.returnTo, { status: "blocked", reason: "email_domain" });
 
-  const inviteStatus = await inviteCollaborator(user.login, env);
-  const status = inviteStatus === "already" ? "existing" : "approved";
-  return redirectResult(state.returnTo, { status, login: user.login });
+  const invite = await inviteCollaborator(user.login, env);
+  const fields = {
+    status: invite.status === "already" ? "existing" : "approved",
+    login: user.login,
+  };
+  if (invite.inviteUrl) fields.invite_url = invite.inviteUrl;
+  return redirectResult(state.returnTo, fields);
 }
 
 function callbackUrl(request) {
@@ -128,12 +132,12 @@ async function inviteCollaborator(username, env) {
     },
     body: JSON.stringify({ permission: "pull" }),
   });
-  if (response.status === 204) return "already";
-  if (response.status === 201) return "invited";
   let payload = {};
   try {
     payload = await response.json();
   } catch {}
+  if (response.status === 204) return { status: "already" };
+  if (response.status === 201) return { status: "invited", inviteUrl: payload.html_url || "" };
   throw new Error(payload.message || "Could not invite collaborator");
 }
 
