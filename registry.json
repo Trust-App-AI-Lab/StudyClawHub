@@ -618,6 +618,24 @@
       ],
       "agent": "scratchmath-homework-feedback-agent",
       "registeredAt": "2026-05-07T11:02:54.489457+00:00"
+    },
+    {
+      "name": "scratchmath-reference-solution",
+      "type": "skill",
+      "repo": "https://github.com/KN33SOXXX/4641Project",
+      "path": ".claude/skills/scratchmath-reference-solution",
+      "author": "KN33SOXXX",
+      "description": "Generate an independent reference solution from ScratchMath question text only for later diagnosis.",
+      "version": "0.1.0",
+      "tags": [
+        "education",
+        "math",
+        "solution-generation",
+        "qwen",
+        "reasoning"
+      ],
+      "agent": "scratchmath-homework-feedback-agent",
+      "registeredAt": "2026-05-07T11:03:29.426931+00:00"
     }
   ]
 }
