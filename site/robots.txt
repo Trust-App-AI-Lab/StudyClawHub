@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /stuclaw-beta.html
 
 Sitemap: https://trust-app-ai-lab.github.io/StudyClawHub/sitemap.xml

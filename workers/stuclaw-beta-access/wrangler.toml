@@ -1,0 +1,9 @@
+name = "stuclaw-beta-access"
+main = "worker.js"
+compatibility_date = "2026-05-07"
+
+[vars]
+TARGET_OWNER = "Trust-App-AI-Lab"
+TARGET_REPO = "stuclaw-desktop"
+ALLOWED_EMAIL_DOMAINS = "hkust-gz.edu.cn"
+FRONTEND_URL = "https://trust-app-ai-lab.github.io/StudyClawHub/stuclaw-beta.html"
