@@ -266,7 +266,7 @@
         <div class="step">
           <div class="step-num">3</div>
           <div class="step-title">Install</div>
-          <div class="step-copy">Run the installer after accepting the invitation.</div>
+          <div class="step-copy">Run the public bootstrap script after access is ready.</div>
         </div>
       </div>
 
@@ -281,8 +281,9 @@
         </div>
 
         <div id="install" class="install">
-          <div class="small-label">Install after your GitHub invitation is accepted</div>
+          <div class="small-label">Install with the public bootstrap script</div>
           <code id="install-command" class="code">curl -fsSL https://trust-app-ai-lab.github.io/StudyClawHub/install-stuclaw-desktop.sh | bash</code>
+          <span class="help">The public script uses GitHub CLI to fetch the private installer after your repo access is active.</span>
         </div>
 
         <div id="config" class="config">
@@ -348,11 +349,11 @@
         const inviteUrl = params.get("invite_url") || "";
         showAcceptButton(inviteUrl);
         showNotice("ok", inviteUrl
-          ? "Access approved. Accept the GitHub repository invitation, then run the installer."
-          : "Access approved. Check GitHub notifications or email for the repository invitation, then run the installer.");
+          ? "Access approved. Accept the GitHub repository invitation, then run the public bootstrap command."
+          : "Access approved. Check GitHub notifications or email for the repository invitation, then run the public bootstrap command.");
         showInstall();
       } else if (status === "existing") {
-        showNotice("ok", "Your GitHub account already has access. You can run the installer now.");
+        showNotice("ok", "Your GitHub account already has access. You can run the public bootstrap command now.");
         showInstall();
       } else if (status === "blocked" && reason === "email_domain") {
         showNotice("error", "No verified school email was found on your GitHub account. Add and verify your HKUST-GZ email in GitHub, then try again.");
