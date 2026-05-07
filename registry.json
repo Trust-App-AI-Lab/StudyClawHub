@@ -654,6 +654,24 @@
       ],
       "agent": "scratchmath-homework-feedback-agent",
       "registeredAt": "2026-05-07T11:04:06.067164+00:00"
+    },
+    {
+      "name": "scratchmath-graph-feedback-generation",
+      "type": "skill",
+      "repo": "https://github.com/KN33SOXXX/4641Project",
+      "path": ".claude/skills/scratchmath-graph-feedback-generation",
+      "author": "KN33SOXXX",
+      "description": "Build an analysis graph from ScratchMath diagnosis rounds and reason over it to generate feedback and teacher summaries.",
+      "version": "0.1.0",
+      "tags": [
+        "education",
+        "graph-reasoning",
+        "feedback",
+        "social-network-mining",
+        "qwen"
+      ],
+      "agent": "scratchmath-homework-feedback-agent",
+      "registeredAt": "2026-05-07T11:04:35.613987+00:00"
     }
   ]
 }
