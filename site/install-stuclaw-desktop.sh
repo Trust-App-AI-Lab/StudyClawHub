@@ -98,7 +98,6 @@ ensure_gh() {
 ensure_gh_auth() {
   if gh auth status --hostname "$HOSTNAME" >/dev/null 2>&1; then
     log "GitHub CLI authenticated for $HOSTNAME."
-    gh auth setup-git --hostname "$HOSTNAME"
     return 0
   fi
   if ! have_tty; then
@@ -106,7 +105,6 @@ ensure_gh_auth() {
   fi
   log "Starting GitHub login."
   gh auth login --hostname "$HOSTNAME" --git-protocol https --scopes repo < /dev/tty > /dev/tty 2>&1
-  gh auth setup-git --hostname "$HOSTNAME"
 }
 
 decode_base64() {
