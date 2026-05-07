@@ -600,6 +600,24 @@
       ],
       "agent": "scratchmath-homework-feedback-agent",
       "registeredAt": "2026-05-07T11:02:16.489840+00:00"
+    },
+    {
+      "name": "scratchmath-student-work-extraction",
+      "type": "skill",
+      "repo": "https://github.com/KN33SOXXX/4641Project",
+      "path": ".claude/skills/scratchmath-student-work-extraction",
+      "author": "KN33SOXXX",
+      "description": "Extract student final answers, visible steps, uncertainty, and scratchwork summaries from ScratchMath OCR output.",
+      "version": "0.1.0",
+      "tags": [
+        "education",
+        "math",
+        "reasoning",
+        "scratchwork",
+        "diagnosis"
+      ],
+      "agent": "scratchmath-homework-feedback-agent",
+      "registeredAt": "2026-05-07T11:02:54.489457+00:00"
     }
   ]
 }
