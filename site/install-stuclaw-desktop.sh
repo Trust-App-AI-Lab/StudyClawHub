@@ -10,6 +10,7 @@ NO_PROMPT=0
 RUN_GH_INSTALL=1
 RUN_GH_AUTH=1
 FORWARD_ARGS=()
+FORWARD_COUNT=0
 
 usage() {
   cat <<'EOF'
@@ -78,6 +79,11 @@ gh_status_line() {
   else
     printf '%s\n' "  [!!] GitHub CLI  not installed"
   fi
+}
+
+forward_arg() {
+  FORWARD_ARGS+=("$1")
+  FORWARD_COUNT=$((FORWARD_COUNT + 1))
 }
 
 load_homebrew_shellenv() {
@@ -158,22 +164,22 @@ parse_args() {
     case "$1" in
       --no-gh-install)
         RUN_GH_INSTALL=0
-        FORWARD_ARGS+=("$1")
+        forward_arg "$1"
         shift
         ;;
       --no-gh-auth)
         RUN_GH_AUTH=0
-        FORWARD_ARGS+=("$1")
+        forward_arg "$1"
         shift
         ;;
       -y|--yes)
         YES=1
-        FORWARD_ARGS+=("$1")
+        forward_arg "$1"
         shift
         ;;
       --no-prompt)
         NO_PROMPT=1
-        FORWARD_ARGS+=("$1")
+        forward_arg "$1"
         shift
         ;;
       -h|--help)
@@ -181,7 +187,7 @@ parse_args() {
         exit 0
         ;;
       *)
-        FORWARD_ARGS+=("$1")
+        forward_arg "$1"
         shift
         ;;
     esac
@@ -218,7 +224,11 @@ main() {
   ensure_gh
   ensure_gh_auth
   fetch_private_installer "$INSTALLER_TMP"
-  STUCLAW_BOOTSTRAP_GH_READY=1 bash "$INSTALLER_TMP" "${FORWARD_ARGS[@]}"
+  if [[ "$FORWARD_COUNT" -gt 0 ]]; then
+    STUCLAW_BOOTSTRAP_GH_READY=1 bash "$INSTALLER_TMP" "${FORWARD_ARGS[@]}"
+  else
+    STUCLAW_BOOTSTRAP_GH_READY=1 bash "$INSTALLER_TMP"
+  fi
 }
 
 parse_args "$@"
