@@ -5,6 +5,31 @@ OWNER="${STUCLAW_BETA_OWNER:-Trust-App-AI-Lab}"
 REPO="${STUCLAW_BETA_REPO:-stuclaw-desktop}"
 HOSTNAME="${STUCLAW_BETA_HOSTNAME:-github.com}"
 INSTALLER_TMP=""
+YES=0
+NO_PROMPT=0
+RUN_GH_INSTALL=1
+RUN_GH_AUTH=1
+FORWARD_ARGS=()
+
+usage() {
+  cat <<'EOF'
+StuClaw Desktop bootstrap installer
+
+Usage:
+  curl -fsSL https://trust-app-ai-lab.github.io/StudyClawHub/install-stuclaw-desktop.sh | bash
+  bash install-stuclaw-desktop.sh [options]
+
+Options:
+  --dir PATH       Forward install directory to the private installer
+  --no-gh-install  Do not install GitHub CLI automatically
+  --no-gh-auth     Do not start GitHub login automatically
+  -y, --yes        Use defaults where possible
+  --no-prompt      Do not ask interactive prompts
+  -h, --help       Show this help
+
+All other options are forwarded to the private StuClaw Desktop installer.
+EOF
+}
 
 log() {
   printf '%s\n' "==> $*"
@@ -30,6 +55,12 @@ have_tty() {
 prompt_yes_no() {
   local prompt="$1"
   local answer=""
+  if [[ "$YES" -eq 1 ]]; then
+    return 0
+  fi
+  if [[ "$NO_PROMPT" -eq 1 ]]; then
+    return 1
+  fi
   if ! have_tty; then
     return 1
   fi
@@ -39,6 +70,14 @@ prompt_yes_no() {
     y|Y|yes|YES) return 0 ;;
     *) return 1 ;;
   esac
+}
+
+gh_status_line() {
+  if command_exists gh; then
+    printf '%s\n' "  [OK] GitHub CLI  $(command -v gh) (installed; needed for private beta access)"
+  else
+    printf '%s\n' "  [!!] GitHub CLI  not installed"
+  fi
 }
 
 load_homebrew_shellenv() {
@@ -82,11 +121,14 @@ install_gh() {
 }
 
 ensure_gh() {
+  printf '%s\n' "GitHub access"
+  gh_status_line
   if command_exists gh; then
-    log "GitHub CLI found: $(command -v gh)"
     return 0
   fi
-  warn "GitHub CLI was not found."
+  if [[ "$RUN_GH_INSTALL" -ne 1 ]]; then
+    die "GitHub CLI is required to download private StuClaw Desktop."
+  fi
   if prompt_yes_no "Install GitHub CLI now?"; then
     install_gh
   else
@@ -97,14 +139,53 @@ ensure_gh() {
 
 ensure_gh_auth() {
   if gh auth status --hostname "$HOSTNAME" >/dev/null 2>&1; then
-    log "GitHub CLI authenticated for $HOSTNAME."
+    printf '%s\n' "  [OK] GitHub login $HOSTNAME (authenticated)"
     return 0
+  fi
+  printf '%s\n' "  [!!] GitHub login $HOSTNAME (required to download private StuClaw Desktop)"
+  if [[ "$RUN_GH_AUTH" -ne 1 ]]; then
+    die "GitHub login is required to download private StuClaw Desktop."
   fi
   if ! have_tty; then
     die "GitHub login requires an interactive terminal."
   fi
   log "Starting GitHub login."
   gh auth login --hostname "$HOSTNAME" --git-protocol https --scopes repo < /dev/tty > /dev/tty 2>&1
+}
+
+parse_args() {
+  while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+      --no-gh-install)
+        RUN_GH_INSTALL=0
+        FORWARD_ARGS+=("$1")
+        shift
+        ;;
+      --no-gh-auth)
+        RUN_GH_AUTH=0
+        FORWARD_ARGS+=("$1")
+        shift
+        ;;
+      -y|--yes)
+        YES=1
+        FORWARD_ARGS+=("$1")
+        shift
+        ;;
+      --no-prompt)
+        NO_PROMPT=1
+        FORWARD_ARGS+=("$1")
+        shift
+        ;;
+      -h|--help)
+        usage
+        exit 0
+        ;;
+      *)
+        FORWARD_ARGS+=("$1")
+        shift
+        ;;
+    esac
+  done
 }
 
 decode_base64() {
@@ -133,11 +214,12 @@ main() {
   INSTALLER_TMP="$(mktemp "${TMPDIR:-/tmp}/stuclaw-install.XXXXXX")"
   trap cleanup EXIT
 
-  log "StuClaw Desktop beta installer"
+  log "StuClaw Desktop bootstrap setup"
   ensure_gh
   ensure_gh_auth
   fetch_private_installer "$INSTALLER_TMP"
-  bash "$INSTALLER_TMP" "$@"
+  STUCLAW_BOOTSTRAP_GH_READY=1 bash "$INSTALLER_TMP" "${FORWARD_ARGS[@]}"
 }
 
+parse_args "$@"
 main "$@"
