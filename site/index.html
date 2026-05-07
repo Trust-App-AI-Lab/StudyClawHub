@@ -1074,7 +1074,7 @@
     <span class="result-count" id="result-count" style="margin-left:auto"></span>
   </div>
   <div class="grid" id="results"></div>
-  <div id="pagination"></div>
+  <div class="pagination" id="pagination"></div>
 </div>
 
 <!-- Detail overlay -->
@@ -1317,11 +1317,20 @@ function renderCommunityAgentPage() {
     document.getElementById('agents-results').after(pag);
   }
   if (totalPages <= 1) { pag.innerHTML = ''; return; }
-  let html = '';
-  if (communityAgentPage > 1) html += `<button onclick="communityAgentPage--;renderCommunityAgentPage()">← Prev</button>`;
-  html += `<span class="page-info">${communityAgentPage} / ${totalPages}</span>`;
-  if (communityAgentPage < totalPages) html += `<button onclick="communityAgentPage++;renderCommunityAgentPage()">Next →</button>`;
+  let html = `<button class="page-btn" onclick="goCommunityAgentPage(${communityAgentPage-1})" ${communityAgentPage===1?'disabled':''}>Prev</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="page-btn${i===communityAgentPage?' active':''}" onclick="goCommunityAgentPage(${i})">${i}</button>`;
+  }
+  html += `<button class="page-btn" onclick="goCommunityAgentPage(${communityAgentPage+1})" ${communityAgentPage===totalPages?'disabled':''}>Next</button>`;
   pag.innerHTML = html;
+}
+
+function goCommunityAgentPage(p) {
+  const totalPages = Math.ceil(currentCommunityAgents.length / COMMUNITY_AGENT_PAGE_SIZE);
+  if (p < 1 || p > totalPages) return;
+  communityAgentPage = p;
+  renderCommunityAgentPage();
+  document.getElementById('agents-anchor').scrollIntoView({behavior:'smooth'});
 }
 
 function expandAgent(name) {
@@ -1468,11 +1477,11 @@ function renderPage() {
     document.getElementById('pagination').innerHTML = '';
     return;
   }
-  let phtml = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>← Prev</button>`;
+  let phtml = `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>Prev</button>`;
   for (let i = 1; i <= totalPages; i++) {
     phtml += `<button class="page-btn${i===currentPage?' active':''}" onclick="goPage(${i})">${i}</button>`;
   }
-  phtml += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>Next →</button>`;
+  phtml += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>Next</button>`;
   document.getElementById('pagination').innerHTML = phtml;
 }
 
@@ -1481,7 +1490,7 @@ function goPage(p) {
   if (p < 1 || p > totalPages) return;
   currentPage = p;
   renderPage();
-  document.getElementById('skills-section').scrollIntoView({behavior:'smooth'});
+  document.getElementById('skills-anchor').scrollIntoView({behavior:'smooth'});
 }
 
 function showDetail(name) {
