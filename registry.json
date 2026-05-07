@@ -582,6 +582,24 @@
         "multi-skill-agent"
       ],
       "registeredAt": "2026-05-07T11:01:35.378664+00:00"
+    },
+    {
+      "name": "scratchmath-handwritten-parsing",
+      "type": "skill",
+      "repo": "https://github.com/KN33SOXXX/4641Project",
+      "path": ".claude/skills/scratchmath-handwritten-parsing",
+      "author": "KN33SOXXX",
+      "description": "OCR and visual parsing for handwritten ScratchMath solution images using a resident PaddleOCR-VL service.",
+      "version": "0.1.0",
+      "tags": [
+        "education",
+        "math",
+        "ocr",
+        "scratchwork",
+        "social-network-mining"
+      ],
+      "agent": "scratchmath-homework-feedback-agent",
+      "registeredAt": "2026-05-07T11:02:16.489840+00:00"
     }
   ]
 }
