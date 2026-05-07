@@ -636,6 +636,24 @@
       ],
       "agent": "scratchmath-homework-feedback-agent",
       "registeredAt": "2026-05-07T11:03:29.426931+00:00"
+    },
+    {
+      "name": "scratchmath-scratchwork-diagnosis",
+      "type": "skill",
+      "repo": "https://github.com/KN33SOXXX/4641Project",
+      "path": ".claude/skills/scratchmath-scratchwork-diagnosis",
+      "author": "KN33SOXXX",
+      "description": "Compare extracted student work against a reference solution and classify the dominant ScratchMath error cause with evidence.",
+      "version": "0.1.0",
+      "tags": [
+        "education",
+        "math",
+        "error-diagnosis",
+        "feedback",
+        "assessment"
+      ],
+      "agent": "scratchmath-homework-feedback-agent",
+      "registeredAt": "2026-05-07T11:04:06.067164+00:00"
     }
   ]
 }
