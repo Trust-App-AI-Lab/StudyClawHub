@@ -874,6 +874,24 @@
         "tool"
       ],
       "registeredAt": "2026-05-09T13:26:48.354596+00:00"
+    },
+    {
+      "name": "daily-arxiv-briefing",
+      "type": "skill",
+      "repo": "https://github.com/dark482/daily_arxiv_briefing_skill",
+      "path": ".",
+      "author": "dark482",
+      "description": "Fetch arXiv metadata, rank by semantic similarity and novelty, build a paper similarity graph, and emit a Markdown briefing plus CSV.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "semantic-search",
+        "briefing",
+        "graph-analysis",
+        "education"
+      ],
+      "agent": "daily-arxiv-briefing-skill",
+      "registeredAt": "2026-05-09T13:27:07.259836+00:00"
     }
   ]
 }
