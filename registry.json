@@ -801,6 +801,21 @@
       ],
       "agent": "arxiv-research-briefing-agent",
       "registeredAt": "2026-05-09T09:22:46.444294+00:00"
+    },
+    {
+      "name": "paper-report",
+      "type": "skill",
+      "repo": "https://github.com/dreamyingy/arXiv-research-briefing-agent",
+      "path": ".claude/skills/paper-report",
+      "author": "Golunbear",
+      "description": "Joins ranked_papers.json, enriched_papers.json, and graph_metrics.json by canonical id and renders a Markdown briefing (top-N table + four-way highlights + per-paper notes) plus a structured briefing.json for follow-up. Pure stdlib.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "report"
+      ],
+      "agent": "arxiv-research-briefing-agent",
+      "registeredAt": "2026-05-09T09:29:38.649093+00:00"
     }
   ]
 }
