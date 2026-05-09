@@ -787,6 +787,20 @@
       ],
       "agent": "arxiv-research-briefing-agent",
       "registeredAt": "2026-05-09T07:20:46.655681+00:00"
+    },
+    {
+      "name": "paper-network",
+      "type": "skill",
+      "repo": "https://github.com/dreamyingy/arXiv-research-briefing-agent",
+      "path": ".claude/skills/paper-network",
+      "author": "Golunbear",
+      "description": "Builds a heterogeneous paper / author / category / topic graph plus a paper-paper projection (default edge weights 3.0 / 1.5 / 1.0 for shared authors / categories / topics), then computes nine graph_metrics per paper: five centrality / novelty scores (degree_centrality, betweenness_centrality, pagerank, bridging_score, novelty) plus four feature counts. Implementation uses networkx.",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "agent": "arxiv-research-briefing-agent",
+      "registeredAt": "2026-05-09T09:22:46.444294+00:00"
     }
   ]
 }
