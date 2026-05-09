@@ -753,6 +753,23 @@
         "network"
       ],
       "registeredAt": "2026-05-09T07:18:51.533343+00:00"
+    },
+    {
+      "name": "paper-rank",
+      "type": "skill",
+      "repo": "https://github.com/dreamyingy/arXiv-research-briefing-agent",
+      "path": ".claude/skills/paper-rank",
+      "author": "dreamyingy",
+      "description": "Re-rank arXiv papers from raw_papers.json by relevance (BM25 over title + abstract + categories vs the user query) and recency (date-normalized within the corpus), writing ranked_papers.json. Trigger phrases: 'paper-rank', 'rank papers', 'sort papers by relevance', '排序论文', '运行 paper-rank'.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "ranking",
+        "bm25",
+        "briefing"
+      ],
+      "agent": "arxiv-research-briefing-agent",
+      "registeredAt": "2026-05-09T07:20:20.342018+00:00"
     }
   ]
 }
