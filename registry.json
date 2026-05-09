@@ -861,6 +861,19 @@
       ],
       "agent": "arxiv-daily",
       "registeredAt": "2026-05-09T10:43:27.422497+00:00"
+    },
+    {
+      "name": "daily-arxiv-briefing-skill",
+      "type": "agent",
+      "repo": "https://github.com/dark482/daily_arxiv_briefing_skill",
+      "path": ".",
+      "author": "dark482",
+      "description": "an agent that give you daily arxiv briefing related to your domain.",
+      "version": "0.1.0",
+      "tags": [
+        "tool"
+      ],
+      "registeredAt": "2026-05-09T13:26:48.354596+00:00"
     }
   ]
 }
