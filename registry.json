@@ -684,8 +684,9 @@
       "tags": [
         "tool"
       ],
-      "agent": "cv-arxiv-daily",
-      "registeredAt": "2026-05-09T03:44:09.796870+00:00"
+      "agent": "arxiv-daily",
+      "registeredAt": "2026-05-09T03:44:09.796870+00:00",
+      "updatedAt": "2026-05-09T03:45:57.312334+00:00"
     }
   ]
 }
