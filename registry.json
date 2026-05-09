@@ -816,6 +816,22 @@
       ],
       "agent": "arxiv-research-briefing-agent",
       "registeredAt": "2026-05-09T09:29:38.649093+00:00"
+    },
+    {
+      "name": "follow-up",
+      "type": "skill",
+      "repo": "https://github.com/dreamyingy/arXiv-research-briefing-agent",
+      "path": ".claude/skills/follow-up",
+      "author": "Golunbear",
+      "description": "Answers paper-detail, comparison, network-highlight, and keyword-search questions using only cached run JSON — no LLM, no arXiv calls. Cites paper IDs, ranks, URLs, and evidence_sentences; optional --save appends {question, answer} rows to <run>/followups.jsonl.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "ask",
+        "answer"
+      ],
+      "agent": "arxiv-research-briefing-agent",
+      "registeredAt": "2026-05-09T09:32:03.783584+00:00"
     }
   ]
 }
