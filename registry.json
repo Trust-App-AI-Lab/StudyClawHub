@@ -735,6 +735,24 @@
       ],
       "agent": "arxiv-daily",
       "registeredAt": "2026-05-09T06:21:50.143653+00:00"
+    },
+    {
+      "name": "arxiv-research-briefing-agent",
+      "type": "agent",
+      "repo": "https://github.com/dreamyingy/arXiv-research-briefing-agent",
+      "path": ".",
+      "author": "dreamyingy",
+      "description": "Daily arXiv research briefing agent. Given a natural-language research query (English or Chinese), searches arXiv, ranks results, extracts structured research info, builds a paper/author/topic graph, produces a Markdown + JSON briefing, and answers grounded follow-up questions. Six independently-testable skills wired together by JSON files in a per-run directory.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "briefing",
+        "research",
+        "agent",
+        "bm25",
+        "network"
+      ],
+      "registeredAt": "2026-05-09T07:18:51.533343+00:00"
     }
   ]
 }
