@@ -832,6 +832,21 @@
       ],
       "agent": "arxiv-research-briefing-agent",
       "registeredAt": "2026-05-09T09:32:03.783584+00:00"
+    },
+    {
+      "name": "temporal-trend-skill",
+      "type": "skill",
+      "repo": "https://github.com/Wallenstein1026/Temporal_Trend_skill.git",
+      "path": ".",
+      "author": "Wallenstein1026",
+      "description": "This skill detects emerging research communities by comparing today's Skill B network-analysis output with historical network snapshots. It turns static graph analysis into temporal social-network analysis: which communities are growing, which topics are newly appearing, and which communities are under cross-community bridge pressure.",
+      "version": "0.1.0",
+      "tags": [
+        "tool",
+        "graph"
+      ],
+      "agent": "arxiv-daily",
+      "registeredAt": "2026-05-09T10:33:18.128040+00:00"
     }
   ]
 }
