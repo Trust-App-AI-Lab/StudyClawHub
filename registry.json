@@ -847,6 +847,20 @@
       ],
       "agent": "arxiv-daily",
       "registeredAt": "2026-05-09T10:33:18.128040+00:00"
+    },
+    {
+      "name": "network-analysis-skill",
+      "type": "skill",
+      "repo": "https://github.com/GreeWang/Network_Analysis_skill",
+      "path": ".",
+      "author": "GreeWang",
+      "description": "This is the second Skill for the Network-aware Daily arXiv Research Briefing Agent. It consumes paper metadata from Skill A and produces research-network analysis for daily briefings.",
+      "version": "0.1.0",
+      "tags": [
+        "graph"
+      ],
+      "agent": "arxiv-daily",
+      "registeredAt": "2026-05-09T10:43:27.422497+00:00"
     }
   ]
 }
