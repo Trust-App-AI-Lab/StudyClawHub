@@ -719,6 +719,22 @@
       ],
       "agent": "### Your GitHub username",
       "registeredAt": "2026-05-09T06:17:06.988805+00:00"
+    },
+    {
+      "name": "daily-report",
+      "type": "skill",
+      "repo": "https://github.com/Use1i/social_information_network",
+      "path": ".",
+      "author": "Use1i",
+      "description": "It delivers the final daily briefing for the 5-skill arXiv research workflow. It merges the outputs of Skills A–D, generates a professional Markdown briefing, and emits a unified JSON summary and PNG visualizations.",
+      "version": "0.1.0",
+      "tags": [
+        "network",
+        "data-analysis",
+        "visualization"
+      ],
+      "agent": "arxiv-daily",
+      "registeredAt": "2026-05-09T06:21:50.143653+00:00"
     }
   ]
 }
