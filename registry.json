@@ -672,6 +672,20 @@
       ],
       "agent": "scratchmath-homework-feedback-agent",
       "registeredAt": "2026-05-07T11:04:35.613987+00:00"
+    },
+    {
+      "name": "arxiv-fetching",
+      "type": "skill",
+      "repo": "https://github.com/LeyiSheng/cv-arxiv-daily",
+      "path": ".",
+      "author": "LeyiSheng",
+      "description": "Retrieve recent AI-related papers from arXiv, rank them by topic relevance, and generate structured JSON and Markdown briefs. Entry point: python run_skill.py --config skill_config.yaml Primary outputs: outputs/<topic>.papers.json, outputs/<topic>.brief.md, outputs/manifest.json",
+      "version": "0.1.0",
+      "tags": [
+        "tool"
+      ],
+      "agent": "cv-arxiv-daily",
+      "registeredAt": "2026-05-09T03:44:09.796870+00:00"
     }
   ]
 }
