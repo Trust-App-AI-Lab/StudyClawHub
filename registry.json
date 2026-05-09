@@ -770,6 +770,23 @@
       ],
       "agent": "arxiv-research-briefing-agent",
       "registeredAt": "2026-05-09T07:20:20.342018+00:00"
+    },
+    {
+      "name": "paper-extract",
+      "type": "skill",
+      "repo": "https://github.com/dreamyingy/arXiv-research-briefing-agent",
+      "path": ".claude/skills/paper-extract",
+      "author": "dreamyingy",
+      "description": "From the top-N ranked papers, pull structured research info (main contribution, method, task, keywords, datasets/domains, evaluation signals, limitations, evidence sentences) out of title + abstract via lightweight rule-based extraction, writing enriched_papers.json. Trigger phrases: 'paper-extract', 'extract papers', 'pull contributions', '抽取论文', '运行 paper-extract'.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "extraction",
+        "keywords",
+        "briefing"
+      ],
+      "agent": "arxiv-research-briefing-agent",
+      "registeredAt": "2026-05-09T07:20:46.655681+00:00"
     }
   ]
 }
