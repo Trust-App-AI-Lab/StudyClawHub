@@ -201,20 +201,20 @@
     {
       "name": "paper-search",
       "type": "skill",
-      "repo": "https://github.com/Shengyi-Chung/arxiv-network-builder",
-      "path": ".codebuddy/skills/paper-search",
-      "author": "Shengyi-Chung",
-      "description": "Search arXiv papers and build author collaboration networks.",
+      "repo": "https://github.com/dreamyingy/arXiv-research-briefing-agent",
+      "path": ".claude/skills/paper-search",
+      "author": "dreamyingy",
+      "description": "Search arXiv for papers matching a natural-language research query and emit cleaned, deduplicated metadata as raw_papers.json. Trigger phrases: 'paper-search', 'search arxiv', 'find arxiv papers on X', '搜索arxiv论文', '运行 paper-search'.",
       "version": "1.0.0",
       "tags": [
-        "social-network-analysis",
-        "data-mining",
         "arxiv",
-        "graph-construction"
+        "search",
+        "research",
+        "briefing"
       ],
       "registeredAt": "2026-04-18T08:31:10.870944+00:00",
-      "agent": "paper-researcher",
-      "updatedAt": "2026-04-21T05:03:01.897943+00:00"
+      "agent": "arxiv-research-briefing-agent",
+      "updatedAt": "2026-05-09T07:19:23.821538+00:00"
     },
     {
       "name": "briefing-report-generator",
