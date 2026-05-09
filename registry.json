@@ -864,7 +864,7 @@
     },
     {
       "name": "daily-arxiv-briefing-skill",
-      "type": "agent",
+      "type": "skill",
       "repo": "https://github.com/dark482/daily_arxiv_briefing_skill",
       "path": ".",
       "author": "dark482",
@@ -873,7 +873,9 @@
       "tags": [
         "tool"
       ],
-      "registeredAt": "2026-05-09T13:26:48.354596+00:00"
+      "registeredAt": "2026-05-09T13:26:48.354596+00:00",
+      "agent": "daily-arxiv-briefing-skill",
+      "updatedAt": "2026-05-09T13:38:47.865872+00:00"
     },
     {
       "name": "daily-arxiv-briefing",
