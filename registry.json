@@ -902,6 +902,22 @@
       "agent": "daily-arxiv-briefing",
       "registeredAt": "2026-05-09T13:27:07.259836+00:00",
       "updatedAt": "2026-05-10T08:29:35+00:00"
+    },
+    {
+      "name": "paper-search",
+      "type": "skill",
+      "repo": "https://github.com/Shengyi-Chung/paper-researcher2.0",
+      "path": "/.claude/skills/paper-search",
+      "author": "Shengyi-Chung",
+      "description": "Search arXiv papers and extract metadata. Triggers: search papers, find papers about topic, 找关于主题的论文。",
+      "version": "1.1.0",
+      "tags": [
+        "arxiv",
+        "paper-search",
+        "information-retrieval"
+      ],
+      "agent": "paper-researcher-agent",
+      "registeredAt": "2026-05-10T13:37:13.336934+00:00"
     }
   ]
 }
