@@ -936,6 +936,23 @@
       ],
       "agent": "paper-researcher-agent",
       "registeredAt": "2026-05-10T13:37:27.118713+00:00"
+    },
+    {
+      "name": "paper-report",
+      "type": "skill",
+      "repo": "https://github.com/Shengyi-Chung/paper-researcher2.0",
+      "path": "/.claude/skills/paper-report",
+      "author": "Shengyi-Chung",
+      "description": "Generate paper recommendation reports based on search results and ranking analysis.",
+      "version": "1.1.0",
+      "tags": [
+        "paper",
+        "report",
+        "recommendation",
+        "summary"
+      ],
+      "agent": "paper-researcher-agent",
+      "registeredAt": "2026-05-10T13:37:47.676756+00:00"
     }
   ]
 }
