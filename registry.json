@@ -1068,6 +1068,25 @@
       ],
       "agent": "arxiv-deep-briefing-agent",
       "registeredAt": "2026-05-10T13:56:23.037135+00:00"
+    },
+    {
+      "name": "paper-researcher-agent",
+      "type": "agent",
+      "repo": "https://github.com/Shengyi-Chung/paper-researcher2.0.git",
+      "path": "./",
+      "author": "Shengyi-Chung",
+      "description": "AI research paper assistant with arXiv search, network analysis, PageRank ranking, multi-turn conversational Q&A, and Markdown report generation. Four independently-testable skills wired together by JSON files in a shared data directory.",
+      "version": "2.0.0",
+      "tags": [
+        "arxiv",
+        "research",
+        "agent",
+        "pagerank",
+        "network-analysis",
+        "conversational-ai",
+        "report-generator"
+      ],
+      "registeredAt": "2026-05-10T16:55:20.911241+00:00"
     }
   ]
 }
