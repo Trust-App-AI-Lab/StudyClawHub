@@ -918,6 +918,24 @@
       ],
       "agent": "paper-researcher-agent",
       "registeredAt": "2026-05-10T13:37:13.336934+00:00"
+    },
+    {
+      "name": "paper-analyze",
+      "type": "skill",
+      "repo": "https://github.com/Shengyi-Chung/paper-researcher2.0",
+      "path": "/.claude/skills/paper-analyze",
+      "author": "Shengyi-Chung",
+      "description": "Analyze paper similarity, build relationship networks, and rank papers by PageRank importance. Uses TF-IDF cosine similarity and shared author overlap to construct similarity networks.",
+      "version": "2.0.0",
+      "tags": [
+        "network-analysis",
+        "pagerank",
+        "similarity",
+        "paper-analysis",
+        "graph"
+      ],
+      "agent": "paper-researcher-agent",
+      "registeredAt": "2026-05-10T13:37:27.118713+00:00"
     }
   ]
 }
