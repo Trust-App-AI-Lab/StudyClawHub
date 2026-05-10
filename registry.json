@@ -1004,6 +1004,24 @@
       ],
       "agent": "arxiv-deep-briefing-agent",
       "registeredAt": "2026-05-10T13:38:49.742420+00:00"
+    },
+    {
+      "name": "briefing-generation-skill",
+      "type": "skill",
+      "repo": "https://github.com/gr-peng/scproject",
+      "path": "codex-skills/briefing-generation-skill",
+      "author": "gr-peng",
+      "description": "Assemble search, ranking, summarization, visualization, and evaluation outputs into an illustrated Markdown report plus aligned CSV and JSON artifacts for a Daily arXiv Research Briefing pipeline. Use when Codex needs the final briefing-generation skill definition for an arXiv search, literature monitoring, paper triage, or briefing agent, especially when charts should be embedded directly in the report.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "briefing",
+        "report-generation",
+        "markdown",
+        "literature-mining"
+      ],
+      "agent": "arxiv-deep-briefing-agent",
+      "registeredAt": "2026-05-10T13:39:15.320527+00:00"
     }
   ]
 }
