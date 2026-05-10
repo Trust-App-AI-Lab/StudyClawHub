@@ -972,6 +972,20 @@
       ],
       "agent": "paper-researcher-agent",
       "registeredAt": "2026-05-10T13:37:59.381840+00:00"
+    },
+    {
+      "name": "arxiv-deep-briefing-agent",
+      "type": "agent",
+      "repo": "https://github.com/gr-peng/scproject",
+      "path": "codex-skills",
+      "author": "gr-peng",
+      "description": "An Agent that monitors arXiv on a daily basis and gener- ates a personalized research briefing.",
+      "version": "0.1.0",
+      "tags": [
+        "tool",
+        "search"
+      ],
+      "registeredAt": "2026-05-10T13:38:39.075769+00:00"
     }
   ]
 }
