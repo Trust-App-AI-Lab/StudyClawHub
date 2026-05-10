@@ -159,7 +159,10 @@ function findAllowedEmail(emails, domainsValue) {
     if (!entry || !entry.verified || !entry.email) return false;
     const email = String(entry.email).toLowerCase();
     const domain = email.split("@").pop();
-    return domains.some((allowed) => domain === allowed || (allowed.startsWith(".") && domain.endsWith(allowed)));
+    return domains.some((allowed) => {
+      const baseDomain = allowed.startsWith(".") ? allowed.slice(1) : allowed;
+      return domain === baseDomain || domain.endsWith(`.${baseDomain}`);
+    });
   });
 }
 

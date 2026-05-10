@@ -7,7 +7,9 @@ It performs the private part of the flow:
 
 1. Start GitHub OAuth with `user:email`.
 2. Read the authenticated user's verified GitHub emails.
-3. Require an email domain from `ALLOWED_EMAIL_DOMAINS`.
+3. Require an email domain from `ALLOWED_EMAIL_DOMAINS`; each configured domain
+   allows both the exact domain and its subdomains, so `hkust-gz.edu.cn` also
+   allows `connect.hkust-gz.edu.cn`.
 4. Invite the GitHub user to `Trust-App-AI-Lab/stuclaw-desktop` with `pull`
    permission.
 5. Redirect the browser back to the beta page with a result status.
@@ -48,4 +50,3 @@ wrangler deploy
 
 After deployment, set `window.STUCLAW_BETA.apiBase` in
 `site/stuclaw-beta.html` to the Worker URL.
-
