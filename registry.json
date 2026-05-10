@@ -953,6 +953,25 @@
       ],
       "agent": "paper-researcher-agent",
       "registeredAt": "2026-05-10T13:37:47.676756+00:00"
+    },
+    {
+      "name": "query-holder",
+      "type": "skill",
+      "repo": "https://github.com/Shengyi-Chung/paper-researcher2.0",
+      "path": "/.claude/skills/paper-qa",
+      "author": "Shengyi-Chung",
+      "description": "Conversational follow-up query manager for retrieved research papers. Supports multi-turn contextual retrieval, paper comparison, keyword filtering, author search, benchmark lookup, and lightweight web augmentation.",
+      "version": "2.0.0",
+      "tags": [
+        "retrieval",
+        "conversational-rag",
+        "context-management",
+        "research-assistant",
+        "follow-up",
+        "paper-query"
+      ],
+      "agent": "paper-researcher-agent",
+      "registeredAt": "2026-05-10T13:37:59.381840+00:00"
     }
   ]
 }
