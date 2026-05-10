@@ -1022,6 +1022,24 @@
       ],
       "agent": "arxiv-deep-briefing-agent",
       "registeredAt": "2026-05-10T13:39:15.320527+00:00"
+    },
+    {
+      "name": "visualization-skill",
+      "type": "skill",
+      "repo": "https://github.com/gr-peng/scproject",
+      "path": "codex-skills/visualization-skill",
+      "author": "gr-peng",
+      "description": "Generate publication-quality workflow diagrams, evaluation charts, and embeddable figure manifests for a Daily arXiv Research Briefing pipeline, including retrieval quality, ranking score diagnostics, topical/category coverage, recency, summarization coverage, and runtime views. Use when Codex needs the visualization-stage skill definition for an arXiv search, literature monitoring, paper triage, or briefing agent.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "visualization",
+        "evaluation",
+        "png-charts",
+        "literature-mining"
+      ],
+      "agent": "arxiv-deep-briefing-agent",
+      "registeredAt": "2026-05-10T13:39:27.461215+00:00"
     }
   ]
 }
