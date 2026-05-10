@@ -1054,6 +1054,20 @@
       ],
       "agent": "arxiv-deep-briefing-agent",
       "registeredAt": "2026-05-10T13:51:56.177276+00:00"
+    },
+    {
+      "name": "paper-summarization-skill",
+      "type": "skill",
+      "repo": "https://github.com/gr-peng/scproject",
+      "path": "codex-skills/paper-summarization-skill",
+      "author": "gr-peng",
+      "description": "Summarizes each paper’s contribution, method, evidence, and key takeaway.",
+      "version": "0.1.0",
+      "tags": [
+        "summarization"
+      ],
+      "agent": "arxiv-deep-briefing-agent",
+      "registeredAt": "2026-05-10T13:56:23.037135+00:00"
     }
   ]
 }
