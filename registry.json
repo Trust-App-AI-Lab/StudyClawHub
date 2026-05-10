@@ -1087,6 +1087,19 @@
         "report-generator"
       ],
       "registeredAt": "2026-05-10T16:55:20.911241+00:00"
+    },
+    {
+      "name": "research-trail",
+      "type": "agent",
+      "repo": "https://github.com/LiYian2/ResearchTrail",
+      "path": ".",
+      "author": "LiYian2",
+      "description": "ResearchTrail: A Citation-Network Agent for Personalized Research Reading Paths",
+      "version": "1.0.0",
+      "tags": [
+        "(none)"
+      ],
+      "registeredAt": "2026-05-10T18:06:07.441319+00:00"
     }
   ]
 }
