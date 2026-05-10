@@ -1100,6 +1100,24 @@
         "(none)"
       ],
       "registeredAt": "2026-05-10T18:06:07.441319+00:00"
+    },
+    {
+      "name": "literature-retrieval",
+      "type": "skill",
+      "repo": "https://github.com/LiYian2/ResearchTrail",
+      "path": "skill_retrieval",
+      "author": "LiYian2",
+      "description": "Retrieve, enrich, deduplicate, filter, and quality-check academic papers for a user-specified research topic. Use when the agent needs a graph-ready paper corpus.",
+      "version": "1.0.0",
+      "tags": [
+        "literature-retrieval",
+        "arxiv",
+        "openalex",
+        "semantic-scholar",
+        "social-network-analysis"
+      ],
+      "agent": "research-trail",
+      "registeredAt": "2026-05-10T18:10:57.727863+00:00"
     }
   ]
 }
