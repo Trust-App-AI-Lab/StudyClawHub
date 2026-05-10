@@ -570,7 +570,7 @@
       "name": "scratchmath-homework-feedback-agent",
       "type": "agent",
       "repo": "https://github.com/KN33SOXXX/4641Project",
-      "path": ".claude/agents/scratchmath-homework-feedback-agent",
+      "path": ".",
       "author": "KN33SOXXX",
       "description": "Integrates five ScratchMath skills into a question-plus-image agent for OCR, student work extraction, reference solving, diagnosis, graph feedback, and social report generation.",
       "version": "0.1.0",
@@ -581,7 +581,8 @@
         "social-network-mining",
         "multi-skill-agent"
       ],
-      "registeredAt": "2026-05-07T11:01:35.378664+00:00"
+      "registeredAt": "2026-05-07T11:01:35.378664+00:00",
+      "updatedAt": "2026-05-10T02:27:49+00:00"
     },
     {
       "name": "scratchmath-handwritten-parsing",
