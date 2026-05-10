@@ -116,7 +116,7 @@
       "name": "coachbot",
       "type": "skill",
       "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
-      "path": ".claude/skills/coachbot",
+      "path": ".agents/skills/coachbot",
       "author": "EnyanDai",
       "description": "PokerBot entry SKILL -- real-time GTO poker coach. Trigger: \"play poker\", \"开一局\", \"teach me poker\", \"review hands\", \"该不该call\", \"EV多少\".",
       "version": "1.0.0",
@@ -127,13 +127,14 @@
         "entry-point"
       ],
       "agent": "poker-bot",
-      "registeredAt": "2026-04-12T18:38:14.611152+00:00"
+      "registeredAt": "2026-04-12T18:38:14.611152+00:00",
+      "updatedAt": "2026-05-10T08:29:35+00:00"
     },
     {
       "name": "poker-strategy",
       "type": "skill",
       "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
-      "path": ".claude/skills/poker-strategy",
+      "path": ".agents/skills/poker-strategy",
       "author": "EnyanDai",
       "description": "PokerBot internal dependency -- GTO poker calculation tools and strategy docs. Pure internal component, never triggered directly.",
       "version": "1.0.0",
@@ -145,13 +146,14 @@
         "internal"
       ],
       "agent": "poker-bot",
-      "registeredAt": "2026-04-12T18:38:22.263146+00:00"
+      "registeredAt": "2026-04-12T18:38:22.263146+00:00",
+      "updatedAt": "2026-05-10T08:29:35+00:00"
     },
     {
       "name": "bot-management",
       "type": "skill",
       "repo": "https://github.com/Trust-App-AI-Lab/PokerBot",
-      "path": ".claude/skills/bot-management",
+      "path": ".agents/skills/bot-management",
       "author": "EnyanDai",
       "description": "PokerBot internal SKILL -- AI poker bot lifecycle management. Trigger: \"加几个bot\", \"add bots\", \"create bot\", \"bot stuck\".",
       "version": "1.0.0",
@@ -162,7 +164,8 @@
         "internal"
       ],
       "agent": "poker-bot",
-      "registeredAt": "2026-04-12T18:50:44.084314+00:00"
+      "registeredAt": "2026-04-12T18:50:44.084314+00:00",
+      "updatedAt": "2026-05-10T08:29:35+00:00"
     },
     {
       "name": "latex-report",
@@ -718,8 +721,8 @@
         "data-analysis",
         "visualization"
       ],
-      "agent": "### Your GitHub username",
-      "registeredAt": "2026-05-09T06:17:06.988805+00:00"
+      "registeredAt": "2026-05-09T06:17:06.988805+00:00",
+      "updatedAt": "2026-05-10T08:29:35+00:00"
     },
     {
       "name": "daily-report",
@@ -864,19 +867,22 @@
       "registeredAt": "2026-05-09T10:43:27.422497+00:00"
     },
     {
-      "name": "daily-arxiv-briefing-skill",
-      "type": "skill",
+      "name": "daily-arxiv-briefing",
+      "type": "agent",
       "repo": "https://github.com/dark482/daily_arxiv_briefing_skill",
       "path": ".",
       "author": "dark482",
-      "description": "an agent that give you daily arxiv briefing related to your domain.",
-      "version": "0.1.0",
+      "description": "Fetch arXiv metadata, rank by semantic similarity and novelty, build a paper similarity graph, and emit a Markdown briefing plus CSV.",
+      "version": "1.0.0",
       "tags": [
-        "tool"
+        "arxiv",
+        "semantic-search",
+        "briefing",
+        "graph-analysis",
+        "education"
       ],
       "registeredAt": "2026-05-09T13:26:48.354596+00:00",
-      "agent": "daily-arxiv-briefing-skill",
-      "updatedAt": "2026-05-09T13:38:47.865872+00:00"
+      "updatedAt": "2026-05-10T08:29:35+00:00"
     },
     {
       "name": "daily-arxiv-briefing",
@@ -893,8 +899,9 @@
         "graph-analysis",
         "education"
       ],
-      "agent": "daily-arxiv-briefing-skill",
-      "registeredAt": "2026-05-09T13:27:07.259836+00:00"
+      "agent": "daily-arxiv-briefing",
+      "registeredAt": "2026-05-09T13:27:07.259836+00:00",
+      "updatedAt": "2026-05-10T08:29:35+00:00"
     }
   ]
 }

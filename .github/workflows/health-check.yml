@@ -13,6 +13,7 @@ concurrency:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 jobs:
   health-check:
@@ -88,7 +89,11 @@ jobs:
               registry = json.load(f)
 
           skills = registry['skills']
-          by_name = {s['name']: s for s in skills}
+          agents_by_name = {
+              s['name']: s
+              for s in skills
+              if (s.get('type') or 'skill').strip().lower() == 'agent'
+          }
 
           autofix = []   # path drifts with exactly 1 candidate — safe to auto-repair
           issues = []    # problems needing human attention
@@ -120,7 +125,9 @@ jobs:
                   repo_data = api_get(f'https://api.github.com/repos/{owner}/{repo}')
               except urllib.error.HTTPError as e:
                   if e.code == 404:
-                      add('warn', 'Repo not accessible via API — likely private, possibly deleted. Registry metadata is used as fallback.')
+                      if s.get('description'):
+                          continue
+                      add('warn', 'Repo not accessible via API — likely private, possibly deleted, and no registry metadata is available as fallback.')
                   else:
                       add('warn', f'Repo API returned HTTP {e.code}')
                   continue
@@ -174,11 +181,9 @@ jobs:
               # Orphan agent reference
               agent_ref = s.get('agent')
               if agent_ref:
-                  parent = by_name.get(agent_ref)
+                  parent = agents_by_name.get(agent_ref)
                   if not parent:
                       add('broken', f'References missing agent `{agent_ref}`')
-                  elif parent.get('type') != 'agent':
-                      add('broken', f'Parent `{agent_ref}` is not type=agent')
 
           # Apply auto-fixes to registry.json
           if autofix:

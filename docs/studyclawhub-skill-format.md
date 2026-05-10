@@ -47,3 +47,11 @@ That's it. Push to GitHub, then submit to StudyClawHub.
 
 For ClawHub compatibility, you can also add `metadata.openclaw` fields
 (env vars, binary requirements, etc.) — ask Claude about it if needed.
+
+## Registry identity
+
+Standalone Skills are matched by `type + name`.
+
+Child Skills inside an Agent are matched by `type + agent + name`, so two
+different Agents can each publish a child Skill with the same display name
+without overwriting one another.

@@ -34,18 +34,11 @@ jobs:
           body = os.environ.get('ISSUE_BODY', '')
           author_login = os.environ.get('ISSUE_AUTHOR', '')
 
-          # Parse form fields from issue body
+          # Parse form fields from issue body. Bound each value to its own
+          # Markdown heading so an empty field cannot consume the next label.
           def parse_field(text, field_id):
-              pattern = rf'### {field_id}\s*\n\s*(?!###)(.+)'
-              m = re.search(pattern, text, re.IGNORECASE)
-              if m:
-                  val = m.group(1).strip()
-                  if val.lower() in ('_no response_', 'n/a', 'none', ''):
-                      return ''
-                  return val
-              # Fallback: look for "field_id\n\nvalue" pattern
-              pattern = rf'{field_id}\s*\n\n(.+)'
-              m = re.search(pattern, text, re.IGNORECASE)
+              pattern = rf'^###\s+{re.escape(field_id)}\s*\n(.*?)(?=^###\s+|\Z)'
+              m = re.search(pattern, text, re.IGNORECASE | re.MULTILINE | re.DOTALL)
               if m:
                   val = m.group(1).strip()
                   if val.lower() in ('_no response_', 'n/a', 'none', ''):
@@ -94,6 +87,18 @@ jobs:
           with open('registry.json') as f:
               registry = json.load(f)
 
+          def entry_identity(item):
+              item_type = (item.get('type') or 'skill').strip().lower()
+              item_name = (item.get('name') or '').strip()
+              item_agent = (item.get('agent') or '').strip() if item_type == 'skill' else ''
+              return (item_type, item_agent, item_name)
+
+          def entry_label(item):
+              item_type, item_agent, item_name = entry_identity(item)
+              if item_type == 'skill' and item_agent:
+                  return f'{item_agent}/{item_name}'
+              return item_name
+
           # Build entry
           entry = {
               'name': name,
@@ -119,8 +124,11 @@ jobs:
                   for s in registry['skills']
               )
 
-          # Check for duplicates
-          existing = [s for s in registry['skills'] if s['name'] == name]
+          # Check for duplicates by registry identity. Child skills are scoped
+          # by their parent agent, so different agents can register skills with
+          # the same display name without overwriting one another.
+          target_identity = entry_identity(entry)
+          existing = [s for s in registry['skills'] if entry_identity(s) == target_identity]
           if existing:
               entry['updatedAt'] = datetime.now(timezone.utc).isoformat()
               entry['registeredAt'] = existing[0].get('registeredAt', entry['updatedAt'])
@@ -134,7 +142,7 @@ jobs:
           with open('registry.json', 'w') as f:
               json.dump(registry, f, indent=2, ensure_ascii=False)
 
-          comment = f'Successfully {action} **{name}** by @{author}'
+          comment = f'Successfully {action} **{entry_label(entry)}** by @{author}'
           if agent_pending:
               comment += (
                   f'\\n\\nNote: parent agent **{agent_name}** is not registered yet. '
@@ -145,7 +153,7 @@ jobs:
               f.write(f'comment={comment}\n')
               f.write('success=true\n')
 
-          print(f'{action}: {name} by @{author}')
+          print(f'{action}: {entry_label(entry)} by @{author}')
           SCRIPT
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
@@ -216,7 +224,20 @@ jobs:
           issue_author = os.environ.get('ISSUE_AUTHOR', '')
           repo_permission = os.environ.get('REPO_PERMISSION', 'none')
 
-          # Extract skill name from title "delete: skill-name"
+          def entry_identity(item):
+              item_type = (item.get('type') or 'skill').strip().lower()
+              item_name = (item.get('name') or '').strip()
+              item_agent = (item.get('agent') or '').strip() if item_type == 'skill' else ''
+              return (item_type, item_agent, item_name)
+
+          def entry_label(item):
+              item_type, item_agent, item_name = entry_identity(item)
+              if item_type == 'skill' and item_agent:
+                  return f'{item_agent}/{item_name}'
+              return item_name
+
+          # Extract package name from title. For duplicate child skill names,
+          # use "delete: agent-name/skill-name" to target a specific child.
           m = re.match(r'^delete:\s*(.+)$', title.strip(), re.IGNORECASE)
           if not m:
               msg = 'Could not parse skill name from issue title.'
@@ -226,16 +247,32 @@ jobs:
               print(msg, file=sys.stderr)
               sys.exit(1)
 
-          name = m.group(1).strip()
+          raw_name = m.group(1).strip()
+          agent_name = ''
+          name = raw_name
+          if '/' in raw_name:
+              agent_name, name = [part.strip() for part in raw_name.split('/', 1)]
 
           # Load registry
           with open('registry.json') as f:
               registry = json.load(f)
 
           # Find the entry
-          entry = next((s for s in registry['skills'] if s['name'] == name), None)
+          matches = [
+              s for s in registry['skills']
+              if s.get('name') == name and (not agent_name or (s.get('agent') or '') == agent_name)
+          ]
+          if not agent_name and len(matches) > 1:
+              choices = ', '.join(entry_label(s) for s in matches)
+              msg = f'Deletion target **{name}** is ambiguous. Use one of: {choices}'
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write(f'comment={msg}\n')
+                  f.write('success=false\n')
+              print(msg, file=sys.stderr)
+              sys.exit(1)
+          entry = matches[0] if matches else None
           if not entry:
-              msg = f'Skill **{name}** not found in registry.'
+              msg = f'Skill **{raw_name}** not found in registry.'
               with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                   f.write(f'comment={msg}\n')
                   f.write('success=false\n')
@@ -246,7 +283,7 @@ jobs:
           is_admin = repo_permission in ('admin', 'write')
           is_author = issue_author.lower() == entry.get('author', '').lower()
           if not is_admin and not is_author:
-              msg = f'Permission denied. Only the author (@{entry.get("author")}) or repo admins can delete **{name}**.'
+              msg = f'Permission denied. Only the author (@{entry.get("author")}) or repo admins can delete **{entry_label(entry)}**.'
               with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                   f.write(f'comment={msg}\n')
                   f.write('success=false\n')
@@ -254,12 +291,13 @@ jobs:
               sys.exit(1)
 
           # If deleting an agent, also remove its child skills
-          removed = [name]
+          removed_entries = [entry]
           if entry.get('type') == 'agent':
-              children = [s['name'] for s in registry['skills'] if s.get('agent') == name]
-              removed.extend(children)
+              removed_entries.extend(s for s in registry['skills'] if s.get('agent') == name)
 
-          registry['skills'] = [s for s in registry['skills'] if s['name'] not in removed]
+          removed_identities = {entry_identity(s) for s in removed_entries}
+          removed = [entry_label(s) for s in removed_entries]
+          registry['skills'] = [s for s in registry['skills'] if entry_identity(s) not in removed_identities]
 
           with open('registry.json', 'w') as f:
               json.dump(registry, f, indent=2, ensure_ascii=False)
@@ -267,7 +305,7 @@ jobs:
           if len(removed) > 1:
               msg = f'Deleted agent **{name}** and {len(removed)-1} child skill(s): {", ".join(removed[1:])}'
           else:
-              msg = f'Deleted **{name}** from registry.'
+              msg = f'Deleted **{removed[0]}** from registry.'
 
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f'comment={msg}\n')

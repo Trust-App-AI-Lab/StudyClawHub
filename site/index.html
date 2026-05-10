@@ -1191,6 +1191,13 @@ let currentDisplaySkills = [];
 const AGENT_PREVIEW_COUNT = 3;
 let HUB_AGENT_NAMES = [];
 
+function registryKey(item) {
+  const type = item && item.type ? item.type : 'skill';
+  const agent = type === 'skill' && item && item.agent ? item.agent : '';
+  const name = item && item.name ? item.name : '';
+  return `${type}:${agent}:${name}`;
+}
+
 async function boot() {
   try {
     const [res, hubRes] = await Promise.all([
@@ -1268,7 +1275,7 @@ function renderAgentCard(a) {
     </div>
     <div class="agent-right" id="agent-skills-${esc(a.name)}">
       ${preview.map(s => `
-        <div class="agent-skill" onclick="showDetail('${esc(s.name)}')">
+        <div class="agent-skill" onclick="showDetail('${esc(registryKey(s))}')">
           <span class="agent-skill-name">${esc(s.name)}</span>
           <span class="agent-skill-desc">${esc(s.description)}</span>
         </div>
@@ -1338,7 +1345,7 @@ function expandAgent(name) {
   if (!a) return;
   const el = document.getElementById('agent-skills-' + name);
   el.innerHTML = a.children.map(s => `
-    <div class="agent-skill" onclick="showDetail('${esc(s.name)}')">
+    <div class="agent-skill" onclick="showDetail('${esc(registryKey(s))}')">
       <span class="agent-skill-name">${esc(s.name)}</span>
       <span class="agent-skill-desc">${esc(s.description)}</span>
     </div>
@@ -1452,7 +1459,7 @@ function renderPage() {
   const pageSkills = skills.slice(start, start + PAGE_SIZE);
 
   document.getElementById('results').innerHTML = pageSkills.map(s => `
-    <div class="card" onclick="showDetail('${esc(s.name)}')">
+    <div class="card" onclick="showDetail('${esc(registryKey(s))}')">
       <div class="card-top">
         <span class="card-name">${esc(s.name)}</span>
         <span class="card-version">v${esc(s.version||'1.0.0')}</span>
@@ -1493,9 +1500,10 @@ function goPage(p) {
   document.getElementById('skills-anchor').scrollIntoView({behavior:'smooth'});
 }
 
-function showDetail(name) {
+function showDetail(identifier) {
   const allChildren = allAgents.flatMap(a => a.children || []);
-  const s = allSkills.find(x => x.name === name) || allChildren.find(x => x.name === name);
+  const allItems = allSkills.concat(allChildren);
+  const s = allItems.find(x => registryKey(x) === identifier) || allItems.find(x => x.name === identifier);
   if (!s) return;
 
   // If this skill belongs to an agent, show a link to the agent
@@ -2103,15 +2111,21 @@ function parseFrontmatter(text) {
 let batchState = null;
 
 function openBatchPicker(ctx) {
-  // Which child-skill names are already in the registry? Default-uncheck those.
-  const registered = new Set(allSkills.map(s => s.name).concat(allAgents.map(a => a.name)));
-  const children = ctx.children.map(c => ({
-    ...c,
+  // Which child-skill identities are already in the registry? Default-uncheck
+  // exact same agent/name matches, but allow another agent to reuse the name.
+  const registered = new Set(allSkills.map(registryKey).concat(allAgents.map(registryKey)));
+  const children = ctx.children.map(c => {
     // If SKILL.md has no name, fall back to the directory basename
-    effectiveName: c.name || (c.path === '.' ? ctx.agentName : c.path.split('/').pop()),
-    alreadyRegistered: registered.has(c.name) && c.name !== ctx.agentName,
-    selected: !(registered.has(c.name) && c.name !== ctx.agentName),
-  }));
+    const effectiveName = c.name || (c.path === '.' ? ctx.agentName : c.path.split('/').pop());
+    const childKey = registryKey({ type: 'skill', agent: ctx.agentName, name: effectiveName });
+    const alreadyRegistered = registered.has(childKey);
+    return {
+      ...c,
+      effectiveName,
+      alreadyRegistered,
+      selected: !alreadyRegistered,
+    };
+  });
 
   batchState = {
     ctx,
@@ -2133,7 +2147,7 @@ function renderBatchPicker() {
       <div class="child-skill-main">
         <div class="child-skill-name">
           <code>${escapeHtml(c.effectiveName)}</code>
-          ${c.alreadyRegistered ? '<span class="child-skill-badge">Already registered</span>' : ''}
+          ${c.alreadyRegistered ? '<span class="child-skill-badge">Already registered for this agent</span>' : ''}
         </div>
         <div class="child-skill-path">${escapeHtml(c.path === '.' ? '(repo root)' : c.path)}/SKILL.md</div>
         ${c.description ? `<div class="child-skill-desc">${escapeHtml(c.description)}</div>` : ''}

@@ -43,7 +43,7 @@ body:
     id: agent
     attributes:
       label: Agent name
-      description: "If this skill belongs to an Agent, enter the Agent's name. Leave empty for standalone skills or agents."
+      description: "If this skill belongs to an Agent, enter the Agent's name. Child skill updates match by both Skill name and Agent name. Leave empty for standalone skills or agents."
       placeholder: ""
 
   - type: input
