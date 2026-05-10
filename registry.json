@@ -1118,6 +1118,24 @@
       ],
       "agent": "research-trail",
       "registeredAt": "2026-05-10T18:10:57.727863+00:00"
+    },
+    {
+      "name": "research-graph-analysis",
+      "type": "skill",
+      "repo": "https://github.com/LiYian2/ResearchTrail",
+      "path": "skill_graph",
+      "author": "LiYian2",
+      "description": "Retrieve, enrich, deduplicate, filter, and quality-check academic papers for a user-specified research topic. Use when the agent needs a graph-ready paper corpus.",
+      "version": "1.0.0",
+      "tags": [
+        "graph-analysis",
+        "pagerank",
+        "betweenness-centrality",
+        "community-detection",
+        "citation-network"
+      ],
+      "agent": "researchtrail",
+      "registeredAt": "2026-05-10T18:16:16.398309+00:00"
     }
   ]
 }
