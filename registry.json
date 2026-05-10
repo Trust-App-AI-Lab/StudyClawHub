@@ -1136,6 +1136,24 @@
       ],
       "agent": "researchtrail",
       "registeredAt": "2026-05-10T18:16:16.398309+00:00"
+    },
+    {
+      "name": "reading-path-report",
+      "type": "skill",
+      "repo": "https://github.com/LiYian2/ResearchTrail",
+      "path": "skill_reading_path",
+      "author": "LiYian2",
+      "description": "Generate personalized research reading paths, evidence-grounded explanations, Markdown reports, and visualizations from graph analysis results.",
+      "version": "1.0.0",
+      "tags": [
+        "reading-path",
+        "report-generation",
+        "evidence-grounded-explanation",
+        "visualization",
+        "research-agent"
+      ],
+      "agent": "research-trail",
+      "registeredAt": "2026-05-10T18:21:36.839255+00:00"
     }
   ]
 }
