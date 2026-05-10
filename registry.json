@@ -1040,6 +1040,20 @@
       ],
       "agent": "arxiv-deep-briefing-agent",
       "registeredAt": "2026-05-10T13:39:27.461215+00:00"
+    },
+    {
+      "name": "paper-ranking-skill",
+      "type": "skill",
+      "repo": "https://github.com/gr-peng/scproject",
+      "path": "codex-skills/paper-ranking-skill",
+      "author": "gr-peng",
+      "description": "Ranks papers using relevance, novelty, citation/proxy, recency, and method-quality signals.",
+      "version": "0.1.0",
+      "tags": [
+        "rank"
+      ],
+      "agent": "arxiv-deep-briefing-agent",
+      "registeredAt": "2026-05-10T13:51:56.177276+00:00"
     }
   ]
 }
