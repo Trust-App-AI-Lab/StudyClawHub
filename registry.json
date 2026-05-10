@@ -986,6 +986,24 @@
         "search"
       ],
       "registeredAt": "2026-05-10T13:38:39.075769+00:00"
+    },
+    {
+      "name": "arxiv-search-skill",
+      "type": "skill",
+      "repo": "https://github.com/gr-peng/scproject",
+      "path": "codex-skills/arxiv-search-skill",
+      "author": "gr-peng",
+      "description": "Retrieve arXiv papers for a Daily arXiv Research Briefing pipeline by converting user topics into arXiv API queries, applying category and date filters, removing duplicates, and returning structured Paper objects. Use when Codex needs the retrieval-stage skill definition for an arXiv search, literature monitoring, or briefing agent.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "search",
+        "retrieval",
+        "literature-mining",
+        "social-network-analysis"
+      ],
+      "agent": "arxiv-deep-briefing-agent",
+      "registeredAt": "2026-05-10T13:38:49.742420+00:00"
     }
   ]
 }
