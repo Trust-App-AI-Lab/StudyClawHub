@@ -1768,17 +1768,20 @@
       "name": "Student Recommendation Ranker",
       "type": "skill",
       "repo": "https://github.com/taowenxiang/ProgRec",
-      "path": "./skill5_student-recommendation-ranker",
+      "path": ".skill2_Academic_Graph_Builder",
       "author": "taowenxiang",
-      "description": "The Student Recommendation Ranker is a multi-objective scoring and re-ranking system designed to provide unified recommendations for mentors, projects, and teammates. It integrates outputs from discovery and bundling modules to produce final ranked lists using sophisticated metrics such as topic similarity, network distance, and skill matching. The skill features MMR-based diversity re-ranking to reduce redundancy and includes a cold-start compensation mechanism to ensure fair exposure for new participants.",
+      "description": "Skill 2 builds a heterogeneous academic graph from seeded CSVs and mentor profiles, optionally merges in Skill 1 students and embeddings, and exports stable JSON/NPY artifacts for downstream retrieval and analysis without coupling to its codebase.",
       "version": "0.1.0",
       "tags": [
-        "tool"
+        "heterogeneous-graph",
+        "graph-construction",
+        "embeddings-alignment"
       ],
       "metadataUnverified": true,
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "ProgRec",
-      "registeredAt": "2026-05-11T10:04:25.765496+00:00"
+      "registeredAt": "2026-05-11T10:04:25.765496+00:00",
+      "updatedAt": "2026-05-11T10:08:32.974961+00:00"
     }
   ]
 }
