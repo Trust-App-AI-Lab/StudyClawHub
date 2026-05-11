@@ -1209,6 +1209,20 @@
       ],
       "agent": "travel-guidebook-agent",
       "registeredAt": "2026-05-11T02:15:31.444841+00:00"
+    },
+    {
+      "name": "local-reputation-research",
+      "type": "skill",
+      "repo": "https://github.com/hqiang335/Roammate",
+      "path": ".claude/skills/local-reputation-research",
+      "author": "hqiang335",
+      "description": "Research mainland China destination, attraction, restaurant, and hotel reputation using Amap/FlyAI structured facts plus Web-Rooter public evidence. Summarize recommendations, warnings, tourist traps, queues, reservation friction, food, and hotel-area convenience.",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "agent": "travel-guidebook-agent",
+      "registeredAt": "2026-05-11T02:15:42.456680+00:00"
     }
   ]
 }
