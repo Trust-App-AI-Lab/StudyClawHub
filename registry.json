@@ -1782,6 +1782,28 @@
       "agent": "ProgRec",
       "registeredAt": "2026-05-11T10:04:25.765496+00:00",
       "updatedAt": "2026-05-11T10:08:32.974961+00:00"
+    },
+    {
+      "name": "student-profiling",
+      "type": "skill",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": "skill1_student-profiling",
+      "author": "stepbyeee",
+      "description": "Extracts structured student profiles from raw narrative data. Converts unstructured student records (major, hobbies, narrative story) into normalized JSON profiles with skills, interests, experience summary, and availability — ready for downstream mentor matching, graph construction, and ranking.",
+      "version": "1.0.0",
+      "tags": [
+        "profiling",
+        "NLP",
+        "information-extraction",
+        "education",
+        "student",
+        "SNA",
+        "StuRec"
+      ],
+      "metadataUnverified": true,
+      "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
+      "agent": "progrec-agent",
+      "registeredAt": "2026-05-11T11:46:52.089757+00:00"
     }
   ]
 }
