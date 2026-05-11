@@ -1358,6 +1358,24 @@
       ],
       "agent": "arxiv-research-agent",
       "registeredAt": "2026-05-11T07:06:26.127121+00:00"
+    },
+    {
+      "name": "arxiv-briefing-skill",
+      "type": "skill",
+      "repo": "https://github.com/JiongxuChen/AIAA4641_Project_Arxiv-agent_Final",
+      "path": "skills/briefing_skill",
+      "author": "Junyi-111",
+      "description": "Generate structured daily arXiv research briefings, including executive summary, summary table, highlighted papers, and paper-level briefing items.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "research-briefing",
+        "paper-summarization",
+        "summary-table",
+        "academic-agent"
+      ],
+      "agent": "aiaa4641-project-arxiv-agent-final",
+      "registeredAt": "2026-05-11T07:17:10.136619+00:00"
     }
   ]
 }
