@@ -1652,6 +1652,21 @@
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "ProgRec",
       "registeredAt": "2026-05-11T09:35:39.473597+00:00"
+    },
+    {
+      "name": "ProgRec",
+      "type": "agent",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": ".",
+      "author": "taowenxiang",
+      "description": "Recommend project and mentor to a student",
+      "version": "0.1.0",
+      "tags": [
+        "tool"
+      ],
+      "metadataUnverified": true,
+      "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
+      "registeredAt": "2026-05-11T09:38:33.615138+00:00"
     }
   ]
 }
