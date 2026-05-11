@@ -191,11 +191,14 @@ jobs:
                   skill_entry["metadataBranch"] = metadata_branch
               if metadata_file:
                   skill_entry["metadataFile"] = metadata_file
-              if entry.get("metadataUnverified") or used_fallback_metadata:
+              if entry.get("metadataUnverified") or entry.get("healthUnverified") or used_fallback_metadata:
                   skill_entry["metadataUnverified"] = True
                   skill_entry["metadataWarning"] = entry.get(
-                      "metadataWarning",
-                      "Repository metadata was not verified during submission; this card uses form metadata."
+                      "healthWarning",
+                      entry.get(
+                          "metadataWarning",
+                          "Repository metadata was not verified during submission; this card uses form metadata."
+                      )
                   )
               if entry.get("agent"):
                   skill_entry["agent"] = entry["agent"]

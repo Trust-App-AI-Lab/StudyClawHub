@@ -97,6 +97,13 @@ jobs:
 
           autofix = []   # path drifts with exactly 1 candidate — safe to auto-repair
           issues = []    # problems needing human attention
+          registry_changed = False
+
+          def entry_key(item):
+              item_type = (item.get('type') or 'skill').strip().lower()
+              item_name = (item.get('name') or '').strip()
+              item_agent = (item.get('agent') or '').strip() if item_type == 'skill' else ''
+              return f'{item_type}\0{item_agent}\0{item_name}'
 
           for s in skills:
               name = s['name']
@@ -104,11 +111,14 @@ jobs:
               path = s.get('path', '.') or '.'
               entry_type = s.get('type', 'skill')
               author = s.get('author', '')
+              agent = s.get('agent', '') if (entry_type or 'skill').strip().lower() == 'skill' else ''
+              key = entry_key(s)
 
               def add(severity, msg):
                   issues.append({
                       'severity': severity, 'name': name, 'type': entry_type,
-                      'author': author, 'repo': repo_url, 'issue': msg,
+                      'agent': agent, 'key': key, 'author': author,
+                      'repo': repo_url, 'issue': msg,
                   })
 
               m = re.match(r'https://github\.com/([^/]+)/([^/?#]+?)(?:\.git)?/?$', repo_url)
@@ -170,6 +180,7 @@ jobs:
                           if len(candidates) == 1:
                               autofix.append({
                                   'name': name, 'type': entry_type, 'author': author,
+                                  'agent': agent, 'key': key,
                                   'repo': repo_url, 'old_path': path, 'new_path': candidates[0],
                               })
                           elif candidates:
@@ -185,13 +196,50 @@ jobs:
                   if not parent:
                       add('broken', f'References missing agent `{agent_ref}`')
 
-          # Apply auto-fixes to registry.json
+          # Apply auto-fixes and health markers to registry.json
           if autofix:
-              fix_map = {a['name']: a['new_path'] for a in autofix}
+              fix_map = {a['key']: a['new_path'] for a in autofix}
               for s in registry['skills']:
-                  if s['name'] in fix_map:
-                      s['path'] = fix_map[s['name']]
+                  key = entry_key(s)
+                  if key in fix_map:
+                      s['path'] = fix_map[key]
                       s['updatedAt'] = datetime.now(timezone.utc).isoformat(timespec='seconds')
+                      registry_changed = True
+
+          issues_by_key = {}
+          for issue in issues:
+              item = issues_by_key.setdefault(issue['key'], {
+                  'severity': issue['severity'],
+                  'messages': [],
+              })
+              if issue['severity'] == 'broken':
+                  item['severity'] = 'broken'
+              item['messages'].append(issue['issue'])
+
+          checked_at = datetime.now(timezone.utc).isoformat(timespec='seconds')
+          health_fields = ('healthUnverified', 'healthSeverity', 'healthWarning', 'healthCheckedAt')
+          for s in registry['skills']:
+              key = entry_key(s)
+              issue = issues_by_key.get(key)
+              if issue:
+                  warning = f"Health check {issue['severity']}: " + '; '.join(issue['messages'])
+                  updates = {
+                      'healthUnverified': True,
+                      'healthSeverity': issue['severity'],
+                      'healthWarning': warning,
+                      'healthCheckedAt': checked_at,
+                  }
+                  for field, value in updates.items():
+                      if s.get(field) != value:
+                          s[field] = value
+                          registry_changed = True
+              else:
+                  for field in health_fields:
+                      if field in s:
+                          s.pop(field, None)
+                          registry_changed = True
+
+          if registry_changed:
               with open('registry.json', 'w') as f:
                   json.dump(registry, f, indent=2, ensure_ascii=False)
 
@@ -238,23 +286,24 @@ jobs:
               f.write(f'broken_count={len(broken)}\n')
               f.write(f'warn_count={len(warn)}\n')
               f.write(f'autofix_count={len(autofix)}\n')
+              f.write(f'registry_changed={"1" if registry_changed else "0"}\n')
               f.write(f'total={len(skills)}\n')
 
           print(f'total={len(skills)} broken={len(broken)} warn={len(warn)} autofix={len(autofix)}')
           SCRIPT
 
-      - name: Commit auto-fixes
-        if: steps.scan.outputs.autofix_count != '0'
+      - name: Commit registry health updates
+        if: steps.scan.outputs.registry_changed != '0'
         run: |
           git config user.name "StudyClawHub Bot"
           git config user.email "bot@studyclawhub"
           git add registry.json
-          git commit -m "health-check: auto-fix path drift for ${{ steps.scan.outputs.autofix_count }} entries"
+          git commit -m "health-check: update registry health markers"
           git pull --rebase origin main
           git push
 
       - name: Trigger index rebuild
-        if: steps.scan.outputs.autofix_count != '0'
+        if: steps.scan.outputs.registry_changed != '0'
         continue-on-error: true
         run: gh workflow run build-index.yml
         env:
