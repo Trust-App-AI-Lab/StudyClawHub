@@ -1535,6 +1535,25 @@
       ],
       "agent": "daily-paper-recommendation-briefing-agent",
       "registeredAt": "2026-05-11T08:29:57.801385+00:00"
+    },
+    {
+      "name": "arxiv-ranking-skill",
+      "type": "skill",
+      "repo": "https://github.com/JiongxuChen/AIAA4641_Project_Arxiv-agent_Final",
+      "path": "skills/ranking_skill",
+      "author": "mathway18",
+      "description": "Rank and cluster retrieved arXiv papers according to their relevance to a user research query.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "ranking",
+        "cluster",
+        "relevance"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "agent": "aiaa4641-project-arxiv-agent-final",
+      "registeredAt": "2026-05-11T09:10:25.938531+00:00"
     }
   ]
 }
