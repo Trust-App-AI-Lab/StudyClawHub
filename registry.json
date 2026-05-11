@@ -1304,6 +1304,24 @@
       ],
       "agent": "daily-arxiv-research-briefing-agent",
       "registeredAt": "2026-05-11T06:47:08.012820+00:00"
+    },
+    {
+      "name": "aiaa4641-project-arxiv-agent-final",
+      "type": "agent",
+      "repo": "https://github.com/JiongxuChen/AIAA4641_Project_Arxiv-agent_Final",
+      "path": ".",
+      "author": "JiongxuChen",
+      "description": "A arXiv research briefing agent that retrieves, ranks, summarizes, schedules, and supports follow-up queries over research papers.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "research",
+        "retrieval",
+        "ranking",
+        "briefing",
+        "followup"
+      ],
+      "registeredAt": "2026-05-11T06:57:53.132576+00:00"
     }
   ]
 }
