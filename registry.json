@@ -1804,6 +1804,21 @@
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "progrec-agent",
       "registeredAt": "2026-05-11T11:46:52.089757+00:00"
+    },
+    {
+      "name": "program-and-teammate-discovery",
+      "type": "agent",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": ".https://github.com/taowenxiang/ProgRec",
+      "author": "taowenxiang",
+      "description": "Discovery programs and teammates for target students",
+      "version": "0.1.0",
+      "tags": [
+        "search"
+      ],
+      "metadataUnverified": true,
+      "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
+      "registeredAt": "2026-05-11T13:06:33.931991+00:00"
     }
   ]
 }
