@@ -1594,7 +1594,8 @@
       "metadataBranch": "main",
       "metadataFile": "SKILL.md",
       "agent": "Job Market Intelligence Agent text",
-      "registeredAt": "2026-05-11T09:33:03.566577+00:00"
+      "registeredAt": "2026-05-11T09:33:03.566577+00:00",
+      "updatedAt": "2026-05-11T09:33:19.173533+00:00"
     }
   ]
 }
