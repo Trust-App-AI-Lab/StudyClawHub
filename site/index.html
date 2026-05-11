@@ -1102,8 +1102,8 @@
 
     <div class="form-group">
       <label for="f-name">Name</label>
-      <div class="hint" id="name-hint">Lowercase, kebab-case (e.g. my-cool-skill)</div>
-      <input class="form-input" id="f-name" type="text" placeholder="my-cool-skill" oninput="updatePreview()" />
+      <div class="hint" id="name-hint">Any non-empty name shown in the registry</div>
+      <input class="form-input" id="f-name" type="text" placeholder="my_cool_skill" oninput="updatePreview()" />
     </div>
 
     <div class="form-group">
@@ -1590,16 +1590,16 @@ function updatePreview() {
   const repoHint = document.querySelector('label[for="f-repo"]').nextElementSibling;
 
   if (isAgent) {
-    nameHint.textContent = 'Lowercase, kebab-case (e.g. my-awesome-agent)';
-    nameInput.placeholder = 'my-awesome-agent';
+    nameHint.textContent = 'Any non-empty agent name shown in the registry';
+    nameInput.placeholder = 'my_awesome_agent';
     descInput.placeholder = 'A short description of your agent project';
     pathGroup.style.display = '';
     pathInput.placeholder = '.';
     repoHint.textContent = 'The repo that contains your agent project';
     pathHintContainer.innerHTML = renderAgentPathHint();
   } else {
-    nameHint.textContent = 'Lowercase, kebab-case (e.g. my-cool-skill)';
-    nameInput.placeholder = 'my-cool-skill';
+    nameHint.textContent = 'Any non-empty skill name shown in the registry';
+    nameInput.placeholder = 'my_cool_skill';
     descInput.placeholder = 'A short description of your skill';
     pathGroup.style.display = '';
     pathInput.placeholder = '.claude/skills/my-skill';
@@ -1803,12 +1803,6 @@ async function submitSkill(force = false) {
 
   if (!name || !repo || !author) {
     showSubmitStatus('error', '<span class="submit-status-title">Missing fields</span><div class="submit-status-note">Please fill in Name, Repo URL, and GitHub Username.</div>');
-    return;
-  }
-
-  // Validate name format — both skills and agents use kebab-case
-  if (!/^[a-z0-9][a-z0-9-]*$/.test(name)) {
-    showSubmitStatus('error', `<span class="submit-status-title">Invalid name</span><div class="submit-status-note">Name must be lowercase kebab-case (e.g. ${type === 'agent' ? 'my-awesome-agent' : 'my-cool-skill'}).</div>`);
     return;
   }
 

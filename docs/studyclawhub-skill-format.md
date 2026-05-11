@@ -19,7 +19,7 @@ to Claude / OpenClaw and they'll figure it out.
 
 ```yaml
 ---
-name: my-cool-skill
+name: my_cool_skill
 description: "What this skill does in one sentence."
 author: your-github-username
 version: 1.0.0
@@ -39,7 +39,7 @@ That's it. Push to GitHub, then submit to StudyClawHub.
 
 | Field         | Required | Description                                    |
 | ------------- | -------- | ---------------------------------------------- |
-| `name`        | Yes      | Lowercase kebab-case (`my-cool-skill`)         |
+| `name`        | Yes      | Any non-empty name shown in the registry       |
 | `description` | Yes      | One-line summary for search results            |
 | `author`      | Recommended | Your GitHub username                        |
 | `version`     | Recommended | Semver (`1.0.0`)                            |

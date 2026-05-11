@@ -7,8 +7,8 @@ body:
     id: name
     attributes:
       label: Skill name
-      description: Kebab-case, e.g. "pagerank-search"
-      placeholder: my-awesome-skill
+      description: Name shown in the registry
+      placeholder: my_awesome_skill
     validations:
       required: true
 
