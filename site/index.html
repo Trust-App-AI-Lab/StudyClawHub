@@ -392,6 +392,7 @@
       align-items: center;
       gap: 0.25rem;
     }
+    .card-footer > .card-stat { margin-left: auto; }
     .card-stat .num { color: var(--text-secondary); font-weight: 500; }
     .card-link {
       font-size: 0.75rem;
@@ -1524,9 +1525,6 @@ function renderPage() {
           <img src="https://github.com/${esc(s.author)}.png?size=36" alt="" loading="lazy" />
           @${esc(s.author)}
         </a>
-        <div class="card-tags">
-          ${(s.tags||[]).slice(0,3).map(t => `<span class="tag">${esc(t)}</span>`).join('')}
-        </div>
         <span class="card-stat">★ ${s.stars||0}</span>
         ${websiteLink(s, 'site →', true)}
       </div>
