@@ -1819,6 +1819,24 @@
       "metadataUnverified": true,
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "registeredAt": "2026-05-11T13:06:33.931991+00:00"
+    },
+    {
+      "name": "Academic_Graph_Builder",
+      "type": "skill",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": "skill2_handoff",
+      "author": "taowenxiang",
+      "description": "This skill builds a heterogeneous academic graph from seeded CSVs and mentor profiles, optionally merges in Skill 1 students and embeddings, and exports stable JSON/NPY artifacts for downstream retrieval and analysis without coupling to its codebase.",
+      "version": "0.1.0",
+      "tags": [
+        "heterogeneous-graph",
+        "graph-construction",
+        "embeddings-alignment"
+      ],
+      "metadataUnverified": true,
+      "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
+      "agent": "ProgRec",
+      "registeredAt": "2026-05-11T13:07:42.495386+00:00"
     }
   ]
 }
