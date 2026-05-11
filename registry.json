@@ -1441,14 +1441,15 @@
       "description": "Extract one-line summary, key contributions, methods and keywords for the top-N ranked arXiv papers. The host LLM running this Agent performs the summarization itself in-context — this skill prepares the request and validates the output. Skill 3 of 5 in the arXiv Research Briefing Agent.",
       "version": "0.3.0",
       "tags": [
-        "arxiv",
+        "[arxiv",
         "summarization",
         "llm",
         "research",
-        "agent-skill"
+        "agent-skill]"
       ],
       "agent": "arxiv-research-agent",
-      "registeredAt": "2026-05-11T07:55:41.717Z"
+      "registeredAt": "2026-05-11T07:55:41.717Z",
+      "updatedAt": "2026-05-11T08:17:26.718868+00:00"
     },
     {
       "name": "briefing_report",
