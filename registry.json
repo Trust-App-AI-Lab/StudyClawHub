@@ -1727,6 +1727,26 @@
       "metadataFile": "SKILL.md",
       "agent": "Job Market Intelligence Agent",
       "registeredAt": "2026-05-11T09:42:23.360079+00:00"
+    },
+    {
+      "name": "Resume Matching Recommendation Skill",
+      "type": "skill",
+      "repo": "https://github.com/hermit354/AIAA4641_Project",
+      "path": "tools/core/resume_matching_recommendation_skill",
+      "author": "hermit354",
+      "description": "Parse a resume or self-description, compare the candidate profile with market role requirements, and recommend suitable jobs with skill gaps and reasons.",
+      "version": "0.1.0",
+      "tags": [
+        "resume",
+        "recommendation",
+        "job-matching",
+        "career",
+        "skills"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "agent": "Job Market Intelligence Agent",
+      "registeredAt": "2026-05-11T09:43:07.615016+00:00"
     }
   ]
 }
