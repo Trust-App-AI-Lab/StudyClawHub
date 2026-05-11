@@ -1269,6 +1269,23 @@
       ],
       "agent": "daily-arxiv-research-briefing-agent",
       "registeredAt": "2026-05-11T06:45:10.033713+00:00"
+    },
+    {
+      "name": "arxiv-retrieval-skill",
+      "type": "skill",
+      "repo": "https://github.com/JiongxuChen/AIAA4641_Project_Arxiv-agent_Final",
+      "path": "skills/retrieval_skill",
+      "author": "JiongxuChen",
+      "description": "Retrieves recent arXiv papers from keyword, phrase, or multi-term research queries and normalizes them into structured paper dictionaries.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "retrieval",
+        "search",
+        "research"
+      ],
+      "agent": "aiaa4641-project-arxiv-agent-final",
+      "registeredAt": "2026-05-11T06:46:16.798362+00:00"
     }
   ]
 }
