@@ -1482,6 +1482,23 @@
       "version": "1.0.0",
       "agent": "arxiv-research-agent",
       "registeredAt": "2026-05-11T07:55:41.717Z"
+    },
+    {
+      "name": "daily-paper-recommendation-briefing-agent",
+      "type": "agent",
+      "repo": "https://github.com/cytochronne/Dailiy-Research-Agent",
+      "path": ".",
+      "author": "cytochronne",
+      "description": "Daily arXiv paper monitoring, recommendation, feedback refinement, briefing generation, and explanation agent.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "research-agent",
+        "recommendation",
+        "briefing",
+        "llm"
+      ],
+      "registeredAt": "2026-05-11T08:29:30.139540+00:00"
     }
   ]
 }
