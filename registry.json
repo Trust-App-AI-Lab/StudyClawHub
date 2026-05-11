@@ -1747,6 +1747,22 @@
       "metadataFile": "SKILL.md",
       "agent": "Job Market Intelligence Agent",
       "registeredAt": "2026-05-11T09:43:07.615016+00:00"
+    },
+    {
+      "name": "project_teammate_discovery",
+      "type": "skill",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": "Skill4_README.md",
+      "author": "taowenxiang",
+      "description": "a skill to discovery suitable projects and teammates to target student",
+      "version": "0.1.0",
+      "tags": [
+        "search"
+      ],
+      "metadataUnverified": true,
+      "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
+      "agent": "ProgRec Agent",
+      "registeredAt": "2026-05-11T10:01:20.345176+00:00"
     }
   ]
 }
