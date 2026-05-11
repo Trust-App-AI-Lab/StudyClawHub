@@ -1195,6 +1195,20 @@
       ],
       "agent": "travel-guidebook-agent",
       "registeredAt": "2026-05-11T02:15:18.974697+00:00"
+    },
+    {
+      "name": "itinerary-planner",
+      "type": "skill",
+      "repo": "https://github.com/hqiang335/Roammate",
+      "path": ".claude/skills/itinerary-planner",
+      "author": "hqiang335",
+      "description": "Plan mainland China multi-day trips with daily themes, timelines, transport, meals, budgets, reservation reminders, backup plans, and feasibility checks for families, older adults, self-driving, rail, and mixed travel.",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "agent": "travel-guidebook-agent",
+      "registeredAt": "2026-05-11T02:15:31.444841+00:00"
     }
   ]
 }
