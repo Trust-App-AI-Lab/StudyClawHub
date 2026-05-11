@@ -1687,6 +1687,26 @@
       "metadataFile": "SKILL.md",
       "agent": "Job Market Intelligence Agent",
       "registeredAt": "2026-05-11T09:41:08.882391+00:00"
+    },
+    {
+      "name": "Job Skill Extraction Skill",
+      "type": "skill",
+      "repo": "https://github.com/hermit354/AIAA4641_Project",
+      "path": "tools/core/job_skill_extraction_skill",
+      "author": "hermit354",
+      "description": "Extract and normalize job titles, skill requirements, tools, education requirements, and experience requirements from job descriptions.",
+      "version": "0.1.0",
+      "tags": [
+        "job-skills",
+        "extraction",
+        "career",
+        "nlp",
+        "requirements"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "agent": "Job Market Intelligence Agent",
+      "registeredAt": "2026-05-11T09:41:57.898428+00:00"
     }
   ]
 }
