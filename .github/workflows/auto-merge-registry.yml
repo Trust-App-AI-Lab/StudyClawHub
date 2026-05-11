@@ -4,10 +4,6 @@ on:
   issues:
     types: [opened]
 
-concurrency:
-  group: registry-update
-  cancel-in-progress: false
-
 permissions:
   contents: write
   issues: write
@@ -283,8 +279,13 @@ jobs:
           git config user.email "bot@studyclawhub"
           git add registry.json
           git commit -m "register: add skill from #${{ github.event.issue.number }}"
-          git pull --rebase origin main
-          git push
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin main && git push && exit 0
+            git rebase --abort || true
+            sleep $((attempt * 2))
+          done
+          echo "Failed to push registry update after retries" >&2
+          exit 1
 
       - name: Trigger index rebuild
         if: steps.register.outputs.success == 'true'
