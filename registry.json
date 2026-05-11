@@ -1499,6 +1499,24 @@
         "llm"
       ],
       "registeredAt": "2026-05-11T08:29:30.139540+00:00"
+    },
+    {
+      "name": "discovery-recommendation",
+      "type": "skill",
+      "repo": "https://github.com/cytochronne/Dailiy-Research-Agent",
+      "path": "skills/discovery-recommendation",
+      "author": "cytochronne",
+      "description": "Plan arXiv discovery, retrieve candidate papers, rank recommendations, and refine them with seed papers or feedback.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "recommendation",
+        "retrieval",
+        "ranking",
+        "research-agent"
+      ],
+      "agent": "daily-paper-recommendation-briefing-agent",
+      "registeredAt": "2026-05-11T08:29:43.342406+00:00"
     }
   ]
 }
