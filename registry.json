@@ -1575,6 +1575,26 @@
       "metadataBranch": "main",
       "metadataFile": "AGENTS.md",
       "registeredAt": "2026-05-11T09:27:03.062917+00:00"
+    },
+    {
+      "name": "Job Market Search Skill text",
+      "type": "skill",
+      "repo": "https://github.com/hermit354/AIAA4641_Project",
+      "path": "tools/core/job_market_search_skill",
+      "author": "hermit354",
+      "description": "Collect and filter job-market data for demand queries, resume-based recommendations, and target-role skill analysis. text",
+      "version": "0.1.0",
+      "tags": [
+        "job-market",
+        "search",
+        "career",
+        "recruitment",
+        "data-collection text"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "agent": "Job Market Intelligence Agent text",
+      "registeredAt": "2026-05-11T09:33:03.566577+00:00"
     }
   ]
 }
