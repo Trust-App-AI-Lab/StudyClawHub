@@ -1517,6 +1517,24 @@
       ],
       "agent": "daily-paper-recommendation-briefing-agent",
       "registeredAt": "2026-05-11T08:29:43.342406+00:00"
+    },
+    {
+      "name": "research-synthesis",
+      "type": "skill",
+      "repo": "https://github.com/cytochronne/Dailiy-Research-Agent",
+      "path": "skills/research-synthesis",
+      "author": "cytochronne",
+      "description": "Turn ranked arXiv recommendations into evidence-bounded briefings and selected-paper explanations.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "synthesis",
+        "briefing",
+        "explanation",
+        "research-agent"
+      ],
+      "agent": "daily-paper-recommendation-briefing-agent",
+      "registeredAt": "2026-05-11T08:29:57.801385+00:00"
     }
   ]
 }
