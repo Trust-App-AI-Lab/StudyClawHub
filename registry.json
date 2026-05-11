@@ -1329,13 +1329,15 @@
       "repo": "https://github.com/3123738092/arxiv-research-agent",
       "path": ".",
       "author": "3123738092",
-      "description": "Daily arXiv Research Briefing Agent — host-LLM driven multi-skill agent that   fetches, ranks, summarizes, visualizes, and reports on daily arXiv papers.",
+      "description": "Daily arXiv Research Briefing Agent — host-LLM driven multi-skill agent that fetches, ranks, summarizes, visualizes, and reports on daily arXiv papers.",
       "version": "0.1.0",
       "tags": [
         "(none)"
       ],
       "registeredAt": "2026-05-11T07:05:59.354094+00:00",
-      "updatedAt": "2026-05-11T08:16:36.531532+00:00"
+      "updatedAt": "2026-05-11T09:15:53.941141+00:00",
+      "metadataBranch": "main",
+      "metadataFile": "AGENTS.md"
     },
     {
       "name": "router",
