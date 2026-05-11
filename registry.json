@@ -1168,6 +1168,19 @@
       ],
       "agent": "travel-guidebook-agent",
       "registeredAt": "2026-05-11T02:10:59.313413+00:00"
+    },
+    {
+      "name": "travel-guidebook-agent",
+      "type": "agent",
+      "repo": "https://github.com/hqiang335/Roammate",
+      "path": ".",
+      "author": "hqiang335",
+      "description": "A multi-skill AI agent for mainland China trip planning, local reputation research, route mapping, and dashboard-style guidebook generation.",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "registeredAt": "2026-05-11T02:15:06.867995+00:00"
     }
   ]
 }
