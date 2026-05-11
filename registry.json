@@ -1556,6 +1556,25 @@
       "metadataFile": "SKILL.md",
       "agent": "aiaa4641-project-arxiv-agent-final",
       "registeredAt": "2026-05-11T09:10:25.938531+00:00"
+    },
+    {
+      "name": "Job Market Intelligence Agent",
+      "type": "agent",
+      "repo": "https://github.com/hermit354/AIAA4641_Project",
+      "path": ".",
+      "author": "hermit354",
+      "description": "A FractFlow-based composite agent for job-market demand analysis, resume-based role recommendation, and target-role skill requirement analysis. text",
+      "version": "0.1.0",
+      "tags": [
+        "career",
+        "job-market",
+        "resume",
+        "skills",
+        "agent text"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "AGENTS.md",
+      "registeredAt": "2026-05-11T09:27:03.062917+00:00"
     }
   ]
 }
