@@ -1322,6 +1322,20 @@
         "followup"
       ],
       "registeredAt": "2026-05-11T06:57:53.132576+00:00"
+    },
+    {
+      "name": "arxiv-research-agent",
+      "type": "agent",
+      "repo": "https://github.com/3123738092/arxiv-research-agent",
+      "path": ".",
+      "author": "3123738092",
+      "description": "Daily arXiv Research Briefing Agent — host-LLM driven multi-skill agent that   fetches, ranks, summarizes, visualizes, and reports on daily arXiv papers.",
+      "version": "0.1.0",
+      "tags": [
+        "tool",
+        "research paper"
+      ],
+      "registeredAt": "2026-05-11T07:05:59.354094+00:00"
     }
   ]
 }
