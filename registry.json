@@ -1636,6 +1636,22 @@
       "metadataFile": "SKILL.md",
       "agent": "Job Market Intelligence Agent text",
       "registeredAt": "2026-05-11T09:34:52.933541+00:00"
+    },
+    {
+      "name": "mentor_discovery",
+      "type": "skill",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": "skill3_mentor_discovery",
+      "author": "taowenxiang",
+      "description": "Recommend mentor to a student.",
+      "version": "0.1.0",
+      "tags": [
+        "tool"
+      ],
+      "metadataUnverified": true,
+      "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
+      "agent": "ProgRec",
+      "registeredAt": "2026-05-11T09:35:39.473597+00:00"
     }
   ]
 }
