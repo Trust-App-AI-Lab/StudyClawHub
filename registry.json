@@ -1707,6 +1707,26 @@
       "metadataFile": "SKILL.md",
       "agent": "Job Market Intelligence Agent",
       "registeredAt": "2026-05-11T09:41:57.898428+00:00"
+    },
+    {
+      "name": "Market Trend Analysis Skill",
+      "type": "skill",
+      "repo": "https://github.com/hermit354/AIAA4641_Project",
+      "path": "tools/core/market_trend_analysis_skill",
+      "author": "hermit354",
+      "description": "Analyze structured job and skill data to identify high-demand roles, trending skills, skill clusters, and market demand changes over time.",
+      "version": "0.1.0",
+      "tags": [
+        "market-trends",
+        "analysis",
+        "jobs",
+        "skills",
+        "career"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "agent": "Job Market Intelligence Agent",
+      "registeredAt": "2026-05-11T09:42:23.360079+00:00"
     }
   ]
 }
