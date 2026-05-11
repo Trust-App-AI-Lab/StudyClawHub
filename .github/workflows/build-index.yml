@@ -73,12 +73,12 @@ jobs:
               entry_type = entry.get('type', 'skill')
 
               # Extract owner/repo from URL
-              match = re.match(r'https://github\.com/([^/]+/[^/]+)', repo)
+              match = re.match(r'https://github\.com/([^/]+)/([^/?#]+?)(?:\.git)?/?(?:[?#].*)?$', repo)
               if not match:
                   print(f"Skipping {name}: invalid repo URL", file=sys.stderr)
                   continue
 
-              repo_path = match.group(1)
+              repo_path = f"{match.group(1)}/{match.group(2)}"
 
               # Fetch metadata file: AGENTS.md for agents, SKILL.md for skills
               if entry_type == 'agent':

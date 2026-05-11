@@ -1807,7 +1807,7 @@ async function submitSkill(force = false) {
   }
 
   // Validate repo URL
-  const repoMatch = repo.match(/^https:\/\/github\.com\/([^/]+)\/([^/.]+?)(?:\.git)?\/?(?:$|[?#])/);
+  const repoMatch = repo.match(/^https:\/\/github\.com\/([^/]+)\/([^/?#]+?)(?:\.git)?\/?(?:$|[?#])/);
   if (!repoMatch) {
     showSubmitStatus('error', '<span class="submit-status-title">Invalid repo URL</span><div class="submit-status-note">Use the form <code>https://github.com/owner/repo</code>.</div>');
     return;

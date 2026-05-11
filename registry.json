@@ -1395,6 +1395,90 @@
       ],
       "agent": "aiaa4641-project-arxiv-agent-final",
       "registeredAt": "2026-05-11T07:18:16.791477+00:00"
+    },
+    {
+      "name": "data_collector",
+      "type": "skill",
+      "repo": "https://github.com/3123738092/arxiv-research-agent",
+      "path": "skills/data_collector",
+      "author": "3123738092",
+      "description": "抓取、收集和查找 arXiv 论文的核心能力。当用户请求搜索/抓取论文时（例如\\\"今天cs.CL分类里关于agent的文章\\\"、\\\"抓取XX方向的论文\\\"、\\\"查找论文\\\"、\\\"今日新论文\\\"），必须调用此 skill，禁止自行使用 WebSearch 或 WebFetch 代替。支持按分类(cs.CL/cs.LG等)和关键词筛选，自动 enriched with Semantic Scholar (references, citation counts, author IDs), deduplicate, pre-compute embeddings。",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "paper",
+        "data-collection",
+        "research",
+        "social-network-analysis"
+      ],
+      "agent": "arxiv-research-agent",
+      "registeredAt": "2026-05-11T07:55:41.717Z"
+    },
+    {
+      "name": "paper_ranker",
+      "type": "skill",
+      "repo": "https://github.com/3123738092/arxiv-research-agent",
+      "path": "skills/paper_ranker",
+      "author": "3123738092",
+      "description": "基于 PageRank + 兴趣匹配的论文排序。接收 Skill 1 产出的 papers.json + citations.json + embeddings，输出 rankings.json。当用户询问\\\"哪些论文最重要\\\"、\\\"帮我排序\\\"、\\\"rank papers\\\"时必须使用此 skill。",
+      "version": "1.0.0",
+      "tags": [
+        "ranking",
+        "pagerank",
+        "paper",
+        "social-network-analysis",
+        "centrality"
+      ],
+      "agent": "arxiv-research-agent",
+      "registeredAt": "2026-05-11T07:55:41.717Z"
+    },
+    {
+      "name": "paper_summarizer",
+      "type": "skill",
+      "repo": "https://github.com/3123738092/arxiv-research-agent",
+      "path": "skills/paper_summarizer",
+      "author": "3123738092",
+      "description": "Extract one-line summary, key contributions, methods and keywords for the top-N ranked arXiv papers. The host LLM running this Agent performs the summarization itself in-context — this skill prepares the request and validates the output. Skill 3 of 5 in the arXiv Research Briefing Agent.",
+      "version": "0.3.0",
+      "tags": [
+        "arxiv",
+        "summarization",
+        "llm",
+        "research",
+        "agent-skill"
+      ],
+      "agent": "arxiv-research-agent",
+      "registeredAt": "2026-05-11T07:55:41.717Z"
+    },
+    {
+      "name": "briefing_report",
+      "type": "skill",
+      "repo": "https://github.com/3123738092/arxiv-research-agent",
+      "path": "skills/briefing_report",
+      "author": "3123738092",
+      "description": "Render the daily Markdown briefing for the arXiv Research Briefing Agent. Reads ranked + summarized papers from shared_data/ and writes shared_data/briefing.md with top-N picks, key contributions, methods, keywords, and trend analysis. Trigger when user asks: '生成今天的简报', '导出 Markdown 简报', 'write the briefing', 'render daily report', 'regenerate briefing.md', 'give me the Markdown of today's papers'. This is Skill 4 of 5 in the agent — final output stage. Do NOT use this skill to fetch or rank papers; only to render the report once shared_data/ already contains rankings + summaries.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "briefing",
+        "markdown",
+        "report",
+        "daily-digest",
+        "social-network-analysis"
+      ],
+      "agent": "arxiv-research-agent",
+      "registeredAt": "2026-05-11T07:55:41.717Z"
+    },
+    {
+      "name": "papers-analysis-visualizer",
+      "type": "skill",
+      "repo": "https://github.com/3123738092/arxiv-research-agent",
+      "path": "skills/papers-analysis-visualizer",
+      "author": "3123738092",
+      "description": "Build a research dashboard and visual analytics summary from structured paper data, focusing on paper recommendation, keyword network visualization and topic trend exploration.",
+      "version": "1.0.0",
+      "agent": "arxiv-research-agent",
+      "registeredAt": "2026-05-11T07:55:41.717Z"
     }
   ]
 }

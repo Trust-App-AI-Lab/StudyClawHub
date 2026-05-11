@@ -68,8 +68,12 @@ jobs:
               errors.append('Missing skill name')
           if not repo:
               errors.append('Missing repo URL')
-          elif not repo.startswith('https://github.com/'):
-              errors.append(f'Invalid repo URL "{repo}" — must be a GitHub URL')
+          else:
+              repo_match = re.match(r'^https://github\.com/([^/]+)/([^/?#]+?)(?:\.git)?/?(?:[?#].*)?$', repo)
+              if repo_match:
+                  repo = f'https://github.com/{repo_match.group(1)}/{repo_match.group(2)}'
+              else:
+                  errors.append(f'Invalid repo URL "{repo}" — must be a GitHub URL')
           if not author:
               errors.append('Missing author')
 
