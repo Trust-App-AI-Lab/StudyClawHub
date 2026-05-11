@@ -1336,6 +1336,28 @@
         "research paper"
       ],
       "registeredAt": "2026-05-11T07:05:59.354094+00:00"
+    },
+    {
+      "name": "router",
+      "type": "skill",
+      "repo": "https://github.com/3123738092/arxiv-research-agent",
+      "path": "skills/router",
+      "author": "3123738092",
+      "description": "Daily arXiv research briefing agent. Fetches today's papers from arXiv (cs.CL/cs.LG/cs.CV/cs.AI/cs.MA), ranks them by PageRank + user interest + novelty, summarizes the top-N in-context, builds an interactive HTML dashboard, and renders a Markdown briefing. Use this skill for ANY request that asks for a curated daily research summary across multiple papers.",
+      "version": "2.1.0",
+      "tags": [
+        "[arxiv",
+        "agent",
+        "research",
+        "briefing",
+        "daily-digest",
+        "social-network-analysis",
+        "pagerank",
+        "llm",
+        "router]"
+      ],
+      "agent": "arxiv-research-agent",
+      "registeredAt": "2026-05-11T07:06:26.127121+00:00"
     }
   ]
 }
