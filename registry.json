@@ -1181,6 +1181,20 @@
         "(none)"
       ],
       "registeredAt": "2026-05-11T02:15:06.867995+00:00"
+    },
+    {
+      "name": "guidebook-maker",
+      "type": "skill",
+      "repo": "https://github.com/hqiang335/Roammate",
+      "path": ".claude/skills/guidebook-maker",
+      "author": "hqiang335",
+      "description": "Turn mainland China trip briefs, reputation research, itineraries, map data, hotels, budgets, and source notes into a polished dashboard-style interactive HTML travel atlas.",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "agent": "travel-guidebook-agent",
+      "registeredAt": "2026-05-11T02:15:18.974697+00:00"
     }
   ]
 }
