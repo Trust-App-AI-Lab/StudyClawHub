@@ -1251,6 +1251,24 @@
       ],
       "agent": "travel-guidebook-agent",
       "registeredAt": "2026-05-11T02:16:11.675524+00:00"
+    },
+    {
+      "name": "briefing-skill",
+      "type": "skill",
+      "repo": "https://github.com/JiongxuChen/AIAA4641_Project_Arxiv-agent_Final",
+      "path": "skills/briefing_skill",
+      "author": "Junyi-111",
+      "description": "Generate structured daily arXiv research briefings, including executive summary, summary table, highlighted papers, and paper-level briefing items.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "research-briefing",
+        "paper-summarization",
+        "summary-table",
+        "academic-agent"
+      ],
+      "agent": "daily-arxiv-research-briefing-agent",
+      "registeredAt": "2026-05-11T06:45:10.033713+00:00"
     }
   ]
 }
