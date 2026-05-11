@@ -1725,7 +1725,7 @@ function pickPath(path) {
 
 // ── Path verification (GitHub API) ──
 // Returns: { state: 'ok' | 'path-missing' | 'repo-not-found' | 'rate-limited' | 'network-error',
-//            candidates: [], metaFiles: [...], branch }
+//            candidates: [], metaFiles: [...], branch, metadataFile }
 //
 // Strategy: try raw.githubusercontent.com HEAD first (no API quota cost) and
 // only fall back to the /repos API when that HEAD fails. This means the common
@@ -1744,16 +1744,16 @@ async function verifySkillPath({ owner, repo, path, type }) {
     resp.status === 403 && resp.headers.get('X-RateLimit-Remaining') === '0';
 
   // HEAD every (branch, metaFile) combo in parallel; return the first hit.
-  // Returns { ok: true, branch } on success, { ok: false } on miss, or
+  // Returns { ok: true, branch, metadataFile } on success, { ok: false } on miss, or
   // throws on network failure.
   const headAny = async (branches) => {
     const probes = [];
     for (const b of branches) for (const mf of metaFiles) {
-      probes.push(fetch(rawUrl(b, mf), { method: 'HEAD' }).then(r => ({ r, b })));
+      probes.push(fetch(rawUrl(b, mf), { method: 'HEAD' }).then(r => ({ r, b, mf })));
     }
     const results = await Promise.all(probes);
-    for (const { r, b } of results) {
-      if (r.ok) return { ok: true, branch: b };
+    for (const { r, b, mf } of results) {
+      if (r.ok) return { ok: true, branch: b, metadataFile: mf };
     }
     return { ok: false };
   };
@@ -1765,7 +1765,7 @@ async function verifySkillPath({ owner, repo, path, type }) {
   let branch = 'main';
   try {
     const hit = await headAny(['main', 'master']);
-    if (hit.ok) return { state: 'ok', candidates: [], metaFiles, branch: hit.branch };
+    if (hit.ok) return { state: 'ok', candidates: [], metaFiles, branch: hit.branch, metadataFile: hit.metadataFile };
   } catch (_) {
     return { state: 'network-error', candidates: [], metaFiles, branch };
   }
@@ -1789,7 +1789,7 @@ async function verifySkillPath({ owner, repo, path, type }) {
     if (branch !== 'main' && branch !== 'master') {
       try {
         const hit = await headAny([branch]);
-        if (hit.ok) return { state: 'ok', candidates: [], metaFiles, branch };
+        if (hit.ok) return { state: 'ok', candidates: [], metaFiles, branch, metadataFile: hit.metadataFile };
       } catch (_) {
         return { state: 'network-error', candidates: [], metaFiles, branch };
       }
@@ -1857,6 +1857,7 @@ async function submitSkill(force = false) {
   // verifiedBranch is hoisted so the agent child-skill scan can reuse it
   // (avoids a redundant /repos API call).
   let verifiedBranch = null;
+  let verifiedFile = null;
   if (!force) {
     setSubmitBtnBusy(true);
     showSubmitStatus('info', '<span class="submit-spinner"></span>Checking your repo…');
@@ -1866,7 +1867,10 @@ async function submitSkill(force = false) {
     } finally {
       setSubmitBtnBusy(false);
     }
-    if (result.state === 'ok') verifiedBranch = result.branch;
+    if (result.state === 'ok') {
+      verifiedBranch = result.branch;
+      verifiedFile = result.metadataFile;
+    }
 
     if (result.state === 'path-missing' || result.state === 'rate-limited') {
       const metaFiles = result.metaFiles || [];
@@ -1933,7 +1937,12 @@ async function submitSkill(force = false) {
       setSubmitBtnBusy(false);
     }
 
-    const agentIssue = buildIssueEntry({ name, desc, version, tags, repo, path, type: 'agent', agent: '', author, verification: force ? 'unverified' : 'verified' });
+    const agentIssue = buildIssueEntry({
+      name, desc, version, tags, repo, path, type: 'agent', agent: '', author,
+      verification: force ? 'unverified' : 'verified',
+      metadataBranch: verifiedBranch,
+      metadataFile: verifiedFile,
+    });
 
     if (scan.state === 'rate-limited') {
       // Can't list the repo's files right now — submit the agent anyway and
@@ -1961,20 +1970,33 @@ async function submitSkill(force = false) {
       agentAuthor: author,
       agentRepo: repo,
       agentIssue,
+      metadataBranch: verifiedBranch,
+      metadataFile: verifiedFile,
+      childMetadataBranch: scan.branch || verifiedBranch,
       children: scan.skills,
     });
     return;
   }
 
   // Regular skill flow — single issue.
-  const issue = buildIssueEntry({ name, desc, version, tags, repo, path, type, agent: agentField, author, verification: force ? 'unverified' : 'verified' });
+  const issue = buildIssueEntry({
+    name, desc, version, tags, repo, path, type, agent: agentField, author,
+    verification: force ? 'unverified' : 'verified',
+    metadataBranch: verifiedBranch,
+    metadataFile: verifiedFile,
+  });
   window.open(buildIssueUrl(issue), '_blank');
   hideSubmitStatus();
   closeSubmit();
 }
 
 // Build a {title, body} for a GitHub register issue.
-function buildIssueEntry({ name, desc, version, tags, repo, path, type, agent, author, verification = 'verified' }) {
+function buildIssueEntry({
+  name, desc, version, tags, repo, path, type, agent, author,
+  verification = 'verified',
+  metadataBranch = '',
+  metadataFile = '',
+}) {
   const body =
     `### Skill name\n\n${name}\n\n` +
     `### Description\n\n${desc || '(none)'}\n\n` +
@@ -1984,6 +2006,8 @@ function buildIssueEntry({ name, desc, version, tags, repo, path, type, agent, a
     `### Path to Skill folder\n\n${path}\n\n` +
     `### Type\n\n${type}\n\n` +
     `### Metadata verification\n\n${verification}\n\n` +
+    `### Metadata branch\n\n${metadataBranch || ''}\n\n` +
+    `### Metadata file\n\n${metadataFile || ''}\n\n` +
     `### Agent name\n\n${agent || ''}\n\n` +
     `### Your GitHub username\n\n${author}`;
   return { title: `register: ${name}`, body, name };
@@ -2059,7 +2083,7 @@ async function scanChildSkills(owner, repo, branchHint) {
       return null;
     }
   }));
-  return { state: 'ok', skills: results.filter(Boolean) };
+  return { state: 'ok', branch, skills: results.filter(Boolean) };
 }
 
 // Tiny frontmatter parser — only extracts fields we need. Supports plain
@@ -2245,6 +2269,9 @@ function confirmBatchSelection() {
       type: 'skill',
       agent: ctx.agentName,
       author: ctx.agentAuthor,
+      verification: 'verified',
+      metadataBranch: ctx.childMetadataBranch,
+      metadataFile: 'SKILL.md',
     });
     queue.push({ label: `Skill — ${c.effectiveName}`, ...issue, kind: 'skill' });
   }
