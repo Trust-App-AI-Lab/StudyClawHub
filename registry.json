@@ -1343,7 +1343,7 @@
       "repo": "https://github.com/3123738092/arxiv-research-agent",
       "path": "skills/router",
       "author": "3123738092",
-      "description": "Daily arXiv research briefing agent. Fetches today's papers from arXiv (cs.CL/cs.LG/cs.CV/cs.AI/cs.MA), ranks them by PageRank + user interest + novelty, summarizes the top-N in-context, builds an interactive HTML dashboard, and renders a Markdown briefing. Use this skill for ANY request that asks for a curated daily research summary across multiple papers.",
+      "description": "Daily arXiv research briefing agent. Fetches today''s papers from arXiv (cs.CL/cs.LG/cs.CV/cs.AI/cs.MA), ranks them by PageRank + user interest + novelty, summarizes the top-N in-context, builds an interactive HTML dashboard, and renders a Markdown briefing. Use this skill for ANY request that asks for a curated daily research summary across multiple papers. Trigger phrases include: - \"今日 arxiv 简报\" / \"今天的 arxiv\" / \"抓今天的论文\" / \"做个论文简报\" - \"daily arxiv briefing\" / \"today''s papers on X\" / \"what''s new on arxiv today\" - \"arxiv research digest\" / \"morning research digest\" / \"summarize today''s papers\" - \"build a research briefing for <topic>\" / \"give me the top papers on <topic>\" This skill is a ROUTER. It does not run code itself — it activates 5 sub-skills in order via the Skill tool. Each sub-skill owns its own execution details (paths, env vars, commands). Skill 3 (summarization) is performed BY YOU, the host LLM, in-context; no external LLM API is called. The 5 sub-skills live alongside this one in the same skills/ directory.",
       "version": "2.1.0",
       "tags": [
         "[arxiv",
@@ -1357,7 +1357,8 @@
         "router]"
       ],
       "agent": "arxiv-research-agent",
-      "registeredAt": "2026-05-11T07:06:26.127121+00:00"
+      "registeredAt": "2026-05-11T07:06:26.127121+00:00",
+      "updatedAt": "2026-05-11T08:17:41.891047+00:00"
     },
     {
       "name": "arxiv-briefing-skill",
