@@ -1154,6 +1154,20 @@
       ],
       "agent": "research-trail",
       "registeredAt": "2026-05-10T18:21:36.839255+00:00"
+    },
+    {
+      "name": "destination-brief",
+      "type": "skill",
+      "repo": "https://github.com/hqiang335/Roammate",
+      "path": ".claude/skills/destination-brief",
+      "author": "hqiang335",
+      "description": "Create concise mainland China destination briefs covering overview, best season, weather risks, transport gateways, traveler fit, core experiences, cautions, and freshness notes.",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "agent": "travel-guidebook-agent",
+      "registeredAt": "2026-05-11T02:10:59.313413+00:00"
     }
   ]
 }
