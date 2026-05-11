@@ -1401,17 +1401,18 @@
       "repo": "https://github.com/3123738092/arxiv-research-agent",
       "path": "skills/data_collector",
       "author": "3123738092",
-      "description": "抓取、收集和查找 arXiv 论文的核心能力。当用户请求搜索/抓取论文时（例如\\\"今天cs.CL分类里关于agent的文章\\\"、\\\"抓取XX方向的论文\\\"、\\\"查找论文\\\"、\\\"今日新论文\\\"），必须调用此 skill，禁止自行使用 WebSearch 或 WebFetch 代替。支持按分类(cs.CL/cs.LG等)和关键词筛选，自动 enriched with Semantic Scholar (references, citation counts, author IDs), deduplicate, pre-compute embeddings。",
+      "description": "\"When users request to search or crawl papers (e.g., \\\"agent papers in cs.CL today\\\", \\\"crawl papers on XX topic\\\", \\\"find papers\\\", \\\"today's new papers\\\"), this skill must be called. Do not use WebSearch or WebFetch as substitutes.",
       "version": "1.0.0",
       "tags": [
-        "arxiv",
+        "[arxiv",
         "paper",
         "data-collection",
         "research",
-        "social-network-analysis"
+        "social-network-analysis]"
       ],
       "agent": "arxiv-research-agent",
-      "registeredAt": "2026-05-11T07:55:41.717Z"
+      "registeredAt": "2026-05-11T07:55:41.717Z",
+      "updatedAt": "2026-05-11T08:17:11.046952+00:00"
     },
     {
       "name": "paper_ranker",
