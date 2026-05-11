@@ -1763,6 +1763,22 @@
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "ProgRec Agent",
       "registeredAt": "2026-05-11T10:01:20.345176+00:00"
+    },
+    {
+      "name": "Student Recommendation Ranker",
+      "type": "skill",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": "./skill5_student-recommendation-ranker",
+      "author": "taowenxiang",
+      "description": "The Student Recommendation Ranker is a multi-objective scoring and re-ranking system designed to provide unified recommendations for mentors, projects, and teammates. It integrates outputs from discovery and bundling modules to produce final ranked lists using sophisticated metrics such as topic similarity, network distance, and skill matching. The skill features MMR-based diversity re-ranking to reduce redundancy and includes a cold-start compensation mechanism to ensure fair exposure for new participants.",
+      "version": "0.1.0",
+      "tags": [
+        "tool"
+      ],
+      "metadataUnverified": true,
+      "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
+      "agent": "ProgRec",
+      "registeredAt": "2026-05-11T10:04:25.765496+00:00"
     }
   ]
 }
