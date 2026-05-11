@@ -1223,6 +1223,20 @@
       ],
       "agent": "travel-guidebook-agent",
       "registeredAt": "2026-05-11T02:15:42.456680+00:00"
+    },
+    {
+      "name": "map-route-builder",
+      "type": "skill",
+      "repo": "https://github.com/hqiang335/Roammate",
+      "path": ".claude/skills/map-route-builder",
+      "author": "hqiang335",
+      "description": "Convert accepted mainland China itinerary POIs and hotel candidates into normalized map-data JSON with coordinates, route summaries, and map enrichment for guidebook rendering.",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "agent": "travel-guidebook-agent",
+      "registeredAt": "2026-05-11T02:15:54.713490+00:00"
     }
   ]
 }
