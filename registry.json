@@ -1237,6 +1237,20 @@
       ],
       "agent": "travel-guidebook-agent",
       "registeredAt": "2026-05-11T02:15:54.713490+00:00"
+    },
+    {
+      "name": "roammate-travel-concierge",
+      "type": "skill",
+      "repo": "https://github.com/hqiang335/Roammate",
+      "path": ".claude/skills/roammate-travel-concierge",
+      "author": "hqiang335",
+      "description": "Lightweight serial router for complete mainland China trip packages: destination brief, reputation research, itinerary, map data, and dashboard guidebook.",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "agent": "travel-guidebook-agent",
+      "registeredAt": "2026-05-11T02:16:11.675524+00:00"
     }
   ]
 }
