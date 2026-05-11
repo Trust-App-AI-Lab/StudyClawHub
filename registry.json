@@ -1286,6 +1286,24 @@
       ],
       "agent": "aiaa4641-project-arxiv-agent-final",
       "registeredAt": "2026-05-11T06:46:16.798362+00:00"
+    },
+    {
+      "name": "followup-query-skill",
+      "type": "skill",
+      "repo": "https://github.com/JiongxuChen/AIAA4641_Project_Arxiv-agent_Final",
+      "path": "skills/followup_query_skill",
+      "author": "Junyi-111",
+      "description": "Answer follow-up questions about ranked arXiv papers and generated research briefings using paper metadata, summaries, and conversation context.",
+      "version": "0.1.0",
+      "tags": [
+        "arxiv",
+        "follow-up-query",
+        "research-qa",
+        "paper-search",
+        "academic-agent"
+      ],
+      "agent": "daily-arxiv-research-briefing-agent",
+      "registeredAt": "2026-05-11T06:47:08.012820+00:00"
     }
   ]
 }
