@@ -1667,6 +1667,26 @@
       "metadataUnverified": true,
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "registeredAt": "2026-05-11T09:38:33.615138+00:00"
+    },
+    {
+      "name": "Job Market Search Skill",
+      "type": "skill",
+      "repo": "https://github.com/hermit354/AIAA4641_Project",
+      "path": "tools/core/job_market_search_skill",
+      "author": "hermit354",
+      "description": "Collect and filter job-market data for demand queries, resume-based recommendations, and target-role skill analysis.",
+      "version": "0.1.0",
+      "tags": [
+        "job-market",
+        "search",
+        "career",
+        "recruitment",
+        "data-collection"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "agent": "Job Market Intelligence Agent",
+      "registeredAt": "2026-05-11T09:41:08.882391+00:00"
     }
   ]
 }
