@@ -393,6 +393,12 @@
       gap: 0.25rem;
     }
     .card-stat .num { color: var(--text-secondary); font-weight: 500; }
+    .card-link {
+      font-size: 0.75rem;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+    .card-link:hover { color: var(--accent-hover); }
     .metadata-warning {
       display: inline-flex;
       align-items: center;
@@ -575,6 +581,11 @@
     }
     .agent-meta a { color: var(--text-secondary); text-decoration: none; }
     .agent-meta a:hover { color: var(--accent); }
+    .agent-meta .card-link,
+    .detail-meta .card-link {
+      font-size: inherit;
+      color: var(--accent);
+    }
     .agent-right {
       flex: 1;
       display: flex;
@@ -1231,6 +1242,12 @@ function metadataWarning(item, extraClass = '') {
   return `<span class="${cls}" title="${esc(msg)}">Unverified</span>`;
 }
 
+function websiteLink(item, label = 'site →', stopPropagation = false) {
+  if (!item || !item.website) return '';
+  const stop = stopPropagation ? ' onclick="event.stopPropagation()"' : '';
+  return `<a class="card-link" href="${esc(item.website)}" target="_blank" rel="noopener"${stop}>${label}</a>`;
+}
+
 async function boot() {
   try {
     const [res, hubRes] = await Promise.all([
@@ -1304,6 +1321,7 @@ function renderAgentCard(a) {
           @${esc(a.author)}
         </a>
         <span>★ ${a.stars||0}</span>
+        ${websiteLink(a)}
         <a href="${esc(a.repo)}" target="_blank">repo →</a>
       </div>
     </div>
@@ -1510,6 +1528,7 @@ function renderPage() {
           ${(s.tags||[]).slice(0,3).map(t => `<span class="tag">${esc(t)}</span>`).join('')}
         </div>
         <span class="card-stat">★ ${s.stars||0}</span>
+        ${websiteLink(s, 'site →', true)}
       </div>
     </div>
   `).join('');
@@ -1558,6 +1577,7 @@ function showDetail(identifier) {
         ${metadataWarning(s, 'detail-warning')}
         <span>★ ${s.stars||0} stars</span>
         <div class="card-tags">${(s.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
+        ${websiteLink(s)}
         <a href="${esc(s.repo)}" target="_blank">GitHub repo →</a>
       </div>
     </div>

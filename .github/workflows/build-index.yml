@@ -47,6 +47,42 @@ jobs:
               except Exception:
                   return {}
 
+          def normalize_website_url(url):
+              url = str(url or '').strip()
+              if not url:
+                  return ''
+              if url.startswith('//'):
+                  return f'https:{url}'
+              if re.match(r'^https?://', url):
+                  return url
+              if re.match(r'^[A-Za-z0-9.-]+\.[A-Za-z]{2,}(/.*)?$', url):
+                  return f'https://{url}'
+              return ''
+
+          def github_pages_url(repo_path, repo_data):
+              if not repo_data.get('has_pages'):
+                  return ''
+              pages = fetch_json(f'https://api.github.com/repos/{repo_path}/pages')
+              page_url = normalize_website_url(pages.get('html_url', ''))
+              if page_url:
+                  return page_url
+
+              owner, repo_name = repo_path.split('/', 1)
+              if repo_name.lower() == f'{owner.lower()}.github.io':
+                  return f'https://{repo_name}/'
+              return f'https://{owner}.github.io/{repo_name}/'
+
+          def repo_website(repo_path, repo_data):
+              homepage = normalize_website_url(repo_data.get('homepage', ''))
+              if homepage:
+                  return homepage, 'homepage'
+
+              page_url = github_pages_url(repo_path, repo_data)
+              if page_url:
+                  return page_url, 'github-pages'
+
+              return '', ''
+
           def clean_path(path):
               return '' if path in ('', '.') else str(path).strip().strip('/')
 
@@ -163,14 +199,17 @@ jobs:
                       print(f"Skipping {name}: could not fetch {expected} and no registry metadata", file=sys.stderr)
                       continue
 
-              # Fetch star count from GitHub API
+              # Fetch repo-level metadata from GitHub API
               stars = 0
+              repo_data = {}
               try:
                   api_url = f"https://api.github.com/repos/{repo_path}"
                   repo_data = fetch_json(api_url)
                   stars = repo_data.get('stargazers_count', 0)
               except:
                   pass
+
+              website, website_source = repo_website(repo_path, repo_data)
 
               skill_name = meta.get("name", name)
               entry_type = entry.get("type", "skill")
@@ -187,6 +226,9 @@ jobs:
                   "registeredAt": entry.get("registeredAt", ""),
                   "stars": stars,
               }
+              if website:
+                  skill_entry["website"] = website
+                  skill_entry["websiteSource"] = website_source
               if metadata_branch:
                   skill_entry["metadataBranch"] = metadata_branch
               if metadata_file:
