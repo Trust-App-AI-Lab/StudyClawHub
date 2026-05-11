@@ -131,6 +131,12 @@ jobs:
                   "registeredAt": entry.get("registeredAt", ""),
                   "stars": stars,
               }
+              if entry.get("metadataUnverified"):
+                  skill_entry["metadataUnverified"] = True
+                  skill_entry["metadataWarning"] = entry.get(
+                      "metadataWarning",
+                      "Repository metadata was not verified during submission; this card uses form metadata."
+                  )
               if entry.get("agent"):
                   skill_entry["agent"] = entry["agent"]
               skills.append(skill_entry)

@@ -322,6 +322,7 @@
     .card-top {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 0.6rem;
     }
     .card-name {
@@ -329,6 +330,10 @@
       font-weight: 600;
       color: var(--text);
       flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .card-version {
       font-size: 0.7rem;
@@ -388,6 +393,27 @@
       gap: 0.25rem;
     }
     .card-stat .num { color: var(--text-secondary); font-weight: 500; }
+    .metadata-warning {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      font-size: 0.72rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: #7a4f00;
+      background: #fff6cf;
+      border: 1px solid #efc84a;
+      border-radius: 4px;
+      padding: 0.12rem 0.45rem;
+      white-space: nowrap;
+    }
+    .agent-card .metadata-warning {
+      margin-left: 0.4rem;
+      vertical-align: middle;
+    }
+    .detail-warning {
+      margin-left: 0.35rem;
+    }
 
     /* ── Detail overlay ── */
     .overlay {
@@ -1198,6 +1224,13 @@ function registryKey(item) {
   return `${type}:${agent}:${name}`;
 }
 
+function metadataWarning(item, extraClass = '') {
+  if (!item || !item.metadataUnverified) return '';
+  const msg = item.metadataWarning || 'Repository metadata was not verified during submission; this card uses form metadata.';
+  const cls = extraClass ? `metadata-warning ${extraClass}` : 'metadata-warning';
+  return `<span class="${cls}" title="${esc(msg)}">Unverified</span>`;
+}
+
 async function boot() {
   try {
     const [res, hubRes] = await Promise.all([
@@ -1262,6 +1295,7 @@ function renderAgentCard(a) {
       <div>
         <span class="agent-name">${esc(a.name)}</span>
         <span class="agent-badge">${HUB_AGENT_NAMES.includes(a.name) ? 'Hub Agent' : 'Agent'} · ${a.children.length} skill${a.children.length!==1?'s':''}</span>
+        ${metadataWarning(a)}
       </div>
       <div class="agent-desc">${esc(a.description)}</div>
       <div class="agent-meta">
@@ -1463,6 +1497,7 @@ function renderPage() {
       <div class="card-top">
         <span class="card-name">${esc(s.name)}</span>
         <span class="card-version">v${esc(s.version||'1.0.0')}</span>
+        ${metadataWarning(s)}
       </div>
       ${s.agent ? `<div style="font-size:0.7rem;color:var(--purple);margin-bottom:0.25rem">Part of <strong>${esc(s.agent)}</strong></div>` : ''}
       <div class="card-desc">${esc(s.description)}</div>
@@ -1520,6 +1555,7 @@ function showDetail(identifier) {
           @${esc(s.author)}
         </a>
         <span>v${esc(s.version||'1.0.0')}</span>
+        ${metadataWarning(s, 'detail-warning')}
         <span>★ ${s.stars||0} stars</span>
         <div class="card-tags">${(s.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
         <a href="${esc(s.repo)}" target="_blank">GitHub repo →</a>
@@ -1879,6 +1915,11 @@ async function submitSkill(force = false) {
     // result.state === 'ok' — fall through to open issue
   }
 
+  if (force && !desc) {
+    showSubmitStatus('error', '<span class="submit-status-title">Description required</span><div class="submit-status-note">Submit anyway uses form metadata to make the card visible, so please add a short description first.</div>');
+    return;
+  }
+
   const agentField = document.getElementById('f-agent').value.trim();
 
   // Agent branch: scan repo for child SKILL.md, offer batch registration.
@@ -1892,7 +1933,7 @@ async function submitSkill(force = false) {
       setSubmitBtnBusy(false);
     }
 
-    const agentIssue = buildIssueEntry({ name, desc, version, tags, repo, path, type: 'agent', agent: '', author });
+    const agentIssue = buildIssueEntry({ name, desc, version, tags, repo, path, type: 'agent', agent: '', author, verification: force ? 'unverified' : 'verified' });
 
     if (scan.state === 'rate-limited') {
       // Can't list the repo's files right now — submit the agent anyway and
@@ -1926,14 +1967,14 @@ async function submitSkill(force = false) {
   }
 
   // Regular skill flow — single issue.
-  const issue = buildIssueEntry({ name, desc, version, tags, repo, path, type, agent: agentField, author });
+  const issue = buildIssueEntry({ name, desc, version, tags, repo, path, type, agent: agentField, author, verification: force ? 'unverified' : 'verified' });
   window.open(buildIssueUrl(issue), '_blank');
   hideSubmitStatus();
   closeSubmit();
 }
 
 // Build a {title, body} for a GitHub register issue.
-function buildIssueEntry({ name, desc, version, tags, repo, path, type, agent, author }) {
+function buildIssueEntry({ name, desc, version, tags, repo, path, type, agent, author, verification = 'verified' }) {
   const body =
     `### Skill name\n\n${name}\n\n` +
     `### Description\n\n${desc || '(none)'}\n\n` +
@@ -1942,6 +1983,7 @@ function buildIssueEntry({ name, desc, version, tags, repo, path, type, agent, a
     `### GitHub repo URL\n\n${repo}\n\n` +
     `### Path to Skill folder\n\n${path}\n\n` +
     `### Type\n\n${type}\n\n` +
+    `### Metadata verification\n\n${verification}\n\n` +
     `### Agent name\n\n${agent || ''}\n\n` +
     `### Your GitHub username\n\n${author}`;
   return { title: `register: ${name}`, body, name };

@@ -55,7 +55,15 @@ jobs:
           description = parse_field(body, 'Description') or ''
           version = parse_field(body, 'Version') or ''
           tags_str = parse_field(body, 'Tags') or ''
+          metadata_verification = parse_field(body, 'Metadata verification') or ''
           tags = [t.strip() for t in tags_str.split(',') if t.strip()] if tags_str else []
+          metadata_unverified = metadata_verification.strip().lower() in (
+              'unverified',
+              'submit-anyway',
+              'submit anyway',
+              'form metadata',
+              'form-metadata',
+          )
 
           # Normalize type
           entry_type = entry_type.strip().lower()
@@ -76,6 +84,8 @@ jobs:
                   errors.append(f'Invalid repo URL "{repo}" — must be a GitHub URL')
           if not author:
               errors.append('Missing author')
+          if metadata_unverified and not description:
+              errors.append('Description is required for Submit anyway submissions so the website can show a card')
 
           if errors:
               msg = 'Registration failed:\\n' + '\\n'.join(f'- {e}' for e in errors)
@@ -83,7 +93,7 @@ jobs:
                   f.write(f'comment={msg}\n')
                   f.write('success=false\n')
               print(msg, file=sys.stderr)
-              sys.exit(1)
+              sys.exit(0)
 
           # Load registry
           with open('registry.json') as f:
@@ -115,6 +125,12 @@ jobs:
               entry['version'] = version
           if tags:
               entry['tags'] = tags
+          if metadata_unverified:
+              entry['metadataUnverified'] = True
+              entry['metadataWarning'] = (
+                  'Repository metadata was not verified during submission; '
+                  'this card uses form metadata.'
+              )
           agent_pending = False
           if agent_name and entry_type == 'skill':
               # Always record the agent linkage. If the agent isn't registered
