@@ -1885,6 +1885,26 @@
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "ProgRec",
       "registeredAt": "2026-05-11T13:25:38.616313+00:00"
+    },
+    {
+      "name": "daily-arxiv-briefing-agent",
+      "type": "agent",
+      "repo": "https://github.com/050817/daily-arxiv-briefing-agent",
+      "path": ".",
+      "author": "050817",
+      "description": "A daily arXiv research briefing agent. Use when the user wants to search arXiv, rank papers, generate Markdown/PDF reports, draw keyword graphs, archive results, or chat with generated research files.",
+      "version": "1.0.0",
+      "tags": [
+        "arxiv",
+        "research",
+        "briefing",
+        "pdf",
+        "visualization",
+        "archive"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "AGENTS.md",
+      "registeredAt": "2026-05-13T02:25:15.695863+00:00"
     }
   ]
 }
