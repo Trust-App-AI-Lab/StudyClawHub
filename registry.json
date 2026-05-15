@@ -1948,6 +1948,22 @@
       "metadataFile": "SKILL.md",
       "agent": "ProgRec",
       "registeredAt": "2026-05-15T15:26:37.016934+00:00"
+    },
+    {
+      "name": "skill4_program_teammate_discovery",
+      "type": "skill",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": "skill4_program_teammate_discovery",
+      "author": "taowenxiang",
+      "description": "(none)",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "agent": "ProgRec",
+      "registeredAt": "2026-05-15T15:26:46.626039+00:00"
     }
   ]
 }
