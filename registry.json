@@ -1401,10 +1401,10 @@
     {
       "name": "data_collector",
       "type": "skill",
-      "repo": "https://github.com/3123738092/arxiv-research-agent",
-      "path": "skills/data_collector",
-      "author": "3123738092",
-      "description": "\"When users request to search or crawl papers (e.g., \\\"agent papers in cs.CL today\\\", \\\"crawl papers on XX topic\\\", \\\"find papers\\\", \\\"today's new papers\\\"), this skill must be called. Do not use WebSearch or WebFetch as substitutes.",
+      "repo": "https://github.com/YrpSponge/arXiv-Research-Exploration-Agent",
+      "path": ".claude/skills/data_collector",
+      "author": "YrpSponge",
+      "description": "Core capabilities for scraping, collecting, and retrieving arXiv papers. When a user requests to search or scrape papers (e.g., 'articles about agents in the cs.CL category today', 'scrape papers in the XX field', 'find papers', 'today's new papers'), this skill must be invoked. Using WebSearch or WebFetch as a substitute is strictly prohibited. It supports filtering by category (cs.CL/cs.LG, etc.) and keywords, building a semantic similarity graph (as a replacement for the citation graph), deduplication, and pre-computing embeddings",
       "version": "1.0.0",
       "tags": [
         "[arxiv",
@@ -1415,7 +1415,9 @@
       ],
       "agent": "arxiv-research-agent",
       "registeredAt": "2026-05-11T07:55:41.717Z",
-      "updatedAt": "2026-05-11T08:17:11.046952+00:00"
+      "updatedAt": "2026-05-15T14:58:24.744278+00:00",
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md"
     },
     {
       "name": "paper_ranker",
