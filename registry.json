@@ -1916,6 +1916,22 @@
       "metadataBranch": "main",
       "metadataFile": "AGENTS.md",
       "registeredAt": "2026-05-13T02:25:15.695863+00:00"
+    },
+    {
+      "name": "skill2_academic_graph_builder",
+      "type": "skill",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": "skill2_academic_graph_builder",
+      "author": "taowenxiang",
+      "description": "(none)",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "agent": "ProgRec",
+      "registeredAt": "2026-05-15T15:26:21.636526+00:00"
     }
   ]
 }
