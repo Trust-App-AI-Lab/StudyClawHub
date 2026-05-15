@@ -1807,8 +1807,6 @@
       "repo": "https://github.com/taowenxiang/ProgRec",
       "path": "Skill2_academic_graph_buider",
       "author": "taowenxiang",
-      "sourceIssueNumber": 156,
-      "sourceIssueUrl": "https://github.com/Trust-App-AI-Lab/StudyClawHub/issues/156",
       "description": "This skill builds a heterogeneous academic graph from seeded CSVs and mentor profiles, optionally merges in Skill 1 students and embeddings, and exports stable JSON/NPY artifacts for downstream retrieval and analysis without coupling to its codebase.",
       "version": "0.1.0",
       "tags": [
@@ -1860,8 +1858,6 @@
       "repo": "https://github.com/taowenxiang/ProgRec",
       "path": "./skill5_student_recommendation_ranker",
       "author": "taowenxiang",
-      "sourceIssueNumber": 159,
-      "sourceIssueUrl": "https://github.com/Trust-App-AI-Lab/StudyClawHub/issues/159",
       "description": "The Student Recommendation Ranker is a multi-objective scoring and re-ranking skill designed to provide unified recommendations for mentors, projects, and teammates. It integrates outputs from discovery and bundling modules to produce final ranked lists using sophisticated metrics such as topic similarity, network distance, and skill matching. The skill features MMR-based diversity re-ranking to reduce redundancy and includes a cold-start compensation mechanism to ensure fair exposure for new participants.",
       "version": "0.1.0",
       "tags": [
