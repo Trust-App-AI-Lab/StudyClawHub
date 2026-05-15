@@ -1486,13 +1486,19 @@
     {
       "name": "papers-analysis-visualizer",
       "type": "skill",
-      "repo": "https://github.com/3123738092/arxiv-research-agent",
-      "path": "skills/papers-analysis-visualizer",
-      "author": "3123738092",
-      "description": "Build a research dashboard and visual analytics summary from structured paper data, focusing on paper recommendation, keyword network visualization and topic trend exploration.",
+      "repo": "https://github.com/YrpSponge/arXiv-Research-Exploration-Agent",
+      "path": ".claude/skills/papers-analysis-visualizer",
+      "author": "YrpSponge",
+      "description": "A skill to build a research dashboard and organize structured paper data into notion database, focusing on paper recommendation, keyword network visualization and topic trend exploration.",
       "version": "1.0.0",
       "agent": "arxiv-research-agent",
-      "registeredAt": "2026-05-11T07:55:41.717Z"
+      "registeredAt": "2026-05-11T07:55:41.717Z",
+      "tags": [
+        "(none)"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "updatedAt": "2026-05-15T14:59:40.245168+00:00"
     },
     {
       "name": "daily-paper-recommendation-briefing-agent",
