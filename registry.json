@@ -1765,25 +1765,6 @@
       "registeredAt": "2026-05-11T10:01:20.345176+00:00"
     },
     {
-      "name": "Student Recommendation Ranker",
-      "type": "skill",
-      "repo": "https://github.com/taowenxiang/ProgRec",
-      "path": ".skill2_Academic_Graph_Builder",
-      "author": "taowenxiang",
-      "description": "Skill 2 builds a heterogeneous academic graph from seeded CSVs and mentor profiles, optionally merges in Skill 1 students and embeddings, and exports stable JSON/NPY artifacts for downstream retrieval and analysis without coupling to its codebase.",
-      "version": "0.1.0",
-      "tags": [
-        "heterogeneous-graph",
-        "graph-construction",
-        "embeddings-alignment"
-      ],
-      "metadataUnverified": true,
-      "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
-      "agent": "ProgRec",
-      "registeredAt": "2026-05-11T10:04:25.765496+00:00",
-      "updatedAt": "2026-05-11T10:08:32.974961+00:00"
-    },
-    {
       "name": "student-profiling",
       "type": "skill",
       "repo": "https://github.com/taowenxiang/ProgRec",
@@ -1821,11 +1802,13 @@
       "registeredAt": "2026-05-11T13:06:33.931991+00:00"
     },
     {
-      "name": "Academic_Graph_Builder",
+      "name": "academic_graph_builder",
       "type": "skill",
       "repo": "https://github.com/taowenxiang/ProgRec",
-      "path": "skill2_handoff",
+      "path": "Skill2_academic_graph_buider",
       "author": "taowenxiang",
+      "sourceIssueNumber": 156,
+      "sourceIssueUrl": "https://github.com/Trust-App-AI-Lab/StudyClawHub/issues/156",
       "description": "This skill builds a heterogeneous academic graph from seeded CSVs and mentor profiles, optionally merges in Skill 1 students and embeddings, and exports stable JSON/NPY artifacts for downstream retrieval and analysis without coupling to its codebase.",
       "version": "0.1.0",
       "tags": [
@@ -1836,7 +1819,8 @@
       "metadataUnverified": true,
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "ProgRec",
-      "registeredAt": "2026-05-11T13:07:42.495386+00:00"
+      "registeredAt": "2026-05-11T13:07:42.495386+00:00",
+      "updatedAt": "2026-05-15T05:11:11.580Z"
     },
     {
       "name": "student-profiling",
@@ -1871,11 +1855,13 @@
       "registeredAt": "2026-05-11T13:20:24.223733+00:00"
     },
     {
-      "name": "student-recommendation-ranker",
+      "name": "student_recommendation_ranker",
       "type": "skill",
       "repo": "https://github.com/taowenxiang/ProgRec",
-      "path": "./skill5_student-recommendation-ranker",
+      "path": "./skill5_student_recommendation_ranker",
       "author": "taowenxiang",
+      "sourceIssueNumber": 159,
+      "sourceIssueUrl": "https://github.com/Trust-App-AI-Lab/StudyClawHub/issues/159",
       "description": "The Student Recommendation Ranker is a multi-objective scoring and re-ranking skill designed to provide unified recommendations for mentors, projects, and teammates. It integrates outputs from discovery and bundling modules to produce final ranked lists using sophisticated metrics such as topic similarity, network distance, and skill matching. The skill features MMR-based diversity re-ranking to reduce redundancy and includes a cold-start compensation mechanism to ensure fair exposure for new participants.",
       "version": "0.1.0",
       "tags": [
@@ -1884,7 +1870,8 @@
       "metadataUnverified": true,
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "ProgRec",
-      "registeredAt": "2026-05-11T13:25:38.616313+00:00"
+      "registeredAt": "2026-05-11T13:25:38.616313+00:00",
+      "updatedAt": "2026-05-15T05:11:11.580Z"
     },
     {
       "name": "daily-arxiv-briefing-agent",

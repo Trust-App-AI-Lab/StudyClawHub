@@ -2,7 +2,7 @@ name: Process Skill Registration / Deletion
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
 
 permissions:
   contents: write
@@ -29,7 +29,13 @@ jobs:
 
           body = os.environ.get('ISSUE_BODY', '')
           author_login = os.environ.get('ISSUE_AUTHOR', '')
+          issue_number_raw = os.environ.get('ISSUE_NUMBER', '')
+          issue_url = os.environ.get('ISSUE_URL', '')
           GH_TOKEN = os.environ.get('GH_TOKEN') or os.environ.get('GITHUB_TOKEN') or ''
+          try:
+              issue_number = int(issue_number_raw)
+          except Exception:
+              issue_number = 0
 
           # Parse form fields from issue body. Bound each value to its own
           # Markdown heading so an empty field cannot consume the next label.
@@ -209,6 +215,10 @@ jobs:
               'path': path,
               'author': author,
           }
+          if issue_number:
+              entry['sourceIssueNumber'] = issue_number
+          if issue_url:
+              entry['sourceIssueUrl'] = issue_url
           if description:
               entry['description'] = description
           if version:
@@ -238,13 +248,29 @@ jobs:
 
           # Check for duplicates by registry identity. Child skills are scoped
           # by their parent agent, so different agents can register skills with
-          # the same display name without overwriting one another.
+          # the same display name without overwriting one another. If this is
+          # an edit to a previously processed issue, sourceIssueNumber wins so
+          # issue edits update the original registry entry even when name/path
+          # metadata changed.
           target_identity = entry_identity(entry)
-          existing = [s for s in registry['skills'] if entry_identity(s) == target_identity]
+          existing_by_issue = [
+              s for s in registry['skills']
+              if issue_number and s.get('sourceIssueNumber') == issue_number
+          ]
+          existing = existing_by_issue or [
+              s for s in registry['skills']
+              if entry_identity(s) == target_identity
+          ]
           if existing:
+              target = existing[0]
               entry['updatedAt'] = datetime.now(timezone.utc).isoformat()
-              entry['registeredAt'] = existing[0].get('registeredAt', entry['updatedAt'])
-              existing[0].update(entry)
+              entry['registeredAt'] = target.get('registeredAt', entry['updatedAt'])
+              target.update(entry)
+              if existing_by_issue:
+                  registry['skills'] = [
+                      s for s in registry['skills']
+                      if s is target or entry_identity(s) != target_identity
+                  ]
               action = 'updated'
           else:
               entry['registeredAt'] = datetime.now(timezone.utc).isoformat()
@@ -269,6 +295,8 @@ jobs:
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
           GH_TOKEN: ${{ github.token }}
         id: register
 
@@ -278,7 +306,7 @@ jobs:
           git config user.name "StudyClawHub Bot"
           git config user.email "bot@studyclawhub"
           git add registry.json
-          git commit -m "register: add skill from #${{ github.event.issue.number }}"
+          git commit -m "register: sync skill from #${{ github.event.issue.number }}"
           for attempt in 1 2 3 4 5; do
             git pull --rebase origin main && git push && exit 0
             git rebase --abort || true
@@ -317,7 +345,7 @@ jobs:
             });
 
   delete:
-    if: startsWith(github.event.issue.title, 'delete:')
+    if: github.event.action == 'opened' && startsWith(github.event.issue.title, 'delete:')
     runs-on: ubuntu-latest
     steps:
       # See note above (register job) — always start from latest main.
