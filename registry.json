@@ -1459,7 +1459,7 @@
       "type": "skill",
       "repo": "https://github.com/YrpSponge/arXiv-Research-Exploration-Agent",
       "path": ".claude/skills/briefing_report",
-      "author": "3123738092",
+      "author": "YrpSponge",
       "description": "Render the daily Markdown briefing for the arXiv Research Briefing Agent. Reads ranked + summarized papers from shared_data/ and writes shared_data/briefing.md with top-N picks, key contributions, methods, keywords, and trend analysis. Trigger when user asks: '生成今天的简报', '导出 Markdown 简报', 'write the briefing', 'render daily report', 'regenerate briefing.md', 'give me the Markdown of today's papers'. This is Skill 4 of 5 in the agent — final output stage. Do NOT use this skill to fetch or rank papers; only to render the report once shared_data/ already contains rankings + summaries.",
       "version": "1.0.0",
       "tags": [
@@ -1472,7 +1472,7 @@
       ],
       "agent": "arxiv-research-agent",
       "registeredAt": "2026-05-11T07:55:41.717Z",
-      "updatedAt": "2026-05-15T12:58:26.112922+00:00",
+      "updatedAt": "2026-05-15T14:58:02.337909+00:00",
       "metadataBranch": "main",
       "metadataFile": "SKILL.md"
     },
