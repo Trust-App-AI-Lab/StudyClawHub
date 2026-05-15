@@ -1964,6 +1964,22 @@
       "metadataFile": "SKILL.md",
       "agent": "ProgRec",
       "registeredAt": "2026-05-15T15:26:46.626039+00:00"
+    },
+    {
+      "name": "student-recommendation-ranker",
+      "type": "skill",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": "skill5_student_recommendation_ranker",
+      "author": "taowenxiang",
+      "description": "This skill implements a multi-objective joint scoring and re-ranking system for student-mentor-project-teammate recommendations. Given normalized student profiles (student_profiles_normalized.jsonl with fields: student_id, grade, major, skills, interests, experience_summary, availability) along with Skill 3 mentor candidate JSON and Skill 4 project+teammate bundle JSON, it performs joint scoring and re-ranking using: topic similarity, network distance, community membership, skill matching, cold-start compensation, and MMR result diversity. Outputs final_recommendation.json with ranked lists, per-dimension scores, and explanation features. Additionally produces a richly visualized final_recommendation.md alongside the JSON, featuring Unicode progress bars, star ratings, score-label badges, per-dimension breakdown tables, collapsible detail cards, medal ranks, and a legend — all rendered in standard GitHub-Flavored Markdown. This skill should be used when a user needs to combine Skill 3 and Skill 4 outputs into a final unified recommendation, or when multi-criteria re-ranking with explainability is needed for mentors, projects, and teammates.",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "agent": "ProgRec",
+      "registeredAt": "2026-05-15T15:26:53.879719+00:00"
     }
   ]
 }
