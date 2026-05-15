@@ -1932,6 +1932,22 @@
       "metadataFile": "SKILL.md",
       "agent": "ProgRec",
       "registeredAt": "2026-05-15T15:26:21.636526+00:00"
+    },
+    {
+      "name": "mentor-discovery",
+      "type": "skill",
+      "repo": "https://github.com/taowenxiang/ProgRec",
+      "path": "skill3_mentor_discovery",
+      "author": "taowenxiang",
+      "description": "Use when a standardized student profile needs ranked mentor candidates from Skill 2 artifacts, or when debugging Skill 3 CLI path resolution, graph fallback, and mentor-ranking explanations.",
+      "version": "0.1.0",
+      "tags": [
+        "(none)"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "agent": "ProgRec",
+      "registeredAt": "2026-05-15T15:26:37.016934+00:00"
     }
   ]
 }
