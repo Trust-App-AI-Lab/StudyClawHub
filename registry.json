@@ -1443,9 +1443,9 @@
     {
       "name": "paper_summarizer",
       "type": "skill",
-      "repo": "https://github.com/3123738092/arxiv-research-agent",
-      "path": "skills/paper_summarizer",
-      "author": "3123738092",
+      "repo": "https://github.com/YrpSponge/arXiv-Research-Exploration-Agent",
+      "path": ".claude/skills/paper_summarizer",
+      "author": "YrpSponge",
       "description": "Extract one-line summary, key contributions, methods and keywords for the top-N ranked arXiv papers. The host LLM running this Agent performs the summarization itself in-context — this skill prepares the request and validates the output. Skill 3 of 5 in the arXiv Research Briefing Agent.",
       "version": "0.3.0",
       "tags": [
@@ -1457,7 +1457,9 @@
       ],
       "agent": "arxiv-research-agent",
       "registeredAt": "2026-05-11T07:55:41.717Z",
-      "updatedAt": "2026-05-11T08:17:26.718868+00:00"
+      "updatedAt": "2026-05-15T14:59:33.573775+00:00",
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md"
     },
     {
       "name": "briefing_report",
