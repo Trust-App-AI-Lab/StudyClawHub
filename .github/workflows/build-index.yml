@@ -179,14 +179,25 @@ jobs:
 
               repo_path = f"{match.group(1)}/{match.group(2)}"
 
-              meta, metadata_branch, metadata_file = load_metadata(
-                  repo_path,
-                  path,
-                  entry_type,
-                  entry.get('metadataBranch', ''),
-                  entry.get('metadataFile', ''),
-              )
               used_fallback_metadata = False
+              if entry.get("metadataUnverified"):
+                  # Submit-anyway entries are intentionally based on issue
+                  # form metadata. Even if the repo later becomes readable,
+                  # keep the card aligned with the registry entry until the
+                  # registration issue is edited or resubmitted.
+                  used_fallback_metadata = True
+                  meta = {}
+                  metadata_branch = entry.get('metadataBranch', '')
+                  metadata_file = entry.get('metadataFile', '')
+                  print(f"{name}: using registry metadata (unverified submission)")
+              else:
+                  meta, metadata_branch, metadata_file = load_metadata(
+                      repo_path,
+                      path,
+                      entry_type,
+                      entry.get('metadataBranch', ''),
+                      entry.get('metadataFile', ''),
+                  )
               if meta is None:
                   # Use metadata from registry.json as fallback (e.g. private
                   # repos, submit-anyway, or temporarily unreachable repos).
