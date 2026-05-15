@@ -1674,14 +1674,18 @@
       "repo": "https://github.com/taowenxiang/ProgRec",
       "path": ".",
       "author": "taowenxiang",
-      "description": "Recommend project and mentor to a student",
-      "version": "0.1.0",
+      "description": "ProgRec is a repository for undergraduate research recommendation scenarios, organized as 1 Agent + 5 Skills. It can be directly invoked by common AI agents, or you can experience the complete process through our web demo.",
+      "version": "0.2.0",
       "tags": [
-        "tool"
+        "tool",
+        "recommendation"
       ],
       "metadataUnverified": true,
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
-      "registeredAt": "2026-05-11T09:38:33.615138+00:00"
+      "registeredAt": "2026-05-11T09:38:33.615138+00:00",
+      "metadataBranch": "main",
+      "metadataFile": "AGENTS.md",
+      "updatedAt": "2026-05-15T15:26:07.053540+00:00"
     },
     {
       "name": "Job Market Search Skill",
