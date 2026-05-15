@@ -1328,14 +1328,14 @@
       "type": "agent",
       "repo": "https://github.com/YrpSponge/arXiv-Research-Exploration-Agent",
       "path": ".",
-      "author": "3123738092",
-      "description": "Daily arXiv Research Briefing Agent, which host-LLM driven multi-skill agent that fetches, ranks, summarizes, visualizes, and reports on daily arXiv papers.",
-      "version": "0.1.0",
+      "author": "YrpSponge",
+      "description": "一个辅助arxiv research的agent，由5个skill组成；可实现arxiv论文自动抓取/排序/信息总结梳理/出报告/可视化/notion归档 工作流，遍历研究者的日常论文探索+管理。",
+      "version": "0.2.0",
       "tags": [
         "(none)"
       ],
       "registeredAt": "2026-05-11T07:05:59.354094+00:00",
-      "updatedAt": "2026-05-15T12:58:14.719498+00:00",
+      "updatedAt": "2026-05-15T14:58:59.911978+00:00",
       "metadataBranch": "main",
       "metadataFile": "CLAUDE.md"
     },
