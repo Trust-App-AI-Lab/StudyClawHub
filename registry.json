@@ -1086,7 +1086,11 @@
         "conversational-ai",
         "report-generator"
       ],
-      "registeredAt": "2026-05-10T16:55:20.911241+00:00"
+      "registeredAt": "2026-05-10T16:55:20.911241+00:00",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: `AGENTS.md` or `CLAUDE.md` not found at `./` on `main` and no metadata file anywhere in repo",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "research-trail",
@@ -1135,7 +1139,11 @@
         "citation-network"
       ],
       "agent": "researchtrail",
-      "registeredAt": "2026-05-10T18:16:16.398309+00:00"
+      "registeredAt": "2026-05-10T18:16:16.398309+00:00",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: References missing agent `researchtrail`",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "reading-path-report",
@@ -1268,7 +1276,11 @@
         "academic-agent"
       ],
       "agent": "daily-arxiv-research-briefing-agent",
-      "registeredAt": "2026-05-11T06:45:10.033713+00:00"
+      "registeredAt": "2026-05-11T06:45:10.033713+00:00",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: References missing agent `daily-arxiv-research-briefing-agent`",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "arxiv-retrieval-skill",
@@ -1303,7 +1315,11 @@
         "academic-agent"
       ],
       "agent": "daily-arxiv-research-briefing-agent",
-      "registeredAt": "2026-05-11T06:47:08.012820+00:00"
+      "registeredAt": "2026-05-11T06:47:08.012820+00:00",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: References missing agent `daily-arxiv-research-briefing-agent`",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "aiaa4641-project-arxiv-agent-final",
@@ -1610,7 +1626,11 @@
       "metadataFile": "SKILL.md",
       "agent": "Job Market Intelligence Agent text",
       "registeredAt": "2026-05-11T09:33:03.566577+00:00",
-      "updatedAt": "2026-05-11T09:33:19.173533+00:00"
+      "updatedAt": "2026-05-11T09:33:19.173533+00:00",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: References missing agent `Job Market Intelligence Agent text`",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "Job Skill Extraction Skill",
@@ -1630,7 +1650,11 @@
       "metadataBranch": "main",
       "metadataFile": "SKILL.md",
       "agent": "Job Market Intelligence Agent text",
-      "registeredAt": "2026-05-11T09:33:57.345586+00:00"
+      "registeredAt": "2026-05-11T09:33:57.345586+00:00",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: References missing agent `Job Market Intelligence Agent text`",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "Market Trend Analysis Skill",
@@ -1650,7 +1674,11 @@
       "metadataBranch": "main",
       "metadataFile": "SKILL.md",
       "agent": "Job Market Intelligence Agent text",
-      "registeredAt": "2026-05-11T09:34:52.933541+00:00"
+      "registeredAt": "2026-05-11T09:34:52.933541+00:00",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: References missing agent `Job Market Intelligence Agent text`",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "mentor_discovery",
@@ -1781,7 +1809,11 @@
       "metadataUnverified": true,
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "ProgRec Agent",
-      "registeredAt": "2026-05-11T10:01:20.345176+00:00"
+      "registeredAt": "2026-05-11T10:01:20.345176+00:00",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: `SKILL.md` not found at `Skill4_README.md` on `main` (candidates: `skill1_student_profiling`, `skill2_academic_graph_builder`, `skill3_mentor_discovery`, `skill4_program_teammate_discovery`, `skill5_student_recommendation_ranker`); References missing agent `ProgRec Agent`",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "student-profiling",
@@ -1803,13 +1835,17 @@
       "metadataUnverified": true,
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "progrec-agent",
-      "registeredAt": "2026-05-11T11:46:52.089757+00:00"
+      "registeredAt": "2026-05-11T11:46:52.089757+00:00",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: `SKILL.md` not found at `skill1_student-profiling` on `main` (candidates: `skill1_student_profiling`, `skill2_academic_graph_builder`, `skill3_mentor_discovery`, `skill4_program_teammate_discovery`, `skill5_student_recommendation_ranker`); References missing agent `progrec-agent`",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "program-and-teammate-discovery",
       "type": "agent",
       "repo": "https://github.com/taowenxiang/ProgRec",
-      "path": ".https://github.com/taowenxiang/ProgRec",
+      "path": ".",
       "author": "taowenxiang",
       "description": "Discovery programs and teammates for target students",
       "version": "0.1.0",
@@ -1818,7 +1854,8 @@
       ],
       "metadataUnverified": true,
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
-      "registeredAt": "2026-05-11T13:06:33.931991+00:00"
+      "registeredAt": "2026-05-11T13:06:33.931991+00:00",
+      "updatedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "academic_graph_builder",
@@ -1837,7 +1874,11 @@
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "ProgRec",
       "registeredAt": "2026-05-11T13:07:42.495386+00:00",
-      "updatedAt": "2026-05-15T05:11:11.580Z"
+      "updatedAt": "2026-05-15T05:11:11.580Z",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: `SKILL.md` not found at `Skill2_academic_graph_buider` on `main` (candidates: `skill1_student_profiling`, `skill2_academic_graph_builder`, `skill3_mentor_discovery`, `skill4_program_teammate_discovery`, `skill5_student_recommendation_ranker`)",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "student-profiling",
@@ -1878,7 +1919,11 @@
       "metadataUnverified": true,
       "metadataWarning": "Repository metadata was not verified during submission; this card uses form metadata.",
       "agent": "ProgRec",
-      "registeredAt": "2026-05-11T13:20:24.223733+00:00"
+      "registeredAt": "2026-05-11T13:20:24.223733+00:00",
+      "healthUnverified": true,
+      "healthSeverity": "broken",
+      "healthWarning": "Health check broken: `SKILL.md` not found at `.blob/main/skill4_handoff` on `main` (candidates: `skill1_student_profiling`, `skill2_academic_graph_builder`, `skill3_mentor_discovery`, `skill4_program_teammate_discovery`, `skill5_student_recommendation_ranker`)",
+      "healthCheckedAt": "2026-05-17T02:35:00+00:00"
     },
     {
       "name": "student_recommendation_ranker",
