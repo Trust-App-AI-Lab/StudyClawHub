@@ -192,6 +192,7 @@
       gap: 2rem;
     }
     .video-panel {
+      position: relative;
       width: 100%;
       min-width: 0;
       overflow: hidden;
@@ -207,6 +208,41 @@
       aspect-ratio: 16 / 9;
       object-fit: contain;
       background: #111827;
+    }
+    .sound-toggle {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.38rem;
+      border: 1px solid rgba(216,219,226,0.9);
+      border-radius: 999px;
+      padding: 0.38rem 0.62rem;
+      background: rgba(255,255,255,0.82);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(17,24,39,0.12);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .sound-toggle:hover,
+    .sound-toggle.active {
+      border-color: rgba(37,99,235,0.35);
+      background: rgba(255,255,255,0.94);
+      color: var(--accent);
+    }
+    .sound-toggle svg {
+      width: 0.95rem;
+      height: 0.95rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
     }
     .intro-panel {
       width: 100%;
@@ -507,6 +543,10 @@
       .actions { width: 100%; max-width: min(300px, 100%); }
       .video-panel { max-width: 100%; }
       .teaser-video { object-fit: contain; }
+      .sound-toggle {
+        top: 0.55rem;
+        right: 0.55rem;
+      }
       .btn { width: 100%; }
       .share-shell {
         width: 100%;
@@ -568,8 +608,16 @@
   <main class="desktop-stage">
     <div class="video-panel">
       <video id="teaser-video" class="teaser-video" autoplay muted loop playsinline webkit-playsinline controls preload="auto">
-        <source src="assets/studyclaw-desktop-teaser-4k-high-muted.mp4" type="video/mp4" />
+        <source src="assets/studyclaw-desktop-teaser-4k-high-faststart.mp4" type="video/mp4" />
       </video>
+      <button class="sound-toggle" type="button" id="sound-toggle" aria-label="Turn sound on" title="Turn sound on">
+        <svg class="sound-icon-on" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+          <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+          <path d="M18.5 5.5a9 9 0 0 1 0 13"></path>
+        </svg>
+        <span class="sound-label">Sound</span>
+      </button>
     </div>
 
     <section class="intro-panel">
@@ -666,15 +714,38 @@
     const copyDirectButton = document.getElementById('copy-direct-link');
     const copyStatus = document.getElementById('copy-status');
     const teaserVideo = document.getElementById('teaser-video');
+    const soundToggle = document.getElementById('sound-toggle');
+    let teaserAutoplayPrimed = false;
+
+    function updateSoundToggle() {
+      if (!teaserVideo || !soundToggle) return;
+      const isMuted = teaserVideo.muted || teaserVideo.volume === 0;
+      soundToggle.classList.toggle('active', !isMuted);
+      soundToggle.setAttribute('aria-label', isMuted ? 'Turn sound on' : 'Mute video');
+      soundToggle.setAttribute('title', isMuted ? 'Turn sound on' : 'Mute video');
+      const label = soundToggle.querySelector('.sound-label');
+      if (label) label.textContent = isMuted ? 'Sound' : 'Mute';
+    }
+
+    function setTeaserMuted(muted) {
+      if (!teaserVideo) return;
+      teaserVideo.muted = muted;
+      if (muted) teaserVideo.setAttribute('muted', '');
+      else teaserVideo.removeAttribute('muted');
+      updateSoundToggle();
+    }
 
     function tryPlayTeaser() {
       if (!teaserVideo) return;
-      teaserVideo.muted = true;
-      teaserVideo.defaultMuted = true;
       teaserVideo.playsInline = true;
-      teaserVideo.setAttribute('muted', '');
       teaserVideo.setAttribute('playsinline', '');
       teaserVideo.setAttribute('webkit-playsinline', '');
+
+      if (!teaserAutoplayPrimed) {
+        setTeaserMuted(true);
+        teaserVideo.defaultMuted = true;
+        teaserAutoplayPrimed = true;
+      }
 
       const playPromise = teaserVideo.play();
       if (playPromise && typeof playPromise.catch === 'function') {
@@ -720,11 +791,17 @@
 
     copyButton?.addEventListener('click', copyShareLink);
     copyDirectButton?.addEventListener('click', copyShareLink);
+    soundToggle?.addEventListener('click', () => {
+      setTeaserMuted(!teaserVideo.muted);
+      teaserVideo.play().catch(() => {});
+    });
+    teaserVideo?.addEventListener('volumechange', updateSoundToggle);
     window.addEventListener('DOMContentLoaded', tryPlayTeaser);
     window.addEventListener('pageshow', tryPlayTeaser);
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) tryPlayTeaser();
     });
+    updateSoundToggle();
   </script>
 </body>
 </html>
