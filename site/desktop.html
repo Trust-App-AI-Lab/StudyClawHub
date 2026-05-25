@@ -567,8 +567,8 @@
 
   <main class="desktop-stage">
     <div class="video-panel">
-      <video class="teaser-video" autoplay muted loop playsinline controls preload="metadata">
-        <source src="assets/studyclaw-desktop-teaser-4k-high.mp4" type="video/mp4" />
+      <video id="teaser-video" class="teaser-video" autoplay muted loop playsinline webkit-playsinline controls preload="auto">
+        <source src="assets/studyclaw-desktop-teaser-4k-high-muted.mp4" type="video/mp4" />
       </video>
     </div>
 
@@ -665,6 +665,30 @@
     const copyButton = document.getElementById('copy-share-link');
     const copyDirectButton = document.getElementById('copy-direct-link');
     const copyStatus = document.getElementById('copy-status');
+    const teaserVideo = document.getElementById('teaser-video');
+
+    function tryPlayTeaser() {
+      if (!teaserVideo) return;
+      teaserVideo.muted = true;
+      teaserVideo.defaultMuted = true;
+      teaserVideo.playsInline = true;
+      teaserVideo.setAttribute('muted', '');
+      teaserVideo.setAttribute('playsinline', '');
+      teaserVideo.setAttribute('webkit-playsinline', '');
+
+      const playPromise = teaserVideo.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => {
+          const retry = () => {
+            teaserVideo.play().catch(() => {});
+            document.removeEventListener('touchstart', retry);
+            document.removeEventListener('click', retry);
+          };
+          document.addEventListener('touchstart', retry, { once: true, passive: true });
+          document.addEventListener('click', retry, { once: true });
+        });
+      }
+    }
 
     function setShareOpen(open) {
       shareCard.hidden = !open;
@@ -696,6 +720,11 @@
 
     copyButton?.addEventListener('click', copyShareLink);
     copyDirectButton?.addEventListener('click', copyShareLink);
+    window.addEventListener('DOMContentLoaded', tryPlayTeaser);
+    window.addEventListener('pageshow', tryPlayTeaser);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) tryPlayTeaser();
+    });
   </script>
 </body>
 </html>
