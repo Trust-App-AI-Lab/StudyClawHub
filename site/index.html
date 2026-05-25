@@ -222,6 +222,8 @@
       display: flex;
       justify-content: center;
       gap: 0.75rem;
+      flex-wrap: wrap;
+      position: relative;
     }
     .btn {
       display: inline-flex;
@@ -239,6 +241,186 @@
     .btn-primary:hover { background: var(--accent-hover); color: #fff; text-decoration: none; }
     .btn-outline { background: transparent; color: var(--text-secondary); border-color: var(--border); }
     .btn-outline:hover { color: var(--text); border-color: var(--border-hover); background: var(--surface); text-decoration: none; }
+    .share-shell {
+      position: relative;
+      display: inline-flex;
+    }
+    .share-trigger {
+      min-height: 39px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.5rem 1.05rem;
+      background: rgba(248,249,251,0.62);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.66);
+    }
+    .share-trigger:hover,
+    .share-trigger[aria-expanded="true"] {
+      border-color: var(--border-hover);
+      background: var(--surface);
+    }
+    .share-trigger-icon {
+      width: 1.45rem;
+      height: 1.45rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      box-shadow: 0 8px 18px rgba(37,99,235,0.18);
+    }
+    .share-trigger-icon svg {
+      width: 0.86rem;
+      height: 0.86rem;
+      stroke-width: 2.4;
+    }
+    .share-card {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 0.65rem);
+      z-index: 20;
+      width: min(440px, calc(100vw - 2rem));
+      padding: 0.95rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 16px 40px rgba(17,24,39,0.14);
+      text-align: left;
+    }
+    .share-card[hidden] { display: none; }
+    .share-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .share-title-icon {
+      width: 2rem;
+      height: 2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      border-radius: 8px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+    }
+    .share-title-icon svg {
+      width: 1rem;
+      height: 1rem;
+      stroke-width: 2.3;
+    }
+    .share-title {
+      color: var(--text);
+      font-size: 0.86rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .share-subtitle {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      line-height: 1.35;
+      margin-top: 0.12rem;
+    }
+    .share-content {
+      display: grid;
+      grid-template-columns: 128px 1fr;
+      gap: 0.8rem;
+      align-items: center;
+      margin-top: 0.65rem;
+    }
+    .share-qr img {
+      display: block;
+      width: 128px;
+      height: 128px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+    .share-qr-caption {
+      display: block;
+      margin-top: 0.35rem;
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    .share-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+    .share-link {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.42rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.52);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 0.32rem 0.5rem;
+    }
+    .share-link:hover {
+      color: var(--text);
+      border-color: var(--border-hover);
+      background: var(--surface);
+      text-decoration: none;
+    }
+    .share-icon {
+      width: 1.45rem;
+      height: 1.45rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      color: #fff;
+    }
+    .share-icon svg {
+      width: 0.85rem;
+      height: 0.85rem;
+    }
+    .share-icon-x { background: #111827; }
+    .share-icon-linkedin { background: #0a66c2; }
+    .share-icon-wechat { background: #22c55e; }
+    .share-icon-copy { background: var(--purple); }
+    .share-icon-copy svg,
+    .share-icon-wechat svg {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+    .share-hint {
+      color: var(--text-secondary);
+      font-size: 0.74rem;
+      line-height: 1.45;
+      margin-top: 0.55rem;
+    }
+    .copy-status {
+      display: block;
+      min-height: 1rem;
+      margin-top: 0.35rem;
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
 
     /* ── Custom rank banner ── */
     .custom-rank-banner {
@@ -1035,6 +1217,46 @@
       .nav-links { gap: 0.1rem; margin-left: auto; font-size: 0.75rem; }
       .nav-links a { padding: 0.3rem 0.4rem; }
       .hero-stats { gap: 1.25rem; }
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+      .hero-actions > .btn {
+        width: min(280px, 100%);
+        justify-content: center;
+      }
+      .share-shell {
+        width: 100%;
+        max-width: 280px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .share-trigger {
+        min-width: 108px;
+      }
+      .share-card {
+        position: static;
+        width: 100%;
+        margin-top: 0.65rem;
+      }
+      .share-content {
+        grid-template-columns: 96px 1fr;
+        gap: 0.65rem;
+      }
+      .share-options { grid-template-columns: 1fr; }
+      .share-qr img {
+        width: 96px;
+        height: 96px;
+      }
+      .share-link {
+        gap: 0.35rem;
+        padding: 0.32rem 0.42rem;
+      }
+      .share-icon {
+        width: 1.32rem;
+        height: 1.32rem;
+      }
     }
   </style>
 </head>
@@ -1047,7 +1269,7 @@
 <!-- Nav -->
 <nav class="nav">
   <div class="nav-links">
-    <a href="quickstart.html">Quick Start</a>
+    <a href="desktop.html">Desktop</a>
     <a href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank">GitHub</a>
   </div>
   <div class="nav-spacer"></div>
@@ -1073,9 +1295,84 @@
     </div>
   </div>
   <div class="hero-actions">
-    <a class="btn btn-primary" href="quickstart.html">Quick Start</a>
-    <a class="btn btn-primary" href="#skills-anchor">Browse Skills</a>
+    <a class="btn btn-primary" href="desktop.html">Desktop</a>
     <a class="btn btn-primary" href="javascript:openSubmit()">+ Submit</a>
+    <div class="share-shell">
+      <button class="share-trigger" type="button" id="hub-share-trigger" aria-expanded="false" aria-controls="hub-share-card">
+        <span class="share-trigger-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <path d="M8.6 10.5 15.4 6.5"></path>
+            <path d="M8.6 13.5 15.4 17.5"></path>
+          </svg>
+        </span>
+        Share
+      </button>
+      <div class="share-card" id="hub-share-card" aria-label="Share StudyClawHub" hidden>
+        <div class="share-title-row">
+          <span class="share-title-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"></path>
+              <path d="M16 6l-4-4-4 4"></path>
+              <path d="M12 2v13"></path>
+            </svg>
+          </span>
+          <div>
+            <div class="share-title">Share StudyClawHub</div>
+            <p class="share-subtitle">Send the registry to classmates.</p>
+          </div>
+        </div>
+        <div class="share-content">
+          <div class="share-qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&margin=8&data=https%3A%2F%2Ftrust-app-ai-lab.github.io%2FStudyClawHub%2F" alt="StudyClawHub WeChat QR code" loading="lazy" />
+            <span class="share-qr-caption">WeChat QR</span>
+          </div>
+          <div>
+            <div class="share-options">
+              <a class="share-link" href="https://twitter.com/intent/tweet?text=StudyClawHub&url=https%3A%2F%2Ftrust-app-ai-lab.github.io%2FStudyClawHub%2F" target="_blank" rel="noopener">
+                <span class="share-icon share-icon-x" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.2 2.5h3.2l-7 8 8.2 11h-6.4l-5-6.6-5.8 6.6H2.2l7.5-8.6-7.9-10.4h6.6l4.5 5.9 5.3-5.9Zm-1.1 17.1h1.8L7.4 4.3H5.5l11.6 15.3Z"></path>
+                  </svg>
+                </span>
+                <span>X</span>
+              </a>
+              <a class="share-link" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftrust-app-ai-lab.github.io%2FStudyClawHub%2F" target="_blank" rel="noopener">
+                <span class="share-icon share-icon-linkedin" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6.9 8.8H3.7v10.5h3.2V8.8ZM5.3 3.7a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8Zm14.9 9.6c0-3.1-1.7-4.8-4.1-4.8-1.9 0-2.7 1-3.2 1.7V8.8H9.8v10.5H13v-5.8c0-1.5.3-2.9 2.1-2.9 1.7 0 1.7 1.6 1.7 3v5.7h3.2v-6Z"></path>
+                  </svg>
+                </span>
+                <span>LinkedIn</span>
+              </a>
+              <button class="share-link" type="button" id="hub-copy-wechat-link">
+                <span class="share-icon share-icon-wechat" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M10.5 6.5c-4 0-7.2 2.5-7.2 5.7 0 1.8 1 3.3 2.6 4.4l-.6 2 2.4-1.2c.9.3 1.8.5 2.8.5 4 0 7.2-2.5 7.2-5.7s-3.2-5.7-7.2-5.7Z"></path>
+                    <path d="M14.8 11.2c3.3.4 5.9 2.5 5.9 5.1 0 1.5-.8 2.8-2.1 3.7l.5 1.7-2-1c-.8.3-1.6.4-2.5.4-2.6 0-4.9-1.2-6-2.9"></path>
+                    <path d="M8.4 11h.1M12.5 11h.1"></path>
+                  </svg>
+                </span>
+                <span>WeChat</span>
+              </button>
+              <button class="share-link" type="button" id="hub-copy-direct-link">
+                <span class="share-icon share-icon-copy" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="8" y="8" width="11" height="11" rx="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                </span>
+                <span>Copy</span>
+              </button>
+            </div>
+            <p class="share-hint">Scan with WeChat, or copy the page link.</p>
+          </div>
+        </div>
+        <span class="copy-status" id="hub-copy-status" aria-live="polite"></span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1218,6 +1515,7 @@
 <script>
 const INDEX_URL = 'skills-index.json';
 const REPO = 'Trust-App-AI-Lab/StudyClawHub';
+const HUB_SHARE_URL = 'https://trust-app-ai-lab.github.io/StudyClawHub/';
 
 let allSkills = [];
 let allAgents = [];
@@ -1228,6 +1526,48 @@ const PAGE_SIZE = 12;
 let currentDisplaySkills = [];
 const AGENT_PREVIEW_COUNT = 3;
 let HUB_AGENT_NAMES = [];
+
+function setHubShareOpen(open) {
+  const shareTrigger = document.getElementById('hub-share-trigger');
+  const shareCard = document.getElementById('hub-share-card');
+  if (!shareTrigger || !shareCard) return;
+  shareCard.hidden = !open;
+  shareTrigger.setAttribute('aria-expanded', String(open));
+}
+
+async function copyHubShareLink() {
+  const copyStatus = document.getElementById('hub-copy-status');
+  try {
+    await navigator.clipboard.writeText(HUB_SHARE_URL);
+    if (copyStatus) copyStatus.textContent = 'Link copied.';
+  } catch {
+    if (copyStatus) copyStatus.textContent = HUB_SHARE_URL;
+  }
+}
+
+function setupHubShare() {
+  const shareTrigger = document.getElementById('hub-share-trigger');
+  const shareCard = document.getElementById('hub-share-card');
+  const copyButtons = [
+    document.getElementById('hub-copy-wechat-link'),
+    document.getElementById('hub-copy-direct-link'),
+  ].filter(Boolean);
+  if (!shareTrigger || !shareCard) return;
+
+  shareTrigger.addEventListener('click', () => {
+    setHubShareOpen(shareCard.hidden);
+  });
+
+  document.addEventListener('click', event => {
+    if (!shareCard || shareCard.hidden) return;
+    if (event.target.closest('.share-shell')) return;
+    setHubShareOpen(false);
+  });
+
+  copyButtons.forEach(button => {
+    button.addEventListener('click', copyHubShareLink);
+  });
+}
 
 function registryKey(item) {
   const type = item && item.type ? item.type : 'skill';
@@ -2378,6 +2718,7 @@ function escapeHtml(s) {
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
+    setHubShareOpen(false);
     if (document.getElementById('batch-overlay').classList.contains('active')) {
       closeBatch();
     } else {
@@ -2387,6 +2728,7 @@ document.addEventListener('keydown', e => {
   }
 });
 
+setupHubShare();
 boot();
 </script>
 </body>

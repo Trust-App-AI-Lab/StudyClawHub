@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyClaw Desktop — StudyClawHub</title>
+  <meta name="description" content="StudyClaw Desktop is the local desktop home for the StudyClaw ecosystem." />
+  <link rel="canonical" href="https://trust-app-ai-lab.github.io/StudyClawHub/desktop.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="StudyClaw Desktop" />
+  <meta property="og:description" content="Browse, install, and run StudyClaw skills from one local desktop home." />
+  <meta property="og:url" content="https://trust-app-ai-lab.github.io/StudyClawHub/desktop.html" />
+  <meta property="og:image" content="https://trust-app-ai-lab.github.io/StudyClawHub/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="StudyClaw Desktop" />
+  <meta name="twitter:description" content="Browse, install, and run StudyClaw skills from one local desktop home." />
+  <meta name="twitter:image" content="https://trust-app-ai-lab.github.io/StudyClawHub/og-image.png" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f0f1f5;
+      --surface: #f8f9fb;
+      --surface-hover: #edeef2;
+      --border: #d8dbe2;
+      --border-hover: #bfc3cc;
+      --text: #1a1d23;
+      --text-secondary: #4b5563;
+      --text-muted: #6b7280;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --purple: #7c3aed;
+      --tag-bg: rgba(37,99,235,0.06);
+      --tag-border: rgba(37,99,235,0.18);
+      --warning-bg: #fffbeb;
+      --warning-border: #fde68a;
+      --warning-text: #92400e;
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { overflow-x: hidden; }
+    body {
+      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    .bg-glow {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+    .bg-glow::before,
+    .bg-glow::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.35;
+      animation: drift 20s ease-in-out infinite alternate;
+    }
+    .bg-glow::before {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(37,99,235,0.3), transparent 70%);
+      top: -10%;
+      right: -5%;
+    }
+    .bg-glow::after {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(124,58,237,0.25), transparent 70%);
+      bottom: 10%;
+      left: -8%;
+      animation-delay: -10s;
+    }
+    .bg-glow-extra {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.2;
+      background: radial-gradient(circle, rgba(22,163,74,0.3), transparent 70%);
+      top: 40%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: drift2 25s ease-in-out infinite alternate;
+    }
+    @keyframes drift {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-40px, 30px) scale(1.1); }
+    }
+    @keyframes drift2 {
+      0%   { transform: translateX(-50%) translate(0, 0) scale(1); }
+      100% { transform: translateX(-50%) translate(30px, -40px) scale(1.15); }
+    }
+    .bg-grid {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: -1;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.3;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 70%);
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(240,241,245,0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .nav-links { display: flex; gap: 0.25rem; }
+    .nav-links a {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--text);
+      background: var(--surface);
+    }
+    .nav-spacer { flex: 1; }
+
+    .hero {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3.75rem 1rem 1.75rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: 0;
+      margin-bottom: 0.75rem;
+    }
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    h1 span {
+      display: inline;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .desktop-stage {
+      width: calc(100% - 3rem);
+      max-width: 1120px;
+      margin: 0 auto 3.5rem;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.72fr);
+      align-items: center;
+      gap: 2rem;
+    }
+    .video-panel {
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #111827;
+      box-shadow: 0 12px 32px rgba(17, 24, 39, 0.1);
+    }
+    .teaser-video {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: contain;
+      background: #111827;
+    }
+    .intro-panel {
+      width: 100%;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      text-align: left;
+      gap: 0.75rem;
+    }
+    .status {
+      align-self: flex-start;
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--warning-border);
+      background: var(--warning-bg);
+      color: var(--warning-text);
+      border-radius: 6px;
+      padding: 0.28rem 0.55rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .action-copy {
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      overflow-wrap: break-word;
+      max-width: 21rem;
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-top: 0.25rem;
+    }
+    .btn {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 7px;
+      border: 1px solid transparent;
+      padding: 0.65rem 1rem;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    .actions .btn { width: 100%; }
+    .btn-primary {
+      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-primary:hover { color: #fff; background: var(--accent-hover); }
+    .btn-disabled {
+      color: var(--text-muted);
+      background: var(--surface);
+      border-color: var(--border);
+      cursor: not-allowed;
+      opacity: 0.78;
+    }
+    .btn-outline {
+      color: var(--text);
+      background: transparent;
+      border-color: var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--border-hover);
+      background: var(--surface);
+      color: var(--text);
+    }
+    .share-shell {
+      position: relative;
+      margin-top: 0.45rem;
+    }
+    .share-trigger {
+      width: 100%;
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.55rem 1rem;
+      background: rgba(248,249,251,0.62);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.66);
+    }
+    .share-trigger:hover,
+    .share-trigger[aria-expanded="true"] {
+      border-color: var(--border-hover);
+      background: var(--surface);
+    }
+    .share-trigger-icon {
+      width: 1.55rem;
+      height: 1.55rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      box-shadow: 0 8px 18px rgba(37,99,235,0.18);
+    }
+    .share-trigger-icon svg {
+      width: 0.92rem;
+      height: 0.92rem;
+      stroke-width: 2.4;
+    }
+    .share-card {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 0.65rem);
+      z-index: 10;
+      width: min(440px, calc(100vw - 2rem));
+      padding: 0.95rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 16px 40px rgba(17,24,39,0.14);
+    }
+    .share-card[hidden] {
+      display: none;
+    }
+    .share-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .share-title-icon {
+      width: 2rem;
+      height: 2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      border-radius: 8px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+    }
+    .share-title-icon svg {
+      width: 1rem;
+      height: 1rem;
+      stroke-width: 2.3;
+    }
+    .share-title {
+      color: var(--text);
+      font-size: 0.86rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .share-subtitle {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      line-height: 1.35;
+      margin-top: 0.12rem;
+    }
+    .share-content {
+      display: grid;
+      grid-template-columns: 128px 1fr;
+      gap: 0.8rem;
+      align-items: center;
+      margin-top: 0.65rem;
+    }
+    .share-qr img {
+      display: block;
+      width: 128px;
+      height: 128px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+    .share-qr-caption {
+      display: block;
+      margin-top: 0.35rem;
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-align: center;
+    }
+    .share-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+    .share-link {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.42rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.52);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      padding: 0.32rem 0.5rem;
+    }
+    .share-link:hover {
+      color: var(--text);
+      border-color: var(--border-hover);
+      background: var(--surface);
+    }
+    .share-icon {
+      width: 1.45rem;
+      height: 1.45rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      color: #fff;
+    }
+    .share-icon svg {
+      width: 0.85rem;
+      height: 0.85rem;
+    }
+    .share-icon-x { background: #111827; }
+    .share-icon-linkedin { background: #0a66c2; }
+    .share-icon-wechat { background: #22c55e; }
+    .share-icon-copy { background: #7c3aed; }
+    .share-icon-copy svg,
+    .share-icon-wechat svg {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+    .share-hint {
+      color: var(--text-secondary);
+      font-size: 0.74rem;
+      line-height: 1.45;
+      margin-top: 0.55rem;
+    }
+    .copy-status {
+      display: block;
+      min-height: 1rem;
+      margin-top: 0.35rem;
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      h1 { font-size: 2.5rem; }
+      .desktop-stage {
+        max-width: 960px;
+        grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.7fr);
+        gap: 1.35rem;
+      }
+      .intro-panel {
+        width: 100%;
+        margin: 0 auto;
+      }
+      .action-copy {
+        width: 100%;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+    @media (max-width: 760px) {
+      .nav { padding: 0 1rem; }
+      .nav-links { gap: 0.1rem; }
+      .nav-links a { padding: 0.3rem 0.45rem; }
+      .hero { padding: 2.25rem 1rem 1.25rem; }
+      h1 { font-size: 2rem; }
+      h1 span { display: block; }
+      .desktop-stage {
+        width: 100%;
+        max-width: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        gap: 1.15rem;
+      }
+      .intro-panel {
+        width: min(100%, 320px);
+        align-items: center;
+        text-align: center;
+      }
+      .status { align-self: center; }
+      .actions { width: 100%; max-width: min(300px, 100%); }
+      .video-panel { max-width: 100%; }
+      .teaser-video { object-fit: contain; }
+      .btn { width: 100%; }
+      .share-shell {
+        width: 100%;
+        max-width: 280px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .share-trigger {
+        width: auto;
+        min-width: 108px;
+      }
+      .share-card {
+        position: static;
+        width: 100%;
+        margin-top: 0.65rem;
+        text-align: left;
+      }
+      .share-content {
+        grid-template-columns: 96px 1fr;
+        gap: 0.65rem;
+      }
+      .share-options {
+        grid-template-columns: 1fr;
+      }
+      .share-qr img {
+        width: 96px;
+        height: 96px;
+      }
+      .share-link {
+        gap: 0.35rem;
+        padding: 0.32rem 0.42rem;
+      }
+      .share-icon {
+        width: 1.32rem;
+        height: 1.32rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"><div class="bg-glow-extra"></div></div>
+  <div class="bg-grid"></div>
+
+  <nav class="nav">
+    <div class="nav-links">
+      <a href="./">Hub</a>
+      <a class="active" href="desktop.html">Desktop</a>
+      <a href="https://github.com/Trust-App-AI-Lab/StudyClawHub" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="nav-spacer"></div>
+  </nav>
+
+  <section class="hero">
+    <h1><em><span>StudyClaw</span> <span>Desktop</span></em></h1>
+    <p>Browse, install, and run StudyClaw skills from one local desktop home.</p>
+  </section>
+
+  <main class="desktop-stage">
+    <div class="video-panel">
+      <video class="teaser-video" autoplay muted loop playsinline controls preload="metadata">
+        <source src="assets/studyclaw-desktop-teaser-4k-high.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <section class="intro-panel">
+      <div class="status">Download not open yet</div>
+      <p class="action-copy">Install access is being prepared.</p>
+      <div class="actions" aria-label="StudyClaw Desktop actions">
+        <button class="btn btn-disabled" type="button" disabled title="StudyClaw Desktop download is not available yet.">Install</button>
+        <a class="btn btn-primary" href="./#skills-anchor">Browse Skills</a>
+        <a class="btn btn-outline" href="./">Back to Hub</a>
+      </div>
+      <div class="share-shell">
+        <button class="share-trigger" type="button" id="share-trigger" aria-expanded="false" aria-controls="share-card">
+          <span class="share-trigger-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <path d="M8.6 10.5 15.4 6.5"></path>
+              <path d="M8.6 13.5 15.4 17.5"></path>
+            </svg>
+          </span>
+          Share
+        </button>
+        <div class="share-card" id="share-card" aria-label="Share StudyClaw Desktop" hidden>
+          <div class="share-title-row">
+            <span class="share-title-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"></path>
+                <path d="M16 6l-4-4-4 4"></path>
+                <path d="M12 2v13"></path>
+              </svg>
+            </span>
+            <div>
+              <div class="share-title">Share StudyClaw Desktop</div>
+              <p class="share-subtitle">Send the preview page to classmates.</p>
+            </div>
+          </div>
+          <div class="share-content">
+            <div class="share-qr">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&margin=8&data=https%3A%2F%2Ftrust-app-ai-lab.github.io%2FStudyClawHub%2Fdesktop.html" alt="StudyClaw Desktop WeChat QR code" loading="lazy" />
+              <span class="share-qr-caption">WeChat QR</span>
+            </div>
+            <div>
+              <div class="share-options">
+                <a class="share-link" href="https://twitter.com/intent/tweet?text=StudyClaw%20Desktop&url=https%3A%2F%2Ftrust-app-ai-lab.github.io%2FStudyClawHub%2Fdesktop.html" target="_blank" rel="noopener">
+                  <span class="share-icon share-icon-x" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.2 2.5h3.2l-7 8 8.2 11h-6.4l-5-6.6-5.8 6.6H2.2l7.5-8.6-7.9-10.4h6.6l4.5 5.9 5.3-5.9Zm-1.1 17.1h1.8L7.4 4.3H5.5l11.6 15.3Z"></path>
+                    </svg>
+                  </span>
+                  <span>X</span>
+                </a>
+                <a class="share-link" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftrust-app-ai-lab.github.io%2FStudyClawHub%2Fdesktop.html" target="_blank" rel="noopener">
+                  <span class="share-icon share-icon-linkedin" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M6.9 8.8H3.7v10.5h3.2V8.8ZM5.3 3.7a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8Zm14.9 9.6c0-3.1-1.7-4.8-4.1-4.8-1.9 0-2.7 1-3.2 1.7V8.8H9.8v10.5H13v-5.8c0-1.5.3-2.9 2.1-2.9 1.7 0 1.7 1.6 1.7 3v5.7h3.2v-6Z"></path>
+                    </svg>
+                  </span>
+                  <span>LinkedIn</span>
+                </a>
+                <button class="share-link" type="button" id="copy-share-link">
+                  <span class="share-icon share-icon-wechat" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M10.5 6.5c-4 0-7.2 2.5-7.2 5.7 0 1.8 1 3.3 2.6 4.4l-.6 2 2.4-1.2c.9.3 1.8.5 2.8.5 4 0 7.2-2.5 7.2-5.7s-3.2-5.7-7.2-5.7Z"></path>
+                      <path d="M14.8 11.2c3.3.4 5.9 2.5 5.9 5.1 0 1.5-.8 2.8-2.1 3.7l.5 1.7-2-1c-.8.3-1.6.4-2.5.4-2.6 0-4.9-1.2-6-2.9"></path>
+                      <path d="M8.4 11h.1M12.5 11h.1"></path>
+                    </svg>
+                  </span>
+                  <span>WeChat</span>
+                </button>
+                <button class="share-link" type="button" id="copy-direct-link">
+                  <span class="share-icon share-icon-copy" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <rect x="8" y="8" width="11" height="11" rx="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                  </span>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <p class="share-hint">Scan with WeChat, or copy the page link.</p>
+            </div>
+          </div>
+          <span class="copy-status" id="copy-status" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const shareUrl = 'https://trust-app-ai-lab.github.io/StudyClawHub/desktop.html';
+    const shareTrigger = document.getElementById('share-trigger');
+    const shareCard = document.getElementById('share-card');
+    const copyButton = document.getElementById('copy-share-link');
+    const copyDirectButton = document.getElementById('copy-direct-link');
+    const copyStatus = document.getElementById('copy-status');
+
+    function setShareOpen(open) {
+      shareCard.hidden = !open;
+      shareTrigger.setAttribute('aria-expanded', String(open));
+    }
+
+    async function copyShareLink() {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        copyStatus.textContent = 'Link copied.';
+      } catch {
+        copyStatus.textContent = shareUrl;
+      }
+    }
+
+    shareTrigger?.addEventListener('click', () => {
+      setShareOpen(shareCard.hidden);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (shareCard.hidden) return;
+      if (event.target.closest('.share-shell')) return;
+      setShareOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setShareOpen(false);
+    });
+
+    copyButton?.addEventListener('click', copyShareLink);
+    copyDirectButton?.addEventListener('click', copyShareLink);
+  </script>
+</body>
+</html>
