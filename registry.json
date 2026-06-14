@@ -1090,7 +1090,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: `AGENTS.md` or `CLAUDE.md` not found at `./` on `main` and no metadata file anywhere in repo",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "research-trail",
@@ -1143,7 +1143,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: References missing agent `researchtrail`",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "reading-path-report",
@@ -1280,7 +1280,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: References missing agent `daily-arxiv-research-briefing-agent`",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "arxiv-retrieval-skill",
@@ -1319,7 +1319,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: References missing agent `daily-arxiv-research-briefing-agent`",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "aiaa4641-project-arxiv-agent-final",
@@ -1630,7 +1630,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: References missing agent `Job Market Intelligence Agent text`",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "Job Skill Extraction Skill",
@@ -1654,7 +1654,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: References missing agent `Job Market Intelligence Agent text`",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "Market Trend Analysis Skill",
@@ -1678,7 +1678,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: References missing agent `Job Market Intelligence Agent text`",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "mentor_discovery",
@@ -1813,7 +1813,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: `SKILL.md` not found at `Skill4_README.md` on `main` (candidates: `skill1_student_profiling`, `skill2_academic_graph_builder`, `skill3_mentor_discovery`, `skill4_program_teammate_discovery`, `skill5_student_recommendation_ranker`); References missing agent `ProgRec Agent`",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "student-profiling",
@@ -1839,7 +1839,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: `SKILL.md` not found at `skill1_student-profiling` on `main` (candidates: `skill1_student_profiling`, `skill2_academic_graph_builder`, `skill3_mentor_discovery`, `skill4_program_teammate_discovery`, `skill5_student_recommendation_ranker`); References missing agent `progrec-agent`",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "program-and-teammate-discovery",
@@ -1878,7 +1878,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: `SKILL.md` not found at `Skill2_academic_graph_buider` on `main` (candidates: `skill1_student_profiling`, `skill2_academic_graph_builder`, `skill3_mentor_discovery`, `skill4_program_teammate_discovery`, `skill5_student_recommendation_ranker`)",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "student-profiling",
@@ -1923,7 +1923,7 @@
       "healthUnverified": true,
       "healthSeverity": "broken",
       "healthWarning": "Health check broken: `SKILL.md` not found at `.blob/main/skill4_handoff` on `main` (candidates: `skill1_student_profiling`, `skill2_academic_graph_builder`, `skill3_mentor_discovery`, `skill4_program_teammate_discovery`, `skill5_student_recommendation_ranker`)",
-      "healthCheckedAt": "2026-06-07T02:55:46+00:00"
+      "healthCheckedAt": "2026-06-14T03:00:03+00:00"
     },
     {
       "name": "student_recommendation_ranker",
