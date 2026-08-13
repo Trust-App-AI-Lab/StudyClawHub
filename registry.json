@@ -2025,6 +2025,24 @@
       "metadataFile": "SKILL.md",
       "agent": "ProgRec",
       "registeredAt": "2026-05-15T15:26:53.879719+00:00"
+    },
+    {
+      "name": "using-lwc",
+      "type": "skill",
+      "repo": "https://github.com/JanYork/using-lwc",
+      "path": ".",
+      "author": "JanYork",
+      "description": "Use when substantive project work, structural code questions, research, planning, debugging, architecture, decisions, document ingest, incident recovery, or verified context and results should survive future sessions; also when the user invokes $using-lwc or asks to search, update, repair, configure, or maintain an LWC Wiki, physical document graph, or CodeGraph index.",
+      "version": "1.0.0",
+      "tags": [
+        "persistent-memory",
+        "context-engineering",
+        "knowledge-management",
+        "code-graph"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "registeredAt": "2026-08-13T16:25:47.767822+00:00"
     }
   ]
 }
