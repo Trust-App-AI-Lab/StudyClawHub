@@ -2043,6 +2043,25 @@
       "metadataBranch": "main",
       "metadataFile": "SKILL.md",
       "registeredAt": "2026-08-13T16:25:47.767822+00:00"
+    },
+    {
+      "name": "what-could-break",
+      "type": "skill",
+      "repo": "https://github.com/stas4000/what-could-break",
+      "path": "what-could-break",
+      "author": "stas4000",
+      "description": "Find what a change could break outside its own diff, then prove the one fact that makes it safe by running real code. Use before any multi-file edit or an edit to a shared path (API payload, config, stored data, a prompt or policy file), when asked \"what could this break\" or \"blast radius of X\", or when a task asserts something about existing code before you design against that assertion.",
+      "version": "1.0.0",
+      "tags": [
+        "code-review",
+        "testing",
+        "refactoring",
+        "blast-radius",
+        "verification"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "registeredAt": "2026-10-08T21:15:33.670891+00:00"
     }
   ]
 }
