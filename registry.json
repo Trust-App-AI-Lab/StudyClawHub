@@ -2062,6 +2062,25 @@
       "metadataBranch": "main",
       "metadataFile": "SKILL.md",
       "registeredAt": "2026-10-08T21:15:33.670891+00:00"
+    },
+    {
+      "name": "tastegate",
+      "type": "skill",
+      "repo": "https://github.com/stas4000/tastegate",
+      "path": "tastegate",
+      "author": "stas4000",
+      "description": "Build or fix a frontend (landing page, marketing site, dashboard, app screen, component) so it looks designed, not AI-generated, and prove it in a real browser before calling it done. Picks a design direction, builds on a craft floor, then renders the page at phone and desktop width and fails on overlapping text, sideways scroll, low contrast, tiny tap targets, AI purple gradients, gradient text, emoji icons, default fonts and placeholder copy.",
+      "version": "1.0.0",
+      "tags": [
+        "frontend",
+        "design",
+        "ui",
+        "browser-testing",
+        "quality-gate"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "registeredAt": "2026-10-08T21:23:42.210623+00:00"
     }
   ]
 }
