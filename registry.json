@@ -2081,6 +2081,28 @@
       "metadataBranch": "main",
       "metadataFile": "SKILL.md",
       "registeredAt": "2026-10-08T21:23:42.210623+00:00"
+    },
+    {
+      "name": "cn-app-launch-compliance",
+      "type": "skill",
+      "repo": "https://github.com/Yang-Yin734/cn-app-launch-compliance",
+      "path": ".",
+      "author": "Yang-Yin734",
+      "description": "将中国大陆移动 App 上线拆成 8 个可独立执行、部分可自动化的合规阶段，并明确 Agent 与用户的人机分工。",
+      "version": "1.0.0",
+      "tags": [
+        "china",
+        "compliance",
+        "app-launch",
+        "icp-filing",
+        "privacy",
+        "wechat-pay",
+        "alipay",
+        "agent-skill"
+      ],
+      "metadataBranch": "main",
+      "metadataFile": "SKILL.md",
+      "registeredAt": "2026-10-17T06:39:34.565095+00:00"
     }
   ]
 }
